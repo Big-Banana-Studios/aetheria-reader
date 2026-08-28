@@ -1,0 +1,19 @@
+# The app reads books from your own disk at run time. Nothing book-shaped
+# belongs in this repository — not the source PDFs, not text extracted
+# from them.
+Buddism books/
+library/
+aetheria-reader-pwa/
+*.pdf
+build.log
+
+# The original single-file reader this PWA grew out of
+AetheriaReader.html
+
+# Local scratch
+_*.mjs
+_*.html
+__pycache__/
+*.pyc
+.DS_Store
+Thumbs.db
