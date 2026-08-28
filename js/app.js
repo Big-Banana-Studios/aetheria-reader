@@ -449,6 +449,15 @@ function applySettings() {
 
 function persist() { store.saveSettings(settings); }
 
+// Speed and voice are baked into utterances when they are queued, so a
+// change only reaches the listener once the queue is rebuilt. Debounced,
+// or dragging the slider would restart the sentence on every pixel.
+let refreshTimer = null;
+function refreshSpeech() {
+  clearTimeout(refreshTimer);
+  refreshTimer = setTimeout(() => reader?.refresh(), 400);
+}
+
 function openSettings() {
   $('settings-overlay').classList.add('open');
   applySettings();
@@ -723,7 +732,7 @@ function wire() {
 
   $('speed-slider').addEventListener('input', (e) => {
     settings.rate = parseFloat(e.target.value);
-    applySettings(); persist();
+    applySettings(); persist(); refreshSpeech();
   });
   $('btn-size-down').addEventListener('click', () => {
     settings.fontSize = Math.max(14, settings.fontSize - 2);
@@ -743,7 +752,7 @@ function wire() {
 
   $('set-voice').addEventListener('change', (e) => {
     const v = voices[Number(e.target.value)];
-    if (v) { settings.voiceName = v.name; persist(); }
+    if (v) { settings.voiceName = v.name; persist(); refreshSpeech(); }
   });
   $('btn-test-voice').addEventListener('click', () => {
     speechSynthesis.cancel();
@@ -755,12 +764,12 @@ function wire() {
     speechSynthesis.speak(u);
   });
 
-  const bind = (id, key, parse, fmt) => $(id).addEventListener('input', (e) => {
+  const bind = (id, key, parse, speech) => $(id).addEventListener('input', (e) => {
     settings[key] = parse(e.target.value);
     applySettings(); persist();
-    if (fmt) fmt();
+    if (speech) refreshSpeech();
   });
-  bind('set-speed', 'rate', parseFloat);
+  bind('set-speed', 'rate', parseFloat, true);
   bind('set-font', 'fontSize', (v) => parseInt(v, 10));
   bind('set-para-pause', 'paraPause', (v) => parseInt(v, 10));
   bind('set-sec-pause', 'sectionPause', (v) => parseInt(v, 10));
@@ -841,12 +850,12 @@ function wire() {
       case 'ArrowUp':
         e.preventDefault();
         settings.rate = Math.min(2, +(settings.rate + 0.1).toFixed(1));
-        applySettings(); persist();
+        applySettings(); persist(); refreshSpeech();
         break;
       case 'ArrowDown':
         e.preventDefault();
         settings.rate = Math.max(0.5, +(settings.rate - 0.1).toFixed(1));
-        applySettings(); persist();
+        applySettings(); persist(); refreshSpeech();
         break;
     }
   });
