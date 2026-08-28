@@ -211,10 +211,17 @@
 
       <div class="settings-section">
         <div class="settings-section-title">Background playback</div>
+        <div class="setting-desc" style="margin:-4px 0 12px">
+          On a computer, reading carries on in another tab or window. On Android
+          and iOS it cannot: the browser suspends speech whenever the page is
+          hidden, whatever the app does. Reading pauses when you leave and picks
+          up the same sentence when you return. The screen is kept awake while
+          reading, so it will keep going until you lock it yourself.
+        </div>
         <div class="setting-row">
           <div>
             <div class="setting-name">Reading music</div>
-            <div class="setting-desc">A soft loop under the voice. It is also what holds audio focus, so the reading survives the screen going off — switched off, the app falls back to a silent loop, which browsers honour far less reliably.</div>
+            <div class="setting-desc">A soft loop under the voice. It also keeps the tab audible, which lets reading carry on in a background tab on a computer.</div>
           </div>
           <div class="setting-control">
             <button class="btn-pill" id="set-music-on"></button>
@@ -223,7 +230,7 @@
           </div>
         </div>
         <div class="setting-row">
-          <div><div class="setting-name">Audio focus</div><div class="setting-desc" id="bg-note">Start reading, then check.</div></div>
+          <div><div class="setting-name">Audio state</div><div class="setting-desc" id="bg-note">Start reading, then check.</div></div>
           <div class="setting-control"><button class="btn-pill" id="btn-bg-check">Check</button></div>
         </div>
       </div>

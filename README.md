@@ -23,11 +23,9 @@ anything.
   running in your browser on WebGPU, explains the passage, restates it in
   plain English, defines its Pali and Sanskrit terms, or answers a question
   you type.
-- **Keeps reading in the background.** Playback keeps several sentences
-  queued inside the speech engine, and a near-silent audio loop plays
-  alongside so the tab counts as audible — which stops the browser
-  throttling or freezing it, and puts the book on the lock screen with
-  working media keys.
+- **Keeps reading in a background tab** on a computer, and puts the book on
+  the lock screen with working media keys. On phones it pauses when you
+  leave and resumes where you left off — see below for why.
 - **Works offline** after the first visit. The app and pdf.js are precached;
   any book you open is kept, and **Settings → Library offline** downloads the
   whole 57 MB collection in one go. The model persists too, once downloaded.
@@ -96,11 +94,26 @@ scan is too garbled to interpret rather than invent a reading.
 
 ## Background playback
 
-Speech synthesis is not media playback. It holds no audio focus, so a
-browser is free to throttle timers and freeze the page once it is hidden,
-and the operating system has nothing to show on a lock screen.
+**On a phone, reading stops when you leave the app, and that cannot be
+fixed from a web page.** Android and iOS suspend the speech engine whenever
+the page is hidden. It is not a question of audio focus: the music keeps
+playing perfectly well with the screen off, which is exactly the proof that
+focus was granted — the speech engine is simply switched off. Chrome's own
+"listen to this page" is a native feature for the same reason.
 
-Three things address that:
+So the app pauses on the way out, remembers the sentence, resumes it on
+return, and reports *paused* on the lock screen rather than offering a
+button that does nothing. A screen wake lock is held while reading, so it
+keeps going until the screen is locked deliberately.
+
+Getting real background playback would mean abandoning the browser's speech
+engine and synthesising the audio in-page with a neural voice — Kokoro-82M
+or Piper, both of which run in ONNX — then playing that through an audio
+element, which does survive backgrounding. That is a different app, and a
+download of 25–82 MB before a word is spoken.
+
+In a **desktop** background tab it does keep reading, and three things make
+that work:
 
 - **Queued playback.** Four utterances are handed to the engine at a time,
   so it plays them back to back without waiting on JavaScript. A clamped
@@ -132,25 +145,23 @@ off.
 A screen wake lock is also held while reading, where the browser offers one.
 
 **Settings → Background playback → Check** reports what the browser actually
-granted — whether the loop is playing, whether it cleared the five-second
-floor, and whether the lock-screen card and media keys were accepted. None of
-those failures announce themselves otherwise.
+granted — whether reading is under way, whether the loop is playing, whether
+it cleared the five-second floor, and whether the lock-screen card and media
+keys were accepted. None of those failures announce themselves otherwise,
+which is how a four-second loop once survived being tested at all.
 
 ## Browser support
 
 | | Folder picker | Remembers folder | Reading | Background | Assistant |
 | --- | --- | --- | --- | --- | --- |
 | Chrome / Edge desktop | yes | yes | yes | yes | yes |
-| Chrome Android | yes | yes | yes | usually | yes |
-| Firefox | folder upload | no | yes | usually | yes |
-| Safari / iOS | folder upload | no | yes | unreliable | needs Safari 26+ |
+| Chrome Android | yes | yes | yes | no | yes |
+| Firefox | folder upload | no | yes | yes | yes |
+| Safari / iOS | folder upload | no | yes | no | needs Safari 26+ |
 
-"Background" means another tab or another window, and — where the platform
-allows it — a locked screen. iOS suspends speech synthesis aggressively when
-Safari is not in the foreground; the silent loop and the lock-screen card
-help, but reading through a locked iPhone screen should not be relied on.
-Genuinely dependable lock-screen playback would need real audio files rather
-than speech synthesis.
+"Background" means another tab or another window on a computer. No mobile
+browser will keep speech running once the page is hidden, so on a phone the
+app pauses and resumes instead.
 
 Only Chromium browsers implement `showDirectoryPicker`, which is what allows
 the app to reopen your folder on a later visit. Elsewhere the app falls back to
