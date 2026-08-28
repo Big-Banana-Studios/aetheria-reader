@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Aetheria Reader</title>
+<meta name="description" content="A spoken-word reader for your own library of books, with an on-device assistant that explains passages as you listen.">
+<meta name="theme-color" content="#0d0d1a">
+<link rel="manifest" href="./manifest.json">
+<link rel="icon" href="./icons/icon-192.png">
+<link rel="apple-touch-icon" href="./icons/icon-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Aetheria">
+<link rel="stylesheet" href="./css/styles.css">
+</head>
+<body>
+
+<!-- ════════════════ WELCOME ════════════════ -->
+<div class="screen active" id="welcome-screen">
+  <div class="brand">AETHERIA</div>
+  <div class="brand-sub">READER</div>
+
+  <div class="drop-zone" id="drop-zone">
+    <svg width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="color:var(--muted)">
+      <path d="M4 19V5a2 2 0 012-2h9l5 5v11a2 2 0 01-2 2H6a2 2 0 01-2-2z"/><path d="M14 3v5h5"/>
+    </svg>
+    <div class="drop-label" id="drop-label">Choose your books folder</div>
+    <div class="drop-hint" id="drop-hint">Everything stays on this device</div>
+  </div>
+
+  <div class="or-line">OR</div>
+  <button class="btn-secondary" id="btn-pick-files">Open individual books</button>
+  <input type="file" id="file-input" accept=".pdf,.txt,.html,.htm" multiple hidden>
+  <input type="file" id="dir-input" webkitdirectory directory hidden>
+
+  <div id="welcome-error"></div>
+
+  <div class="note" id="welcome-note">
+    <strong>Nothing is uploaded.</strong> Your books are read directly from
+    your own disk, and the text stays in this browser.
+  </div>
+</div>
+
+<!-- ════════════════ LIBRARY ════════════════ -->
+<div class="screen" id="library-screen">
+  <div class="lib-bar">
+    <div class="brand">AETHERIA</div>
+    <input type="search" class="lib-search" id="lib-search" placeholder="Search title or author…" autocomplete="off">
+    <span class="lib-count" id="lib-count"></span>
+    <button class="btn-chip" id="btn-change-folder" title="Choose a different folder">Folder</button>
+    <button class="btn-icon" id="btn-lib-settings" title="Settings">
+      <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="var(--muted)" stroke-width="2" stroke-linecap="round">
+        <circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 01-2.83 2.83l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/>
+      </svg>
+    </button>
+  </div>
+  <div class="lib-scroll">
+    <div class="lib-grid" id="lib-grid"></div>
+    <div class="lib-empty" id="lib-empty" hidden></div>
+  </div>
+</div>
+
+<!-- ════════════════ LOADING ════════════════ -->
+<div class="screen" id="loading-screen">
+  <div class="spinner"></div>
+  <div class="loading-title" id="loading-title">Reading the book…</div>
+  <div class="loading-sub" id="loading-sub"></div>
+  <div class="bar"><div id="loading-bar"></div></div>
+  <button class="btn-secondary" id="btn-cancel-load" style="margin-top:14px">Cancel</button>
+</div>
+
+<!-- ════════════════ READER ════════════════ -->
+<div class="screen" id="reader-screen">
+  <div class="top-bar">
+    <button class="btn-icon" id="btn-back" title="Back to library">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--muted)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+    </button>
+    <div class="title-block">
+      <div class="doc-title" id="doc-title"></div>
+      <div class="doc-meta" id="doc-meta"></div>
+    </div>
+    <button class="btn-icon" id="btn-ai" title="Ask about this passage">
+      <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--gold)">
+        <path d="M12 3l1.9 4.6 4.6 1.9-4.6 1.9L12 16l-1.9-4.6L5.5 9.5l4.6-1.9L12 3z"/><path d="M18 15l.9 2.1 2.1.9-2.1.9L18 21l-.9-2.1-2.1-.9 2.1-.9L18 15z"/>
+      </svg>
+    </button>
+    <button class="btn-icon" id="btn-settings" title="Settings">
+      <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="var(--muted)" stroke-width="2" stroke-linecap="round">
+        <circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 01-2.83 2.83l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/>
+      </svg>
+    </button>
+    <button class="btn-chip" id="btn-nav">
+      Contents
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
+    </button>
+  </div>
+
+  <div class="progress-track"><div class="progress-fill" id="progress-fill"></div></div>
+  <div id="section-nav"></div>
+
+  <div class="reading-area" id="reading-area">
+    <div class="reading-inner">
+      <div class="section-heading" id="section-heading"></div>
+      <div id="text-body"></div>
+    </div>
+  </div>
+
+  <div class="controls-bar">
+    <div class="transport">
+      <button class="btn-transport" id="btn-prev" title="Previous sentence">
+        <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 20L9 12l10-8v16zM5 4v16"/></svg>
+      </button>
+      <button class="btn-transport btn-play" id="btn-play" title="Play (space)">
+        <svg id="play-icon" width="25" height="25" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 4l15 8-15 8V4z"/></svg>
+        <svg id="pause-icon" width="25" height="25" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" hidden><path d="M6 4h4v16H6zM14 4h4v16h-4z"/></svg>
+      </button>
+      <button class="btn-transport" id="btn-next" title="Next sentence">
+        <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4l10 8-10 8V4zM19 4v16"/></svg>
+      </button>
+    </div>
+    <div class="quick-controls">
+      <div class="control-group">
+        <span class="control-label">Speed</span>
+        <input type="range" id="speed-slider" min="0.5" max="2" step="0.1" style="width:80px">
+        <span class="control-value" id="speed-value"></span>
+      </div>
+      <div class="divider"></div>
+      <div class="control-group">
+        <span class="control-label">Size</span>
+        <button class="btn-size" id="btn-size-down" aria-label="Smaller text">−</button>
+        <span class="control-value" id="size-value"></span>
+        <button class="btn-size" id="btn-size-up" aria-label="Larger text">+</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════ SETTINGS ════════════════ -->
+<div class="overlay" id="settings-overlay">
+  <div class="sheet">
+    <div class="sheet-handle"><div class="sheet-handle-bar"></div></div>
+    <div class="sheet-header">
+      <div class="sheet-title">Settings</div>
+      <button class="btn-icon" id="btn-close-settings" aria-label="Close">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--muted)" stroke-width="2" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
+      </button>
+    </div>
+    <div class="sheet-body">
+      <div class="settings-section">
+        <div class="settings-section-title">Voice</div>
+        <div class="setting-row">
+          <div><div class="setting-name">Voice</div><div class="setting-desc">Voices installed on this device</div></div>
+          <div class="setting-control"><select id="set-voice"></select></div>
+        </div>
+        <div class="setting-row">
+          <div><div class="setting-name">Test voice</div><div class="setting-desc">Hear a sample at the current speed</div></div>
+          <div class="setting-control"><button class="btn-pill" id="btn-test-voice">Preview</button></div>
+        </div>
+      </div>
+
+      <div class="settings-section">
+        <div class="settings-section-title">Playback</div>
+        <div class="setting-row">
+          <div><div class="setting-name">Speed</div><div class="setting-desc">0.5× to 2.0×</div></div>
+          <div class="setting-control"><input type="range" id="set-speed" min="0.5" max="2" step="0.1"><span class="control-value" id="set-speed-val"></span></div>
+        </div>
+        <div class="setting-row">
+          <div><div class="setting-name">Paragraph pause</div><div class="setting-desc">Extra silence between paragraphs</div></div>
+          <div class="setting-control"><input type="range" id="set-para-pause" min="0" max="1500" step="100"><span class="control-value" id="set-para-pause-val"></span></div>
+        </div>
+        <div class="setting-row">
+          <div><div class="setting-name">Section pause</div><div class="setting-desc">Silence when a new section starts</div></div>
+          <div class="setting-control"><input type="range" id="set-sec-pause" min="0" max="3000" step="250"><span class="control-value" id="set-sec-pause-val"></span></div>
+        </div>
+      </div>
+
+      <div class="settings-section">
+        <div class="settings-section-title">Display</div>
+        <div class="setting-row">
+          <div><div class="setting-name">Font size</div></div>
+          <div class="setting-control"><input type="range" id="set-font" min="14" max="32" step="1"><span class="control-value" id="set-font-val"></span></div>
+        </div>
+        <div class="setting-row">
+          <div><div class="setting-name">Auto-scroll</div><div class="setting-desc">Keep the spoken sentence in view</div></div>
+          <div class="setting-control"><button class="btn-pill" id="set-autoscroll"></button></div>
+        </div>
+        <div class="setting-row">
+          <div><div class="setting-name">Highlight colour</div></div>
+          <div class="setting-control" style="gap:4px">
+            <button class="color-swatch" data-color="gold"  style="background:#c8a050" title="Gold"></button>
+            <button class="color-swatch" data-color="blue"  style="background:#5090d4" title="Blue"></button>
+            <button class="color-swatch" data-color="green" style="background:#50b47a" title="Green"></button>
+            <button class="color-swatch" data-color="white" style="background:#d8d4cc" title="White"></button>
+          </div>
+        </div>
+      </div>
+
+      <div class="settings-section">
+        <div class="settings-section-title">Assistant</div>
+        <div class="setting-row">
+          <div><div class="setting-name">On-device model</div><div class="setting-desc" id="ai-device-note"></div></div>
+        </div>
+      </div>
+      <div class="model-list" id="model-list"></div>
+
+      <div class="settings-section">
+        <div class="settings-section-title">Storage</div>
+        <div class="setting-row">
+          <div><div class="setting-name">Extracted text</div><div class="setting-desc" id="cache-note">—</div></div>
+          <div class="setting-control"><button class="btn-pill" id="btn-clear-cache">Clear</button></div>
+        </div>
+      </div>
+
+      <button class="btn-reset" id="btn-reset">Reset settings to defaults</button>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════ AI ════════════════ -->
+<div class="overlay" id="ai-overlay">
+  <div class="sheet" id="ai-sheet">
+    <div class="sheet-handle"><div class="sheet-handle-bar"></div></div>
+    <div class="sheet-header">
+      <div class="sheet-title">Ask about this passage</div>
+      <button class="btn-icon" id="btn-close-ai" aria-label="Close">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--muted)" stroke-width="2" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
+      </button>
+    </div>
+    <div class="ai-status"><span class="dot" id="ai-dot"></span><span id="ai-status-text">Assistant not loaded</span></div>
+    <div class="sheet-body">
+      <div id="ai-setup" hidden>
+        <div class="warn" id="ai-warn" hidden></div>
+        <div class="model-list" id="ai-model-list"></div>
+        <div class="ai-actions"><button class="btn-gold" id="btn-load-model">Download and start</button></div>
+      </div>
+      <div id="ai-main" hidden>
+        <div class="ai-passage" id="ai-passage"></div>
+        <div class="ai-answer empty" id="ai-answer">Ask a question, or tap Explain.</div>
+        <div class="ai-actions">
+          <button class="btn-gold" id="btn-explain">Explain this</button>
+          <button class="btn-pill" id="btn-simpler">Say it simply</button>
+          <button class="btn-pill" id="btn-terms">Define the terms</button>
+          <button class="btn-pill" id="btn-ai-stop" hidden>Stop</button>
+        </div>
+        <form class="ai-ask" id="ai-form">
+          <input type="text" id="ai-input" placeholder="Ask your own question…" autocomplete="off">
+          <button class="btn-gold" type="submit" id="btn-ask">Ask</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<script type="module" src="./js/app.js"></script>
+</body>
+</html>

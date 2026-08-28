@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html><head><meta charset="utf-8"><title>selftest</title></head>
+<body><pre id="out">running…</pre>
+<script type="module">
+const out = [];
+const log = (s) => { out.push(s); document.getElementById('out').textContent = out.join('\n'); };
+window.addEventListener('error', (e) => log('WINDOW-ERROR ' + (e.message || e.error)));
+window.addEventListener('unhandledrejection', (e) => log('UNHANDLED ' + (e.reason?.message || e.reason)));
+
+(async () => {
+  try {
+    const tc = await import('../js/textclean.js');
+    const rd = await import('../js/reader.js');
+    const st = await import('../js/store.js');
+    const ai = await import('../js/ai.js');
+    log('PASS module imports');
+
+    // filename parsing
+    const a = tc.parseFilename('A Buddhist Bible by D. Goddard (1932).pdf');
+    log(`${a.title === 'A Buddhist Bible' && a.author === 'D. Goddard' && a.year === 1932 ? 'PASS' : 'FAIL'} parseFilename -> ${JSON.stringify(a)}`);
+    const b = tc.parseFilename('Le Bouddha et sa réligion par J. Barthélemy Saint-Hilaire (1862).pdf');
+    log(`${b.author === 'J. Barthélemy Saint-Hilaire' ? 'PASS' : 'FAIL'} parseFilename fr -> ${b.author}`);
+    const c = tc.parseFilename('Acariya Mun Bhuridatta.pdf');
+    log(`${c.title === 'Acariya Mun Bhuridatta' && c.author === null ? 'PASS' : 'FAIL'} parseFilename bare -> ${JSON.stringify(c)}`);
+
+    // heading detection
+    log(`${tc.isHeading('CHAPTER IV') ? 'PASS' : 'FAIL'} isHeading CHAPTER IV`);
+    log(`${!tc.isHeading('He went to the river and sat down beneath the tree.') ? 'PASS' : 'FAIL'} isHeading prose rejected`);
+
+    // sentence splitting + reader doc
+    const secs = [{ h: 'One', p: ['First sentence here. Second one follows!', 'A new paragraph. And more.'] }];
+    const doc = rd.toReaderDoc(secs);
+    const flat = doc[0].sentences;
+    log(`${doc.length === 1 && flat.filter(s => s !== '¶').length === 4 ? 'PASS' : 'FAIL'} toReaderDoc -> ${JSON.stringify(flat)}`);
+    log(`${flat.includes('¶') ? 'PASS' : 'FAIL'} paragraph markers present`);
+    log(`${rd.countSentences(doc[0]) === 4 ? 'PASS' : 'FAIL'} countSentences`);
+
+    // buildPassage
+    const passage = ai.buildPassage(doc[0], 0);
+    log(`${passage.focus === 'First sentence here.' ? 'PASS' : 'FAIL'} buildPassage focus -> "${passage.focus}"`);
+
+    // store round trip
+    await st.setProgress('__t', { sec: 2, sen: 7, pct: 0.3 });
+    const p = await st.getProgress('__t');
+    log(`${p.sec === 2 && p.sen === 7 ? 'PASS' : 'FAIL'} IndexedDB progress round trip`);
+    await st.cacheBook('__k', { sections: secs, pages: 1, words: 8 });
+    const cached = await st.getCachedBook('__k');
+    log(`${cached?.sections?.[0]?.h === 'One' ? 'PASS' : 'FAIL'} IndexedDB book cache round trip`);
+    log(`${(await st.cachedKeys()).includes('__k') ? 'PASS' : 'FAIL'} cachedKeys`);
+
+    // letter-spacing collapse
+    const ls0 = tc.collapseLetterSpacing("e B U D D H A N E T' S  B O O K  L I B R A R Y");
+    log(`${/BOOK LIBRARY/.test(ls0.replace(/ +/g, ' ')) ? 'PASS' : 'FAIL'} collapseLetterSpacing -> "${ls0}"`);
+    const keep = tc.collapseLetterSpacing('I am a monk of the order');
+    log(`${keep === 'I am a monk of the order' ? 'PASS' : 'FAIL'} prose left alone -> "${keep}"`);
+
+    // Real PDFs, if any were supplied: dev/selftest.html?pdf=<url>&pdf=<url>
+    const ex = await import('../js/extract.js');
+    const pdfs = new URLSearchParams(location.search).getAll('pdf');
+    if (!pdfs.length) log('SKIP pdf extraction (add ?pdf=<url> to test it)');
+    for (const f of pdfs) {
+      const res = await fetch(f);
+      const buf = await res.arrayBuffer();
+      let lastPage = 0;
+      const t0 = performance.now();
+      const data = await ex.extractPdf(buf, (d, t) => { lastPage = `${d}/${t}`; });
+      const ms = Math.round(performance.now() - t0);
+      log(`\n--- ${f} (${(buf.byteLength / 1048576).toFixed(1)} MB) ---`);
+      log(`${data.sections.length > 0 && data.words > 1000 ? 'PASS' : 'FAIL'} extractPdf -> pages=${data.pages} sections=${data.sections.length} words=${data.words} (${ms}ms, ${lastPage})`);
+      log('HEADINGS: ' + data.sections.slice(0, 6).map(s => s.h.slice(0, 40)).join(' | '));
+
+      const rdoc = rd.toReaderDoc(data.sections);
+      const total = rdoc.reduce((a, s) => a + rd.countSentences(s), 0);
+      log(`${total > 200 ? 'PASS' : 'FAIL'} reader doc -> ${rdoc.length} sections, ${total} sentences`);
+      const spoken = rdoc.flatMap(s => s.sentences).filter(s => s !== '¶');
+      const spelly = spoken.filter(s => / \p{L} \p{L} \p{L} /u.test(s)).length;
+      log(`${spelly === 0 ? 'PASS' : 'WARN'} letter-spaced sentences remaining: ${spelly}`);
+      const mid = spoken[Math.floor(spoken.length / 2)] || '';
+      log('MID-BOOK SENTENCE: ' + mid.slice(0, 200));
+    }
+
+    log('DONE');
+  } catch (err) {
+    log('THREW ' + (err?.stack || err));
+    log('DONE');
+  }
+})();
+</script>
+</body></html>
