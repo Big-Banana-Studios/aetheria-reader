@@ -112,6 +112,12 @@ Three things address that:
   runs **thirty seconds**: Chrome takes audio focus only for media longer
   than five seconds, and writes anything shorter off as a UI sound effect
   without a word of complaint.
+- **A Web Audio tone, and a restart loop.** On Android the speech engine
+  takes audio focus of its own when it starts talking, and the browser
+  pauses our element in response — killing the loop at the exact moment it
+  is needed. The element is restarted whenever anything pauses it, and a
+  −86 dBFS Web Audio tone runs alongside, which is not subject to the same
+  focus arbitration.
 - **Media Session.** The book, chapter and cover appear on the lock screen
   and in the browser's media controls; play, pause and next/previous
   sentence work from there and from hardware media keys.

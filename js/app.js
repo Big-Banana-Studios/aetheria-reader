@@ -933,10 +933,12 @@ function reportBackgroundState() {
       ? `✓ loop ${r.duration}s (over the 5s floor)`
       : `✗ loop ${r.duration ?? '?'}s — too short for audio focus`);
   }
+  bits.push(r.toneState === 'running' ? '✓ web-audio tone running' : `✗ tone ${r.toneState}`);
   bits.push(r.mediaSession ? '✓ media session' : '✗ no media session');
   bits.push(r.metadata ? '✓ lock-screen info set' : '✗ no lock-screen info');
   bits.push(r.handlers ? '✓ media keys wired' : '✗ media keys not wired');
   bits.push(`state: ${r.playbackState}`);
+  bits.push(`revivals: ${r.revivals}`);
   if (r.error) bits.push(`audio refused: ${r.error}`);
   if (reader) bits.push(`speech: ${speechSynthesis.speaking ? 'speaking' : 'idle'}${speechSynthesis.pending ? ' +queued' : ''}`);
 

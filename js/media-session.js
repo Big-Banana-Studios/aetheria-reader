@@ -22,6 +22,15 @@
    UI sound effect and ignored outright — no focus, no media notification,
    no exemption from throttling. A short clip fails silently and looks for
    all the world like the feature simply does not work.
+
+   There is a third problem, and it is why this needs two sources rather
+   than one. On Android the speech engine takes audio focus of its own
+   when it starts talking, and the browser responds by pausing our media
+   element — so the loop dies the moment the reading begins, which is
+   exactly when it is needed. The element is therefore restarted whenever
+   something pauses it, and a Web Audio tone runs alongside it. Web Audio
+   is not subject to the same focus arbitration, so it holds the tab
+   audible even in the moments the element has been taken away from us.
    ═══════════════════════════════════════════════════════════════════ */
 
 const LOOP_SECONDS = 30;         // must clear Chrome's five-second floor
@@ -77,6 +86,11 @@ export class MediaSessionKeepAlive {
     this.book = null;
     this.registered = false;
     this.lastError = null;
+    this.wanted = false;          // whether we are meant to be holding focus
+    this.revivals = 0;            // times the element was paused underneath us
+    this.ctx = null;
+    this.toneStopper = null;
+    this.keeper = null;
   }
 
   #element() {
@@ -90,9 +104,48 @@ export class MediaSessionKeepAlive {
     // treat it as real playback rather than a detached buffer.
     audio.setAttribute('aria-hidden', 'true');
     audio.style.display = 'none';
+
+    // The speech engine grabbing focus shows up here as an ordinary pause.
+    // Take it back, unless we asked for it ourselves.
+    audio.addEventListener('pause', () => {
+      if (!this.wanted) return;
+      this.revivals++;
+      audio.play().catch((err) => { this.lastError = err?.message || String(err); });
+    });
+
     document.body.appendChild(audio);
     this.audio = audio;
     return audio;
+  }
+
+  /**
+   * A Web Audio tone at roughly -86 dBFS. Inaudible, and — unlike a media
+   * element — not something the platform's focus handling will pause on
+   * our behalf, so the tab stays audible even while the element is being
+   * wrestled over.
+   */
+  #startTone() {
+    try {
+      const Ctx = window.AudioContext || window.webkitAudioContext;
+      if (!Ctx) return;
+      if (!this.ctx) this.ctx = new Ctx();
+      if (this.ctx.state === 'suspended') this.ctx.resume().catch(() => {});
+      if (this.toneStopper) return;
+
+      const osc = this.ctx.createOscillator();
+      const gain = this.ctx.createGain();
+      gain.gain.value = 0.00005;
+      osc.frequency.value = 440;
+      osc.connect(gain).connect(this.ctx.destination);
+      osc.start();
+      this.toneStopper = () => { try { osc.stop(); osc.disconnect(); } catch {} };
+    } catch {}
+  }
+
+  #stopTone() {
+    this.toneStopper?.();
+    this.toneStopper = null;
+    this.ctx?.suspend?.().catch(() => {});
   }
 
   #registerActions() {
@@ -115,8 +168,10 @@ export class MediaSessionKeepAlive {
    * is, since reading only ever starts from the play button.
    */
   async start() {
+    this.wanted = true;
     const audio = this.#element();
     this.#registerActions();
+    this.#startTone();
     try {
       if (audio.paused) await audio.play();
       this.lastError = null;
@@ -125,12 +180,37 @@ export class MediaSessionKeepAlive {
       // card and the throttling exemption.
       this.lastError = err?.message || String(err);
     }
+    this.#startKeeper();
     this.setPlaying(true);
   }
 
   stop() {
+    this.wanted = false;
+    this.#stopKeeper();
+    this.#stopTone();
     this.setPlaying(false);
     try { this.audio?.pause(); } catch {}
+  }
+
+  /**
+   * The `pause` event is not always delivered when the platform takes the
+   * element away, so check on a timer as well.
+   */
+  #startKeeper() {
+    this.#stopKeeper();
+    this.keeper = setInterval(() => {
+      if (!this.wanted) return;
+      if (this.ctx?.state === 'suspended') this.ctx.resume().catch(() => {});
+      const a = this.audio;
+      if (a && a.paused) {
+        this.revivals++;
+        a.play().catch((err) => { this.lastError = err?.message || String(err); });
+      }
+    }, 4000);
+  }
+
+  #stopKeeper() {
+    if (this.keeper) { clearInterval(this.keeper); this.keeper = null; }
   }
 
   /** Describe the book for the lock screen and the media keys. */
@@ -169,11 +249,15 @@ export class MediaSessionKeepAlive {
       playbackState: navigator.mediaSession?.playbackState ?? 'n/a',
       handlers: this.registered,
       error: this.lastError,
+      revivals: this.revivals,
+      toneState: this.ctx ? this.ctx.state : 'none',
     };
   }
 
   destroy() {
     this.stop();
+    try { this.ctx?.close(); } catch {}
+    this.ctx = null;
     this.audio?.remove();
     if (this.url) URL.revokeObjectURL(this.url);
     this.audio = null;
