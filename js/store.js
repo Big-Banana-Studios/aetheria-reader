@@ -131,6 +131,7 @@ export const DEFAULTS = {
   sectionPause: 800, autoScroll: true, highlightColor: 'gold',
   aiModel: 'onnx-community/LFM2-700M-ONNX', aiEnabled: true,
   lastSource: 'bundled', music: true, musicVolume: 20,
+  voiceEngine: 'system', kokoroVoice: 'bf_emma', kokoroBuild: 0,
 };
 
 export function loadSettings() {

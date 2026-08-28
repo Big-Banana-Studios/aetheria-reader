@@ -94,26 +94,31 @@ scan is too garbled to interpret rather than invent a reading.
 
 ## Background playback
 
-**On a phone, reading stops when you leave the app, and that cannot be
-fixed from a web page.** Android and iOS suspend the speech engine whenever
-the page is hidden. It is not a question of audio focus: the music keeps
-playing perfectly well with the screen off, which is exactly the proof that
-focus was granted — the speech engine is simply switched off. Chrome's own
-"listen to this page" is a native feature for the same reason.
+There are two voices, and the choice decides this.
 
-So the app pauses on the way out, remembers the sentence, resumes it on
-return, and reports *paused* on the lock screen rather than offering a
-button that does nothing. A screen wake lock is held while reading, so it
-keeps going until the screen is locked deliberately.
+**A browser voice** is instant and free, and stops the moment the page is
+hidden. Android and iOS suspend the speech engine outright; it is not a
+question of audio focus, since the music keeps playing perfectly well with
+the screen off. Chrome's own "listen to this page" is a native feature for
+the same reason. With a browser voice the app pauses on the way out,
+remembers the sentence, and resumes it on return.
 
-Getting real background playback would mean abandoning the browser's speech
-engine and synthesising the audio in-page with a neural voice — Kokoro-82M
-or Piper, both of which run in ONNX — then playing that through an audio
-element, which does survive backgrounding. That is a different app, and a
-download of 25–82 MB before a word is spoken.
+**The on-device voice** — Kokoro-82M, in [`js/voices.js`](js/voices.js) and
+[`js/tts-worker.js`](js/tts-worker.js) — synthesises the audio itself. The
+result is ordinary audio, and ordinary audio plays on with the screen off
+like anything else. Sentences are generated a few ahead in a worker and
+handed to the Web Audio clock with an explicit start time, so once a
+sentence is scheduled it will sound whether or not JavaScript is being
+throttled. Output goes through a MediaStream on an audio element, which is
+unambiguously media as far as the platform is concerned.
 
-In a **desktop** background tab it does keep reading, and three things make
-that work:
+Two costs, and they are real. It downloads 82–310 MB once, depending on the
+build. And the first sentence takes a while — the model warms up on its
+first inference — so the status line says *preparing audio…* until sound
+starts. Later sentences are generated well ahead of being needed.
+
+In a **desktop** background tab either voice keeps reading, and three things
+make that work:
 
 - **Queued playback.** Four utterances are handed to the engine at a time,
   so it plays them back to back without waiting on JavaScript. A clamped
@@ -155,13 +160,22 @@ which is how a four-second loop once survived being tested at all.
 | | Folder picker | Remembers folder | Reading | Background | Assistant |
 | --- | --- | --- | --- | --- | --- |
 | Chrome / Edge desktop | yes | yes | yes | yes | yes |
-| Chrome Android | yes | yes | yes | no | yes |
+| Chrome Android | yes | yes | yes | on-device voice | yes |
 | Firefox | folder upload | no | yes | yes | yes |
-| Safari / iOS | folder upload | no | yes | no | needs Safari 26+ |
+| Safari / iOS | folder upload | no | yes | on-device voice | needs Safari 26+ |
 
-"Background" means another tab or another window on a computer. No mobile
-browser will keep speech running once the page is hidden, so on a phone the
-app pauses and resumes instead.
+On a phone, background reading needs the on-device voice; a browser voice
+pauses and resumes instead. **Settings → On-device voice** carries the
+download, the voice list and the build choice.
+
+### Voices
+
+Kokoro ships four British female voices, of which `bf_emma` is much the
+best (the model card grades it B−, against C for Isabella and D for Alice
+and Lily), four British male, and the American voices, where `af_heart` (A)
+and `af_bella` (A−) are the strongest in the set. Note that a voice cannot
+be carried across engines: the ones your browser offers and the ones Kokoro
+offers are separate, unrelated sets.
 
 Only Chromium browsers implement `showDirectoryPicker`, which is what allows
 the app to reopen your folder on a later visit. Elsewhere the app falls back to

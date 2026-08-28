@@ -10,6 +10,7 @@ import { buildSections, parseFilename } from './textclean.js';
 import { Reader, toReaderDoc, countSentences } from './reader.js';
 import { Assistant, MODELS, hasWebGPU, buildPassage, explainMessages, questionMessages } from './ai.js';
 import { MediaSessionKeepAlive } from './media-session.js';
+import { SystemVoice, NeuralVoice, KOKORO_VOICES, KOKORO_BUILDS, hasWebGPU as gpuForVoice } from './voices.js';
 import * as lib from './library.js';
 import * as store from './store.js';
 
@@ -35,6 +36,14 @@ let current = null;        // the open book entry
 let assistant = null;
 let cancelLoad = false;
 let reopenFolder = null;   // set when a remembered folder needs a fresh gesture
+
+// Two ways of speaking; only the on-device one survives being hidden.
+const systemVoice = new SystemVoice(() => getVoice());
+let neuralVoice = null;
+
+function activeEngine() {
+  return settings.voiceEngine === 'neural' && neuralVoice?.ready ? neuralVoice : systemVoice;
+}
 
 // Keeps the tab audible while reading, so the browser does not freeze it
 // and the operating system shows the book on the lock screen.
@@ -323,8 +332,7 @@ function startReading(entry, doc) {
     body: $('text-body'),
     heading: $('section-heading'),
     scroller: $('reading-area'),
-  }, settings);
-  reader.getVoice = getVoice;
+  }, settings, activeEngine());
 
   const saved = entry.progress;
   if (saved && saved.sec < doc.length) {
@@ -340,7 +348,8 @@ function startReading(entry, doc) {
     $('btn-play').classList.toggle('playing', on);
     $('play-icon').hidden = on;
     $('pause-icon').hidden = !on;
-    if (on) media.start(); else media.stop();
+    if (on) { media.start(); startMetaTicker(); } else media.stop();
+    updateMeta();
   });
   reader.addEventListener('finished', () => toast('End of the book.'));
   reader.addEventListener('resumed', () => {
@@ -373,9 +382,28 @@ function describeForLockScreen() {
 function updateMeta() {
   if (!reader) return;
   const pct = reader.progress();
-  $('doc-meta').textContent =
-    `Section ${reader.sec + 1} of ${reader.doc.length}  ·  ${Math.round(pct * 100)}% read`;
+  let line = `Section ${reader.sec + 1} of ${reader.doc.length}  ·  ${Math.round(pct * 100)}% read`;
+
+  // An on-device voice has to make the audio before it can play it. The
+  // first sentence takes the longest — the model is warming up — and
+  // silence with no explanation reads as a fault.
+  if (reader.playing && reader.engine.report) {
+    const n = reader.engine.report();
+    if (!n.sounding) line += '  ·  preparing audio…';
+  }
+  $('doc-meta').textContent = line;
   $('progress-fill').style.width = pct * 100 + '%';
+}
+
+// While an on-device voice is warming up nothing else fires, so keep the
+// status line moving on its own.
+let metaTicker = null;
+function startMetaTicker() {
+  if (metaTicker) return;
+  metaTicker = setInterval(() => {
+    if (!reader?.playing || !reader.engine.report) return;
+    updateMeta();
+  }, 1000);
 }
 
 function renderNav() {
@@ -497,6 +525,7 @@ function refreshSpeech() {
 function openSettings() {
   $('settings-overlay').classList.add('open');
   applySettings();
+  renderVoiceSettings();
   renderModelList();
   updateCacheNote();
   updateOfflineNote();
@@ -746,6 +775,30 @@ function wire() {
   });
   $('btn-offline').addEventListener('click', downloadLibraryForOffline);
   $('btn-bg-check').addEventListener('click', reportBackgroundState);
+  $('btn-kokoro-load').addEventListener('click', downloadVoice);
+  $('set-engine').addEventListener('click', () => {
+    if (settings.voiceEngine === 'neural') {
+      settings.voiceEngine = 'system';
+    } else if (neuralVoice?.ready) {
+      settings.voiceEngine = 'neural';
+    } else {
+      toast('Download the on-device voice first.');
+      return;
+    }
+    persist();
+    swapEngine();
+    renderVoiceSettings();
+  });
+  $('set-kokoro-voice').addEventListener('change', (e) => {
+    settings.kokoroVoice = e.target.value;
+    persist();
+    if (neuralVoice) { neuralVoice.voiceId = settings.kokoroVoice; swapEngine(); }
+  });
+  $('set-kokoro-build').addEventListener('change', (e) => {
+    settings.kokoroBuild = parseInt(e.target.value, 10);
+    persist();
+    $('kokoro-note').textContent = 'Press Download to fetch this build.';
+  });
   $('lib-search').addEventListener('input', renderLibrary);
   $('btn-change-folder').addEventListener('click', pickFolder);
   $('btn-lib-settings').addEventListener('click', openSettings);
@@ -791,14 +844,13 @@ function wire() {
     const v = voices[Number(e.target.value)];
     if (v) { settings.voiceName = v.name; persist(); refreshSpeech(); }
   });
-  $('btn-test-voice').addEventListener('click', () => {
-    speechSynthesis.cancel();
-    const u = new SpeechSynthesisUtterance(
-      'All conditioned things are impermanent. Work out your own salvation with diligence.');
-    u.rate = settings.rate;
-    const v = getVoice();
-    if (v) { u.voice = v; u.lang = v.lang; }
-    speechSynthesis.speak(u);
+  $('btn-test-voice').addEventListener('click', async () => {
+    const line = 'All conditioned things are impermanent. '
+               + 'Work out your own salvation with diligence.';
+    const engine = activeEngine();
+    engine.cancel();
+    if (engine === neuralVoice) await neuralVoice.resume();
+    engine.enqueue(line, { rate: settings.rate });
   });
 
   const bind = (id, key, parse, speech) => $(id).addEventListener('input', (e) => {
@@ -943,6 +995,91 @@ async function downloadLibraryForOffline() {
  * page is throttled the moment it is hidden and there is no lock-screen
  * card — and the failure is otherwise completely silent.
  */
+function renderVoiceSettings() {
+  const neural = settings.voiceEngine === 'neural';
+  const btn = $('set-engine');
+  btn.textContent = neural ? 'On' : 'Off';
+  btn.classList.toggle('on', neural);
+  $('engine-desc').textContent = neural
+    ? (neuralVoice?.ready ? 'On-device voice in use — reading continues in the background.'
+                          : 'Selected, but the model still needs downloading.')
+    : 'Using a browser voice — reading pauses when the app is hidden.';
+
+  const voiceSel = $('set-kokoro-voice');
+  if (!voiceSel.options.length) {
+    for (const v of KOKORO_VOICES) {
+      const opt = document.createElement('option');
+      opt.value = v.id;
+      opt.textContent = `${v.label}  (${v.grade})`;
+      voiceSel.appendChild(opt);
+    }
+  }
+  voiceSel.value = settings.kokoroVoice;
+
+  const buildSel = $('set-kokoro-build');
+  if (!buildSel.options.length) {
+    KOKORO_BUILDS.forEach((b, i) => {
+      const opt = document.createElement('option');
+      opt.value = String(i);
+      opt.textContent = `${b.label} — ${b.size.trim()}`;
+      opt.disabled = b.device === 'webgpu' && !gpuForVoice();
+      buildSel.appendChild(opt);
+    });
+  }
+  buildSel.value = String(settings.kokoroBuild);
+  $('build-desc').textContent = gpuForVoice()
+    ? 'This device has WebGPU, so the larger builds will run fast.'
+    : 'No WebGPU here — only the CPU build will be usable, and it is slow.';
+
+  if (neuralVoice?.ready) {
+    $('kokoro-note').textContent = 'Downloaded and ready.';
+    $('btn-kokoro-load').textContent = 'Reload';
+  }
+}
+
+async function downloadVoice() {
+  const btn = $('btn-kokoro-load');
+  const note = $('kokoro-note');
+  const build = KOKORO_BUILDS[settings.kokoroBuild] || KOKORO_BUILDS[0];
+  btn.disabled = true;
+
+  try {
+    if (neuralVoice) neuralVoice.destroy();
+    neuralVoice = new NeuralVoice(settings.kokoroVoice);
+    neuralVoice.addEventListener('load-progress', (e) => {
+      const { percent, total } = e.detail;
+      if (total) {
+        note.textContent = `Downloading — ${Math.round(percent)}% of ${(total / 1048576).toFixed(0)} MB`;
+      }
+    });
+
+    note.textContent = 'Starting…';
+    await neuralVoice.resume();          // opens audio output within the tap
+    await neuralVoice.prepare(build);
+    note.textContent = `Ready — ${build.label.toLowerCase()}, ${build.device.toUpperCase()}.`;
+    settings.voiceEngine = 'neural';
+    persist();
+    swapEngine();
+    toast('On-device voice ready. Reading now continues in the background.', 5000);
+  } catch (err) {
+    note.textContent = err.message || String(err);
+    toast('The voice could not be loaded: ' + (err.message || err));
+  } finally {
+    btn.disabled = false;
+    renderVoiceSettings();
+  }
+}
+
+/** Move a book already open onto whichever engine is now selected. */
+function swapEngine() {
+  if (!reader) return;
+  const wasPlaying = reader.playing;
+  reader.stop();
+  reader.engine.cancel();
+  reader.engine = activeEngine();
+  if (wasPlaying) reader.play();
+}
+
 function reportBackgroundState() {
   const r = media.report();
   const bits = [];
@@ -952,6 +1089,16 @@ function reportBackgroundState() {
   // chasing a fault that was not there.
   const reading = !!reader?.playing;
   bits.push(reading ? '▶ reading' : '⏸ NOT reading — press play, then check');
+
+  const engine = activeEngine();
+  bits.push(engine.backgroundCapable
+    ? '✓ on-device voice (background capable)'
+    : '· browser voice (pauses when hidden)');
+  if (engine.report) {
+    const n = engine.report();
+    bits.push(`audio ctx ${n.context}, element ${n.element}, ${n.queued} queued, ${n.sounding} sounding`);
+    if (n.error) bits.push('voice error: ' + n.error);
+  }
 
   if (!r.audioElement) {
     bits.push('audio not started');
@@ -1032,6 +1179,13 @@ async function init() {
   if (!supportsDirectoryPicker) {
     $('drop-label').textContent = 'Choose your books folder';
     $('drop-hint').textContent = 'Your browser will ask to upload the folder — nothing leaves this device';
+  }
+
+  renderVoiceSettings();
+  if (settings.voiceEngine === 'neural') {
+    // Chosen previously, but the model has to be fetched again this session
+    // (its weights are cached, so this is usually quick) and only on a tap.
+    $('kokoro-note').textContent = 'Selected — press Download to start it for this session.';
   }
 
   catalog = await lib.loadCatalog();

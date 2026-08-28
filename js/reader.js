@@ -2,22 +2,20 @@
    READER
    Renders a book and speaks it.
 
-   Playback keeps several sentences queued inside the speech engine at
+   Playback keeps several sentences queued inside the voice engine at
    once, rather than speaking one and using a timer to start the next.
    That matters: a background tab has its timers clamped, so a
    timer-driven reader falls silent the moment you switch away. With a
    queue, the engine plays straight through on its own and JavaScript
    only tops it up.
 
-   Two further hazards are handled here. Every utterance is kept in
-   `queue` — Chrome stops speaking if an utterance is garbage-collected
-   before it finishes — and long sentences are cut into chunks, because a
-   single utterance running past about fifteen seconds is dropped.
+   Which engine does the speaking is up to voices.js — the browser's own,
+   or Kokoro running on-device. Only the second keeps going once the page
+   is hidden, so `backgroundCapable` decides whether being hidden pauses
+   the reading or is simply ignored.
    ═══════════════════════════════════════════════════════════════════ */
 
 const PARA = '¶';
-const LOOKAHEAD = 4;             // utterances kept queued in the engine
-const MAX_UTTER_CHARS = 200;     // longest single utterance
 
 /** Split a paragraph into sentences, tolerating abbreviations. */
 export function splitSentences(text) {
@@ -43,47 +41,24 @@ export function toReaderDoc(sections) {
 export const countSentences = (section) =>
   section.sentences.reduce((a, s) => a + (s === PARA ? 0 : 1), 0);
 
-/**
- * Break an over-long sentence at a clause boundary. Speech engines drop
- * an utterance that runs too long, and these translations contain some
- * enormous Victorian sentences.
- */
-function chunkText(text) {
-  if (text.length <= MAX_UTTER_CHARS) return [text];
-  const out = [];
-  let rest = text;
-  while (rest.length > MAX_UTTER_CHARS) {
-    const window = rest.slice(0, MAX_UTTER_CHARS);
-    let cut = Math.max(
-      window.lastIndexOf('; '), window.lastIndexOf(', '),
-      window.lastIndexOf(': '), window.lastIndexOf(' — '));
-    if (cut > MAX_UTTER_CHARS * 0.4) cut += 1;
-    else cut = window.lastIndexOf(' ');
-    if (cut <= 0) cut = MAX_UTTER_CHARS;
-    out.push(rest.slice(0, cut).trim());
-    rest = rest.slice(cut).trim();
-  }
-  if (rest) out.push(rest);
-  return out.filter(Boolean);
-}
-
 export class Reader extends EventTarget {
   /**
    * @param {{heading:string,sentences:string[]}[]} doc
    * @param {{body:HTMLElement, heading:HTMLElement, scroller:HTMLElement}} els
    * @param {object} settings
    */
-  constructor(doc, els, settings) {
+  constructor(doc, els, settings, engine) {
     super();
     this.doc = doc;
     this.els = els;
     this.settings = settings;
+    this.engine = engine;
 
     this.sec = 0;                 // position currently being spoken
     this.sen = 0;
     this.feed = { sec: 0, sen: 0 };// position next to be queued, runs ahead
     this.playing = false;
-    this.queue = [];              // live utterances — see class comment
+    this.inFlight = 0;            // items handed to the engine, not yet done
     this.gen = 0;                 // bumped to disown callbacks after a flush
     this.timer = null;
     this.watchdog = null;
@@ -92,13 +67,14 @@ export class Reader extends EventTarget {
 
     this.resumeOnReturn = false;
 
-    // Android suspends the speech engine outright while the page is
-    // hidden, and there is no arrangement of audio focus that changes it.
-    // Rather than die mid-sentence and leave the controls insisting all is
-    // well, stop cleanly and pick the same sentence back up on return.
+    // Browser speech is suspended outright while the page is hidden, and
+    // no arrangement of audio focus changes it. Rather than die
+    // mid-sentence and leave the controls insisting all is well, stop
+    // cleanly and pick the same sentence back up on return. An on-device
+    // voice produces ordinary audio and needs none of this.
     this.onVisibility = () => {
       if (document.hidden) {
-        if (this.playing) {
+        if (this.playing && !this.engine.backgroundCapable) {
           this.resumeOnReturn = true;
           this.stop();
           this.#emit('suspended');
@@ -250,9 +226,9 @@ export class Reader extends EventTarget {
   /** Drop everything queued and disown its callbacks. */
   #flush() {
     this.gen++;
-    this.queue.length = 0;
+    this.inFlight = 0;
     this.quiet = 0;
-    speechSynthesis.cancel();
+    this.engine.cancel();
   }
 
   #clearTimer() {
@@ -289,26 +265,27 @@ export class Reader extends EventTarget {
   #pump() {
     if (!this.playing || this.timer) return;
 
-    while (this.queue.length < LOOKAHEAD) {
+    while (this.inFlight < this.engine.lookahead) {
       const item = this.#peek();
       if (!item) {
-        if (!this.queue.length) { this.stop(); this.#emit('finished'); }
+        if (!this.inFlight) { this.stop(); this.#emit('finished'); }
         return;
       }
 
-      // Pauses are a nicety, and they cost a timer. In a background tab
-      // a timer may not fire for a minute, so skip them while hidden and
-      // let the reading run on uninterrupted.
-      const pause = document.hidden ? 0 : item.pause;
-      if (pause > 0) {
-        if (this.queue.length) return;      // let what is queued play out
+      // A pause costs a timer, and a hidden tab may not run one for a
+      // minute. An engine that can play buffers back to back takes its
+      // pause as a gap in the schedule instead; the browser engine has to
+      // skip them while hidden, or the reading stalls.
+      const pause = (document.hidden && !this.engine.backgroundCapable) ? 0 : item.pause;
+      if (pause > 0 && !this.engine.backgroundCapable) {
+        if (this.inFlight) return;          // let what is queued play out
         this.feed = item.next;
         this.#pauseThen(item, pause);
         return;
       }
 
       this.feed = item.next;
-      this.#enqueue(item);
+      this.#enqueue(item, pause);
     }
   }
 
@@ -323,19 +300,21 @@ export class Reader extends EventTarget {
     }, ms);
   }
 
-  #enqueue(item) {
+  #enqueue(item, gapAfter = 0) {
     const gen = this.gen;
-    const voice = this.getVoice?.();
+    const chunks = this.engine.chunk(item.text);
 
-    chunkText(item.text).forEach((text, i) => {
-      const utter = new SpeechSynthesisUtterance(text);
-      utter.rate = this.settings.rate;
-      if (voice) { utter.voice = voice; utter.lang = voice.lang; }
+    chunks.forEach((text, i) => {
+      const last = i === chunks.length - 1;
+      this.inFlight++;
 
-      // The highlight follows what is actually being spoken, not what has
-      // been queued — the two are several sentences apart.
-      if (i === 0) {
-        utter.onstart = () => {
+      this.engine.enqueue(text, {
+        rate: this.settings.rate,
+        gapAfter: last ? gapAfter : 0,
+
+        // The highlight follows what is actually being spoken, not what
+        // has been queued — the two are several sentences apart.
+        onStart: i === 0 ? () => {
           if (gen !== this.gen) return;
           this.quiet = 0;
           if (item.sec !== this.sec) {
@@ -347,30 +326,21 @@ export class Reader extends EventTarget {
             this.sen = item.sen;
             this.highlight();
           }
-        };
-      }
+        } : null,
 
-      const done = () => {
-        const at = this.queue.indexOf(utter);
-        if (at >= 0) this.queue.splice(at, 1);
-      };
+        onEnd: () => {
+          if (gen !== this.gen) return;
+          this.inFlight = Math.max(0, this.inFlight - 1);
+          this.#pump();
+        },
 
-      utter.onend = () => {
-        if (gen !== this.gen) return;
-        done();
-        this.#pump();
-      };
-
-      utter.onerror = (e) => {
-        if (gen !== this.gen) return;
-        done();
-        if (e.error === 'canceled' || e.error === 'interrupted') return;
-        this.#emit('speech-error', { error: e.error });
-        this.#pump();
-      };
-
-      this.queue.push(utter);     // holding this reference is essential
-      speechSynthesis.speak(utter);
+        onError: (error) => {
+          if (gen !== this.gen) return;
+          this.inFlight = Math.max(0, this.inFlight - 1);
+          this.#emit('speech-error', { error });
+          this.#pump();
+        },
+      });
     });
   }
 
@@ -383,7 +353,7 @@ export class Reader extends EventTarget {
     this.#stopWatchdog();
     this.watchdog = setInterval(() => {
       if (!this.playing || this.timer) { this.quiet = 0; return; }
-      if (speechSynthesis.speaking || speechSynthesis.pending) { this.quiet = 0; return; }
+      if (this.engine.busy || this.inFlight) { this.quiet = 0; return; }
       if (++this.quiet < 2) return;
       this.#flush();
       this.feed = { sec: this.sec, sen: this.sen };

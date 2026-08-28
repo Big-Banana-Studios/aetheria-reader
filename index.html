@@ -165,6 +165,32 @@
       </div>
 
       <div class="settings-section">
+        <div class="settings-section-title">On-device voice</div>
+        <div class="setting-desc" style="margin:-4px 0 12px">
+          Kokoro runs the voice on this device instead of asking the browser
+          for one. It is the only way reading continues once you leave the app
+          or lock the screen — browser speech is switched off whenever the page
+          is hidden. Downloaded once, then kept.
+        </div>
+        <div class="setting-row">
+          <div><div class="setting-name">Use on-device voice</div><div class="setting-desc" id="engine-desc"></div></div>
+          <div class="setting-control"><button class="btn-pill" id="set-engine"></button></div>
+        </div>
+        <div class="setting-row">
+          <div><div class="setting-name">Voice</div><div class="setting-desc">Graded by the model's own authors</div></div>
+          <div class="setting-control"><select id="set-kokoro-voice"></select></div>
+        </div>
+        <div class="setting-row">
+          <div><div class="setting-name">Build</div><div class="setting-desc" id="build-desc"></div></div>
+          <div class="setting-control"><select id="set-kokoro-build"></select></div>
+        </div>
+        <div class="setting-row">
+          <div><div class="setting-name">Model</div><div class="setting-desc" id="kokoro-note">Not downloaded.</div></div>
+          <div class="setting-control"><button class="btn-pill" id="btn-kokoro-load">Download</button></div>
+        </div>
+      </div>
+
+      <div class="settings-section">
         <div class="settings-section-title">Playback</div>
         <div class="setting-row">
           <div><div class="setting-name">Speed</div><div class="setting-desc">0.5× to 2.0×</div></div>
