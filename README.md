@@ -10,8 +10,9 @@ anything.
 
 ## What it does
 
-- **Ships a library.** 149 public-domain titles, 10.2 million words, printed
-  between 1830 and 1935. Cleaned text only: 57 MB, published with the app.
+- **Ships a library.** 414 public-domain titles across two collections —
+  Buddhism (149) and Mesopotamia (265) — 30.8 million words, printed between
+  1801 and 1935. Cleaned text only: 172 MB, published with the app.
 - **Reads your own folder too.** Choose a folder of PDFs and the app lists
   every book in it, extracts the text in the browser, and remembers the folder
   for next time. Nothing is uploaded.
@@ -32,8 +33,8 @@ anything.
 
 ## The library
 
-`library/index.json` is the catalogue; each book is a separate
-`library/<id>.json` holding cleaned, sectioned text. They are fetched one at a
+`library/index.json` is the catalogue, listing collections and books; each
+book is a separate `library/<id>.json` holding cleaned, sectioned text. They are fetched one at a
 time as books are opened and cached by the service worker, so the reader only
 ever downloads what they actually read.
 
@@ -42,13 +43,30 @@ The texts are generated from a folder of PDFs by
 in-browser cleaner exactly:
 
 ```bash
-python tools/build_library.py "../Buddism books" library
+# add or rebuild one collection
+python tools/build_library.py "../Buddism books" library --name Buddhism
+python tools/build_library.py "G:/" library --name Mesopotamia
+
+# or treat every subfolder of a drive as its own collection
+python tools/build_library.py /e/BookSets library --sets
 ```
 
-The source PDFs — 1.9 GB — are deliberately not in this repository. They
-exceed what GitHub Pages will host, and the text is what the reader needs.
-Of 153 books, 149 carry an OCR text layer; the other four are picture-only
-scans and were skipped.
+Runs merge: collections not named are carried over untouched, and books
+already extracted are kept rather than redone, so adding a set takes as long
+as that set alone. Catalogue entries whose text file has gone are dropped,
+and collections left empty disappear. `--force` re-extracts, `--replace`
+starts a fresh catalogue.
+
+The source PDFs are deliberately not in this repository — they run to
+several gigabytes, far more than GitHub Pages will host, and the text is
+what the reader needs. Sixteen of 430 scans carry no OCR text layer at all
+and are skipped.
+
+Each book is also scored for how much of it reads as English prose. These
+sets include scholarly editions of transliterated cuneiform, and volumes in
+German and French; they extract perfectly well and are useless read aloud by
+an English voice, so the library marks them **not English prose** rather than
+letting someone find out by pressing play. Nineteen of 414 are flagged.
 
 ## Getting the text out of the books
 

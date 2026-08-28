@@ -152,21 +152,49 @@ function setSource(next) {
     btn.classList.toggle('active', btn.dataset.src === next);
   }
   $('btn-change-folder').hidden = next !== 'local';
+  $('lib-collection').hidden = next !== 'bundled' || $('lib-collection').options.length < 2;
   settings.lastSource = next;
   persist();
   renderLibrary();
+}
+
+/**
+ * Offer the collections as a filter, but only once there is more than one
+ * — a lone "Buddhism" dropdown would be furniture.
+ */
+function fillCollections(cat) {
+  const sel = $('lib-collection');
+  const sets = lib.collections(cat);
+  sel.replaceChildren();
+  if (sets.length < 2) { sel.hidden = true; return; }
+
+  const all = document.createElement('option');
+  all.value = '*';
+  all.textContent = `All ${cat.count} books`;
+  sel.appendChild(all);
+  for (const c of sets) {
+    const opt = document.createElement('option');
+    opt.value = c.id;
+    opt.textContent = `${c.name} (${c.count})`;
+    sel.appendChild(opt);
+  }
+  sel.value = '*';
+  sel.hidden = false;
 }
 
 /* ── Library UI ─────────────────────────────────────────────────── */
 
 function renderLibrary() {
   const query = $('lib-search').value.trim().toLowerCase();
+  const wanted = $('lib-collection').value;
   const grid = $('lib-grid');
-  const shown = query
-    ? books.filter((b) =>
-        b.title.toLowerCase().includes(query) ||
-        (b.author || '').toLowerCase().includes(query))
-    : books;
+
+  const shown = books.filter((b) => {
+    if (wanted && wanted !== '*' && b.collection !== wanted) return false;
+    if (!query) return true;
+    return b.title.toLowerCase().includes(query)
+        || (b.author || '').toLowerCase().includes(query);
+  });
 
   $('lib-count').textContent =
     shown.length === books.length
@@ -177,7 +205,7 @@ function renderLibrary() {
   $('lib-empty').hidden = shown.length > 0;
   if (!shown.length) {
     $('lib-empty').textContent = books.length
-      ? 'Nothing matches that search.'
+      ? 'Nothing here matches.'
       : 'No books found in that folder.';
     return;
   }
@@ -207,6 +235,11 @@ function renderLibrary() {
       : `${(book.size / 1048576).toFixed(1)} MB`);
     if (book.unreadable) {
       foot.appendChild(badge('no text layer', 'unreadable'));
+    } else if (book.prose !== null && book.prose < 12) {
+      // Scholarly editions of transliterated cuneiform, and the odd volume
+      // in German or French. They read aloud as nonsense in an English
+      // voice, so say so before someone presses play.
+      foot.appendChild(badge('not English prose', 'unreadable'));
     } else if (book.cached) {
       foot.appendChild(badge('ready', 'ready'));
     }
@@ -800,6 +833,7 @@ function wire() {
     $('kokoro-note').textContent = 'Press Download to fetch this build.';
   });
   $('lib-search').addEventListener('input', renderLibrary);
+  $('lib-collection').addEventListener('change', renderLibrary);
   $('btn-change-folder').addEventListener('click', pickFolder);
   $('btn-lib-settings').addEventListener('click', openSettings);
 
@@ -1191,6 +1225,7 @@ async function init() {
   catalog = await lib.loadCatalog();
   if (catalog) {
     bundledBooks = lib.toEntries(catalog, await store.allProgress());
+    fillCollections(catalog);
     $('src-toggle').hidden = false;
     setSource('bundled');
     show('library-screen');

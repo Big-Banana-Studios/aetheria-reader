@@ -44,6 +44,8 @@ export function toEntries(catalog, progress) {
     author: b.a || null,
     year: b.y || null,
     note: b.n || null,
+    collection: b.c || null,
+    prose: typeof b.p === 'number' ? b.p : null,
     words: b.w,
     sectionCount: b.s,
     bytes: (b.kb || 0) * 1024,
@@ -57,6 +59,10 @@ export function toEntries(catalog, progress) {
 
 /** Every book URL in the catalogue, for pre-caching the whole library. */
 export const allBookUrls = (catalog) => catalog.books.map((b) => bookUrl(b.id));
+
+/** The collections in the catalogue, oldest format tolerated. */
+export const collections = (catalog) =>
+  Array.isArray(catalog?.collections) ? catalog.collections : [];
 
 /** Total published size, in bytes. */
 export const totalBytes = (catalog) =>

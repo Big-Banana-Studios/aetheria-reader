@@ -6,11 +6,16 @@ Extracts the text layer of every PDF (via pdftotext), cleans up OCR
 artefacts, splits the result into sections and writes one compact JSON
 file per book plus a catalog index.
 
-    python tools/build_library.py "../Buddism books" library
+    python tools/build_library.py "../Buddism books" library --name Buddhism
+    python tools/build_library.py /e/BookSets library --sets
+
+Books already extracted are kept, so adding a new set does not re-do the
+old ones. Collections not named in a run are carried over untouched.
 
 Requires `pdftotext` (Poppler / Xpdf) on PATH.
 """
 
+import argparse
 import json
 import os
 import re
@@ -51,11 +56,37 @@ def parse_name(stem):
         title = parts[0].strip(" .,-")
         author = parts[-1].strip(" .,-")
     else:
+        # Some sets use "Title - Author" instead of "Title by Author". Only
+        # take the tail when it actually looks like a name, or subtitles
+        # ("Assyria - its princes, priests and people") lose half of
+        # themselves to the author field.
         title = stem.strip(" .,-")
+        head, sep, tail = stem.rpartition(" - ")
+        if sep and looks_like_name(tail.strip(" .,")):
+            title = head.strip(" .,-")
+            author = tail.strip(" .,-")
 
     if author and len(author) > 90:
         author = None
     return title or stem, author, year, note
+
+
+# "G. Smith", "E. A. Budge", "The British Museum" — but not a subtitle
+NAME_RE = re.compile(
+    r"^(?:[A-Z]\.\s*)*[A-Z][\w'’-]*(?:\s+[A-Z][\w'’-]*){0,3}$", re.U)
+
+
+def looks_like_name(text):
+    if not text or len(text) > 45:
+        return False
+    words = text.split()
+    if not 1 <= len(words) <= 5:
+        return False
+    # A trailing subtitle usually reads as a phrase, not a name
+    if any(w.lower() in ("of", "the", "and", "in", "to", "from", "with", "its")
+           for w in words[1:]):
+        return False
+    return bool(NAME_RE.match(text))
 
 
 def slugify(text, fallback="book"):
@@ -299,6 +330,33 @@ def build_sections(pages):
     return merged
 
 
+# -- Readability -----------------------------------------------------------
+
+STOPWORDS = frozenset(
+    "the of and to in is was that a it as for with by his he on at from not "
+    "this which were be or had have their but they all we you her she him "
+    "them".split())
+
+
+def prose_score(sections):
+    """
+    Roughly, how much of this reads as English prose.
+
+    These sets contain scholarly editions that are mostly transliterated
+    cuneiform, and a few volumes in German or French. They extract
+    perfectly well and are useless read aloud by an English voice, so the
+    library says so rather than letting someone find out by pressing play.
+    Measured as the share of words that are common English function words:
+    ordinary prose runs well above 18%, transliteration near zero.
+    """
+    text = " ".join(p for s in sections for p in s["p"])
+    mid = text[len(text) // 4: len(text) // 4 + 60000]
+    words = re.findall(r"[A-Za-z'-]+", mid.lower())
+    if len(words) < 200:
+        return 0
+    return round(100 * sum(w in STOPWORDS for w in words) / len(words))
+
+
 # -- Main ------------------------------------------------------------------
 
 def extract(path):
@@ -318,24 +376,49 @@ def extract(path):
     return strip_running_headers(pages)
 
 
-def main():
-    src = sys.argv[1] if len(sys.argv) > 1 else "../Buddism books"
-    dest = sys.argv[2] if len(sys.argv) > 2 else "library"
-    os.makedirs(dest, exist_ok=True)
+def load_index(dest):
+    """Existing catalogue, so a rerun need not re-extract everything."""
+    path = os.path.join(dest, "index.json")
+    if not os.path.exists(path):
+        return {"collections": [], "books": []}
+    with open(path, encoding="utf-8") as fh:
+        return json.load(fh)
 
+
+def build_collection(src, dest, name, existing, force=False):
+    """Extract one folder of PDFs into `dest`, returning its catalogue rows."""
+    coll_id = slugify(name)
     pdfs = sorted(f for f in os.listdir(src) if f.lower().endswith(".pdf"))
-    catalog, skipped, seen = [], [], set()
+    if not pdfs:
+        print("  (no PDFs in %s)" % src)
+        return coll_id, [], []
+
+    # Books already extracted are reused unless asked otherwise: a full run
+    # over a large set takes many minutes, and adding a new set should not
+    # mean redoing the ones already done.
+    known = {b["id"]: b for b in existing.get("books", [])}
+    rows, skipped, seen = [], [], set()
 
     for n, fname in enumerate(pdfs, 1):
-        stem = os.path.splitext(fname)[0]
-        title, author, year, note = parse_name(stem)
+        title, author, year, note = parse_name(os.path.splitext(fname)[0])
         slug = slugify("%s-%s-%s" % (title, author or "", year or ""))
         while slug in seen:
             slug += "-2"
         seen.add(slug)
 
-        sys.stdout.write("[%3d/%d] %-56.56s " % (n, len(pdfs), title))
+        sys.stdout.write("[%3d/%d] %-52.52s " % (n, len(pdfs), title))
         sys.stdout.flush()
+
+        out_path = os.path.join(dest, slug + ".json")
+        if not force and slug in known and os.path.exists(out_path):
+            row = dict(known[slug])
+            row["c"] = coll_id
+            if "p" not in row:                     # scored after the fact
+                with open(out_path, encoding="utf-8") as fh:
+                    row["p"] = prose_score(json.load(fh)["sections"])
+            rows.append(row)
+            print("kept")
+            continue
 
         pages = extract(os.path.join(src, fname))
         if not pages:
@@ -350,37 +433,116 @@ def main():
             skipped.append(fname)
             continue
 
-        book = {
-            "id": slug, "title": title, "author": author, "year": year,
-            "note": note, "pages": len(pages), "words": words,
-            "sections": sections,
-        }
-        out_path = os.path.join(dest, slug + ".json")
         with open(out_path, "w", encoding="utf-8") as fh:
-            json.dump(book, fh, ensure_ascii=False, separators=(",", ":"))
+            json.dump({
+                "id": slug, "title": title, "author": author, "year": year,
+                "note": note, "pages": len(pages), "words": words,
+                "sections": sections,
+            }, fh, ensure_ascii=False, separators=(",", ":"))
 
         kb = round(os.path.getsize(out_path) / 1024)
-        catalog.append({
-            "id": slug, "t": title, "a": author, "y": year,
-            "n": note, "w": words, "s": len(sections), "kb": kb,
+        rows.append({
+            "id": slug, "t": title, "a": author, "y": year, "n": note,
+            "w": words, "s": len(sections), "kb": kb, "c": coll_id,
+            "p": prose_score(sections),
         })
         print("%3d sec %8d words %6d KB" % (len(sections), words, kb))
 
-    catalog.sort(key=lambda b: b["t"].lower())
-    with open(os.path.join(dest, "index.json"), "w", encoding="utf-8") as fh:
+    return coll_id, rows, skipped
+
+
+def main():
+    ap = argparse.ArgumentParser(
+        description="Build the Aetheria Reader library from folders of PDFs.")
+    ap.add_argument("source", help="folder of PDFs, or a parent of such folders with --sets")
+    ap.add_argument("dest", nargs="?", default="library", help="output folder (default: library)")
+    ap.add_argument("--name", help="collection name (default: the folder's own name)")
+    ap.add_argument("--sets", action="store_true",
+                    help="treat each subfolder of SOURCE as its own collection")
+    ap.add_argument("--replace", action="store_true",
+                    help="start a fresh catalogue instead of merging into the existing one")
+    ap.add_argument("--force", action="store_true",
+                    help="re-extract books even where their text is already built")
+    args = ap.parse_args()
+
+    os.makedirs(args.dest, exist_ok=True)
+    existing = {"collections": [], "books": []} if args.replace else load_index(args.dest)
+
+    sources = []
+    if args.sets:
+        for entry in sorted(os.listdir(args.source)):
+            path = os.path.join(args.source, entry)
+            if os.path.isdir(path):
+                sources.append((path, entry))
+    else:
+        sources.append((args.source,
+                        args.name or os.path.basename(os.path.abspath(args.source))))
+
+    # Anything not part of the collections being (re)built is carried over
+    rebuilt = {slugify(name) for _, name in sources}
+    carried = [b for b in existing.get("books", []) if b.get("c") not in rebuilt]
+    collections = [c for c in existing.get("collections", []) if c["id"] not in rebuilt]
+    books = []
+    all_skipped = []
+
+    for src, name in sources:
+        print("\n== %s ==" % name)
+        coll_id, rows, skipped = build_collection(src, args.dest, name, existing, args.force)
+        if not rows:
+            continue
+        books.extend(rows)
+        collections.append({
+            "id": coll_id, "name": name, "count": len(rows),
+            "words": sum(r["w"] for r in rows),
+        })
+        all_skipped.extend(skipped)
+
+    # Books carried over from a previous run join at the end, minus any the
+    # run has just rebuilt. Catalogues written before collections existed
+    # have no `c` at all, so matching on id is what keeps them from being
+    # counted twice.
+    fresh = {b["id"] for b in books}
+    for b in carried:
+        if b["id"] in fresh:
+            continue
+        # A catalogue entry whose text file has gone would be a dead link
+        if not os.path.exists(os.path.join(args.dest, b["id"] + ".json")):
+            print("  dropped (text missing): %s" % b["t"])
+            continue
+        books.append(b)
+
+    # Recount every collection from the books that actually survived, and
+    # drop any left with nothing in it.
+    counts = {}
+    for b in books:
+        c = b.get("c")
+        if c:
+            entry = counts.setdefault(c, {"count": 0, "words": 0})
+            entry["count"] += 1
+            entry["words"] += b.get("w", 0)
+    collections = [dict(c, **counts[c["id"]]) for c in collections if c["id"] in counts]
+
+    books.sort(key=lambda b: b["t"].lower())
+    collections.sort(key=lambda c: c["name"].lower())
+
+    with open(os.path.join(args.dest, "index.json"), "w", encoding="utf-8") as fh:
         json.dump({
             "generated": date.today().isoformat(),
-            "count": len(catalog),
-            "books": catalog,
+            "count": len(books),
+            "collections": collections,
+            "books": books,
         }, fh, ensure_ascii=False, separators=(",", ":"))
 
-    total_kb = sum(b["kb"] for b in catalog)
-    print("\n%d books  |  %.1f MB  |  %s words"
-          % (len(catalog), total_kb / 1024.0, "{:,}".format(sum(b["w"] for b in catalog))))
-    if skipped:
-        print("\nSkipped %d:" % len(skipped))
-        for s in skipped:
-            print("  -", s)
+    total_kb = sum(b["kb"] for b in books)
+    print("\n%d books in %d collection(s)  |  %.1f MB  |  %s words"
+          % (len(books), len(collections), total_kb / 1024.0,
+             "{:,}".format(sum(b["w"] for b in books))))
+    for c in collections:
+        print("   %-28s %4d books" % (c["name"], c["count"]))
+    if all_skipped:
+        print("\nSkipped %d (no text layer):" % len(all_skipped))
+        for sk in all_skipped:
+            print("  -", sk)
 
 
 if __name__ == "__main__":
