@@ -187,20 +187,32 @@ function setSource(next) {
   for (const btn of document.querySelectorAll('.src-btn')) {
     btn.classList.toggle('active', btn.dataset.src === next);
   }
+  // Both ways in stay available on every platform. Where a folder cannot
+  // be remembered the picker still works as a one-off upload, and adding
+  // a single file must always be possible.
   $('btn-add-books').hidden = next !== 'local';
-  $('btn-change-folder').hidden = next !== 'local' || !supportsDirectoryPicker;
+  $('btn-change-folder').hidden = next !== 'local';
   $('lib-collection').hidden = next !== 'bundled' || $('lib-collection').options.length < 2;
   settings.lastSource = next;
   persist();
   renderLibrary();
 
-  if (next === 'local' && !localBooks.length) addBooks();
+  if (next === 'local' && !localBooks.length) addFiles();
 }
 
-/** Add books from this device, without disturbing what is already here. */
-function addBooks() {
-  if (reopenFolder) { reopenFolder(); return; }
+/**
+ * Add one or more individual files. This must never divert to the folder
+ * picker: a button marked "add a file" that opens a folder dialog is the
+ * whole reason single files were unreachable.
+ */
+function addFiles() {
   $('file-input').click();
+}
+
+/** Add a whole folder at once, or reopen the one already chosen. */
+function addFolder() {
+  if (reopenFolder) { reopenFolder(); return; }
+  pickFolder();
 }
 
 /**
@@ -883,8 +895,8 @@ function wire() {
   });
   $('lib-search').addEventListener('input', renderLibrary);
   $('lib-collection').addEventListener('change', renderLibrary);
-  $('btn-change-folder').addEventListener('click', pickFolder);
-  $('btn-add-books').addEventListener('click', addBooks);
+  $('btn-change-folder').addEventListener('click', addFolder);
+  $('btn-add-books').addEventListener('click', addFiles);
   $('btn-lib-settings').addEventListener('click', openSettings);
 
   // Loading

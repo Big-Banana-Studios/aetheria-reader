@@ -13,8 +13,8 @@ anything.
 - **Ships a library.** 414 public-domain titles across two collections —
   Buddhism (149) and Mesopotamia (265) — 30.8 million words, printed between
   1801 and 1935. Cleaned text only: 172 MB, published with the app.
-- **Reads your own books too.** PDFs, Word documents, text and HTML, added a
-  file at a time or a whole folder at once. The text is extracted in the
+- **Reads your own books too.** PDFs, Word documents, text and HTML, added
+  singly with **+ File** or a whole folder at once with **+ Folder**. The text is extracted in the
   browser and kept, so **My books** shows your shelf on every visit — even
   on a phone, where no browser will remember a folder. Nothing is uploaded.
 - **Speaks the text.** Sentence-by-sentence playback with highlighting,
