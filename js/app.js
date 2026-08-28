@@ -343,6 +343,13 @@ function startReading(entry, doc) {
     if (on) media.start(); else media.stop();
   });
   reader.addEventListener('finished', () => toast('End of the book.'));
+  reader.addEventListener('resumed', () => {
+    // Explain once, on the way back, when they can actually read it.
+    if (localStorage.getItem('aetheria-bg-explained')) return;
+    localStorage.setItem('aetheria-bg-explained', '1');
+    toast('Android stops browser speech while the screen is off, so reading '
+        + 'pauses when you leave and resumes where you left off.', 7000);
+  });
   reader.addEventListener('speech-error', () =>
     toast('The speech engine stopped unexpectedly. Press play to resume.'));
 

@@ -90,7 +90,27 @@ export class Reader extends EventTarget {
     this.quiet = 0;
     this.wakeLock = null;
 
+    this.resumeOnReturn = false;
+
+    // Android suspends the speech engine outright while the page is
+    // hidden, and there is no arrangement of audio focus that changes it.
+    // Rather than die mid-sentence and leave the controls insisting all is
+    // well, stop cleanly and pick the same sentence back up on return.
     this.onVisibility = () => {
+      if (document.hidden) {
+        if (this.playing) {
+          this.resumeOnReturn = true;
+          this.stop();
+          this.#emit('suspended');
+        }
+        return;
+      }
+      if (this.resumeOnReturn) {
+        this.resumeOnReturn = false;
+        this.play();
+        this.#emit('resumed');
+        return;
+      }
       if (!this.playing) return;
       this.#requestWakeLock();    // a lock is dropped whenever we are hidden
       this.#pump();
@@ -205,6 +225,7 @@ export class Reader extends EventTarget {
   }
 
   stop() {
+    if (!document.hidden) this.resumeOnReturn = false;   // a deliberate pause
     this.playing = false;
     this.#flush();
     this.#clearTimer();
