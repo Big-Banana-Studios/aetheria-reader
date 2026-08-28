@@ -1,17 +1,20 @@
 # Aetheria Reader
 
-A spoken-word reader for a library of books you already own. Point it at a
-folder on your own disk and it will read any of them aloud, keep your place,
-and — if you want it — answer questions about the passage you are listening
-to, using a language model that runs on your own hardware.
+A spoken-word reader for classic Buddhist texts. It ships with 149
+public-domain books, reads them aloud, keeps your place, and — if you want it —
+answers questions about the passage you are listening to, using a language
+model that runs on your own hardware.
 
-Nothing is uploaded. No book ever leaves the device, and no book is stored in
-this repository.
+It will also read your own books, straight off your disk, without uploading
+anything.
 
 ## What it does
 
-- **Reads a whole folder.** Choose your books folder once; the app lists every
-  PDF, text and HTML file in it and remembers the folder for next time.
+- **Ships a library.** 149 public-domain titles, 10.2 million words, printed
+  between 1830 and 1935. Cleaned text only: 57 MB, published with the app.
+- **Reads your own folder too.** Choose a folder of PDFs and the app lists
+  every book in it, extracts the text in the browser, and remembers the folder
+  for next time. Nothing is uploaded.
 - **Speaks the text.** Sentence-by-sentence playback with highlighting,
   adjustable speed and voice, paragraph and section pauses, and a contents
   list built from the book's own chapter headings.
@@ -20,8 +23,29 @@ this repository.
   running in your browser on WebGPU, explains the passage, restates it in
   plain English, defines its Pali and Sanskrit terms, or answers a question
   you type.
-- **Works offline** after the first visit. The app, pdf.js, your extracted
-  books and the downloaded model all persist locally.
+- **Works offline** after the first visit. The app and pdf.js are precached;
+  any book you open is kept, and **Settings → Library offline** downloads the
+  whole 57 MB collection in one go. The model persists too, once downloaded.
+
+## The library
+
+`library/index.json` is the catalogue; each book is a separate
+`library/<id>.json` holding cleaned, sectioned text. They are fetched one at a
+time as books are opened and cached by the service worker, so the reader only
+ever downloads what they actually read.
+
+The texts are generated from a folder of PDFs by
+[`tools/build_library.py`](tools/build_library.py), which mirrors the
+in-browser cleaner exactly:
+
+```bash
+python tools/build_library.py "../Buddism books" library
+```
+
+The source PDFs — 1.9 GB — are deliberately not in this repository. They
+exceed what GitHub Pages will host, and the text is what the reader needs.
+Of 153 books, 149 carry an OCR text layer; the other four are picture-only
+scans and were skipped.
 
 ## Getting the text out of the books
 
@@ -35,6 +59,8 @@ cleaner in [`js/textclean.js`](js/textclean.js) undoes all of that:
   pdf.js reports to tell a wrapped line from a real paragraph break
 - collapses letter-spaced display type (`B O O K` → `BOOK`), which a speech
   synthesiser would otherwise spell out one letter at a time
+- rejoins a paragraph split across a page break, so the reader is never left
+  speaking half a sentence and then starting mid-clause on the other side
 - finds chapter headings line by line and falls back to page ranges when a
   scan is too noisy for that to be trustworthy
 
@@ -79,7 +105,8 @@ remember the choice.
 
 ## Deploying to GitHub Pages
 
-The repository is about 2 MB. Push it and enable Pages:
+The repository is about 59 MB — 2 MB of app and 57 MB of book text, well
+inside the 1 GB Pages allows. Push it and enable Pages:
 
 ```bash
 git init
@@ -122,6 +149,8 @@ js/textclean.js         OCR cleanup and sectioning
 js/store.js             IndexedDB: folder handle, book cache, progress
 js/ai.js                model catalogue and prompts
 js/ai-worker.js         transformers.js in a worker
+js/library.js           the published catalogue and offline pre-caching
+library/                149 books as cleaned text, plus index.json
 vendor/pdfjs/           pdf.js 6.2.108, vendored so reading works offline
 sw.js                   precached shell + runtime cache for the AI libraries
 dev/selftest.html       browser self-test — see below
@@ -145,13 +174,8 @@ chrome --headless=new --remote-debugging-port=9222 --user-data-dir=/tmp/p about:
 node dev/drive.mjs "http://127.0.0.1:8000/dev/selftest.html?pdf=../some-book.pdf"
 ```
 
-`tools/build_library.py` is a command-line counterpart to the in-browser
-cleaner, mirroring the same logic. It is not used by the app, but it is a quick
-way to find out which books in a folder lack a text layer before you try them:
-
-```bash
-python tools/build_library.py "../Buddism books" /tmp/out
-```
+`tools/build_library.py` generates `library/`. It mirrors the in-browser
+cleaner, and also reports which books in a folder lack a text layer.
 
 ## Credits
 

@@ -9,6 +9,7 @@ import { extractPdf, NoTextLayerError } from './extract.js';
 import { buildSections, parseFilename } from './textclean.js';
 import { Reader, toReaderDoc, countSentences } from './reader.js';
 import { Assistant, MODELS, hasWebGPU, buildPassage, explainMessages, questionMessages } from './ai.js';
+import * as lib from './library.js';
 import * as store from './store.js';
 
 const $ = (id) => document.getElementById(id);
@@ -22,7 +23,11 @@ const COLORS = {
 };
 
 let settings = store.loadSettings();
-let books = [];            // library entries
+let books = [];            // entries currently on screen
+let catalog = null;        // the published library, when one exists
+let bundledBooks = [];
+let localBooks = [];
+let source = 'bundled';    // which shelf the library screen is showing
 let voices = [];
 let reader = null;
 let current = null;        // the open book entry
@@ -111,6 +116,28 @@ async function fileFor(entry) {
   throw new Error('This book is no longer reachable. Pick the folder again.');
 }
 
+/* ── Shelves ────────────────────────────────────────────────────── */
+
+/**
+ * Switch between the published library and books on this device.
+ * Picking "my books" with nothing chosen yet opens the folder picker.
+ */
+function setSource(next) {
+  // Nothing chosen yet: reopen the remembered folder if there is one
+  // (browsers only allow that prompt from a gesture like this click),
+  // otherwise ask for a folder outright.
+  if (next === 'local' && !localBooks.length) { (reopenFolder || pickFolder)(); return; }
+  source = next;
+  books = next === 'bundled' ? bundledBooks : localBooks;
+  for (const btn of document.querySelectorAll('.src-btn')) {
+    btn.classList.toggle('active', btn.dataset.src === next);
+  }
+  $('btn-change-folder').hidden = next !== 'local';
+  settings.lastSource = next;
+  persist();
+  renderLibrary();
+}
+
 /* ── Library UI ─────────────────────────────────────────────────── */
 
 function renderLibrary() {
@@ -156,7 +183,9 @@ function renderLibrary() {
     const foot = document.createElement('div');
     foot.className = 'book-foot';
     if (book.year) foot.append(String(book.year));
-    foot.append(`${(book.size / 1048576).toFixed(1)} MB`);
+    foot.append(book.bundled
+      ? `${Math.round(book.words / 1000)}k words`
+      : `${(book.size / 1048576).toFixed(1)} MB`);
     if (book.unreadable) {
       foot.appendChild(badge('no text layer', 'unreadable'));
     } else if (book.cached) {
@@ -228,18 +257,27 @@ async function openBook(entry) {
   $('loading-bar').style.width = '0%';
 
   try {
-    let data = await store.getCachedBook(entry.key);
+    let data;
 
-    if (!data) {
-      $('loading-sub').textContent = 'Extracting text — this happens once per book.';
-      data = await extractBook(entry, (done, total) => {
+    if (entry.bundled) {
+      // Already cleaned and published; the service worker keeps a copy
+      $('loading-sub').textContent = 'Fetching the text…';
+      $('loading-bar').style.width = '40%';
+      data = await lib.loadBook(entry.id);
+      $('loading-bar').style.width = '100%';
+    } else {
+      data = await store.getCachedBook(entry.key);
+      if (!data) {
+        $('loading-sub').textContent = 'Extracting text — this happens once per book.';
+        data = await extractBook(entry, (done, total) => {
+          if (cancelLoad) throw new CancelledError();
+          $('loading-bar').style.width = (done / total) * 100 + '%';
+          $('loading-sub').textContent = `Page ${done} of ${total}`;
+        });
         if (cancelLoad) throw new CancelledError();
-        $('loading-bar').style.width = (done / total) * 100 + '%';
-        $('loading-sub').textContent = `Page ${done} of ${total}`;
-      });
-      if (cancelLoad) throw new CancelledError();
-      await store.cacheBook(entry.key, data);
-      entry.cached = true;
+        await store.cacheBook(entry.key, data);
+        entry.cached = true;
+      }
     }
 
     const doc = toReaderDoc(data.sections);
@@ -416,6 +454,8 @@ function openSettings() {
   applySettings();
   renderModelList();
   updateCacheNote();
+  updateOfflineNote();
+  $('offline-row').hidden = !catalog;
 }
 
 /* ── Assistant ──────────────────────────────────────────────────── */
@@ -561,9 +601,9 @@ async function useDirectoryHandle(handle, { remember = true } = {}) {
     toast('No PDF, text or HTML books were found in that folder.');
     return false;
   }
-  books = await materialise(raw);
+  localBooks = await materialise(raw);
   if (remember) { try { await store.setDirHandle(handle); } catch {} }
-  renderLibrary();
+  setSource('local');
   show('library-screen');
   return true;
 }
@@ -591,8 +631,8 @@ async function useFiles(fileList, { label = 'books' } = {}) {
     $('welcome-error').textContent = `No readable ${label} in that selection.`;
     return;
   }
-  books = await materialise(raw);
-  renderLibrary();
+  localBooks = await materialise(raw);
+  setSource('local');
   show('library-screen');
   if (!supportsDirectoryPicker) {
     toast('This browser cannot remember a folder, so you will need to choose it again next time.', 5000);
@@ -652,6 +692,14 @@ function wire() {
   }
 
   // Library
+  for (const btn of document.querySelectorAll('.src-btn')) {
+    btn.addEventListener('click', () => setSource(btn.dataset.src));
+  }
+  $('btn-browse-library').addEventListener('click', () => {
+    setSource('bundled');
+    show('library-screen');
+  });
+  $('btn-offline').addEventListener('click', downloadLibraryForOffline);
   $('lib-search').addEventListener('input', renderLibrary);
   $('btn-change-folder').addEventListener('click', pickFolder);
   $('btn-lib-settings').addEventListener('click', openSettings);
@@ -811,6 +859,40 @@ function wire() {
   });
 }
 
+async function downloadLibraryForOffline() {
+  if (!catalog) return;
+  const btn = $('btn-offline');
+  const note = $('offline-note');
+  btn.disabled = true;
+
+  try {
+    const done = await lib.cacheWholeLibrary(catalog, (n, total) => {
+      note.textContent = `Downloading ${n} of ${total}…`;
+    });
+    note.textContent = done.failed
+      ? `${done.total - done.failed} of ${done.total} books stored — ${done.failed} failed.`
+      : `All ${done.total} books stored for offline reading.`;
+    toast(done.failed
+      ? `${done.failed} book${done.failed === 1 ? '' : 's'} could not be downloaded.`
+      : 'The whole library is now available offline.');
+  } catch (err) {
+    note.textContent = err.message;
+    toast(err.message);
+  } finally {
+    btn.disabled = false;
+    updateOfflineNote();
+  }
+}
+
+async function updateOfflineNote() {
+  if (!catalog) return;
+  const have = await lib.cachedCount(catalog);
+  const mb = (lib.totalBytes(catalog) / 1048576).toFixed(0);
+  $('offline-note').textContent = have >= catalog.books.length
+    ? `All ${catalog.books.length} books stored offline.`
+    : `${have} of ${catalog.books.length} stored · about ${mb} MB in total`;
+}
+
 async function updateCacheNote() {
   const keys = await store.cachedKeys();
   const bytes = await store.cacheSize();
@@ -862,7 +944,18 @@ async function init() {
     $('drop-hint').textContent = 'Your browser will ask to upload the folder — nothing leaves this device';
   }
 
-  await restoreFolder();
+  catalog = await lib.loadCatalog();
+  if (catalog) {
+    bundledBooks = lib.toEntries(catalog, await store.allProgress());
+    $('src-toggle').hidden = false;
+    setSource('bundled');
+    show('library-screen');
+  }
+
+  const restored = await restoreFolder();
+  if (restored && (settings.lastSource === 'local' || !catalog)) setSource('local');
+  else if (catalog) setSource('bundled');
+  if (!catalog && !restored) show('welcome-screen');
 
   if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('./sw.js').then((reg) => {

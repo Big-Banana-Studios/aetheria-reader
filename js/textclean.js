@@ -171,11 +171,45 @@ function pageGroups(prose, pageCount, group = 8) {
   return sections;
 }
 
+const ENDS_SENTENCE = /[.!?…]["')\]]?\s*$/;
+
+/**
+ * Does one block of text run straight on into the next?
+ *
+ * Scans break a single paragraph into pieces constantly — at page ends,
+ * at column ends, and wherever OCR read the leading of a line as a blank
+ * line. Left alone, each piece becomes its own utterance and the reader
+ * hears a pause dropped into the middle of a sentence.
+ *
+ * The test is deliberately strict: the first piece must not have ended a
+ * sentence, *and* the second must start lower-case (or the first must end
+ * on a mark that cannot close one). A genuine new paragraph opening with
+ * a capital is therefore never swallowed, even when OCR lost its full
+ * stop.
+ */
+function continuesParagraph(prev, next) {
+  if (ENDS_SENTENCE.test(prev)) return false;
+  return /^\p{Ll}/u.test(next) || /[,;:—–-]$/.test(prev);
+}
+
+function joinParagraph(prev, next) {
+  return /[-‐‑]$/.test(prev)
+    ? prev.replace(/[-‐‑]$/, '') + next     // a word split by the break
+    : prev + ' ' + next;
+}
+
 /** Split cleaned pages into navigable sections. */
 export function buildSections(pages) {
   const flat = [];
   pages.forEach((page, pi) => {
-    for (const b of pageBlocks(page)) flat.push({ ...b, page: pi });
+    for (const b of pageBlocks(page)) {
+      const prev = flat[flat.length - 1];
+      if (b.kind === 'p' && prev?.kind === 'p' && continuesParagraph(prev.text, b.text)) {
+        prev.text = joinParagraph(prev.text, b.text);
+        continue;
+      }
+      flat.push({ ...b, page: pi });
+    }
   });
   if (!flat.length) return [];
 

@@ -1,9 +1,7 @@
-# The app reads books from your own disk at run time. Nothing book-shaped
-# belongs in this repository — not the source PDFs, not text extracted
-# from them.
+# The source PDFs are 1.9 GB — far too much for a static host, and not
+# what the reader needs. Only the cleaned text in library/ is published;
+# regenerate it with tools/build_library.py.
 Buddism books/
-library/
-aetheria-reader-pwa/
 *.pdf
 build.log
 

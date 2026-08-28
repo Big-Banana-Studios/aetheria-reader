@@ -219,11 +219,43 @@ def page_groups(flat, pages, group=8):
     return sections
 
 
+ENDS_SENTENCE_RE = re.compile(r"""[.!?…]["')\]]?\s*$""")
+TRAILING_HYPHEN_RE = re.compile(r"[-‐‑]$")
+
+
+def continues_paragraph(prev, nxt):
+    """Does one block of text run straight on into the next?
+
+    Scans break a single paragraph into pieces constantly -- at page ends,
+    at column ends, and wherever OCR read the leading of a line as a blank
+    line. Left alone, each piece becomes its own utterance and the reader
+    hears a pause dropped into the middle of a sentence.
+
+    The test is deliberately strict: the first piece must not have ended a
+    sentence, *and* the second must start lower-case (or the first must end
+    on a mark that cannot close one). A genuine new paragraph opening with a
+    capital is therefore never swallowed, even when OCR lost its full stop.
+    """
+    if ENDS_SENTENCE_RE.search(prev):
+        return False
+    return (nxt[:1].islower() and nxt[:1].isalpha()) or prev[-1:] in ",;:—–-"
+
+
+def join_paragraph(prev, nxt):
+    if TRAILING_HYPHEN_RE.search(prev):
+        return TRAILING_HYPHEN_RE.sub("", prev) + nxt   # word split by the break
+    return prev + " " + nxt
+
+
 def build_sections(pages):
     """Split pages into sections, preferring detected headings."""
     flat = []                                     # [(kind, text, page_index)]
     for pi, page in enumerate(pages):
         for kind, text in page_blocks(page):
+            if (kind == "p" and flat and flat[-1][0] == "p"
+                    and continues_paragraph(flat[-1][1], text)):
+                flat[-1] = ("p", join_paragraph(flat[-1][1], text), flat[-1][2])
+                continue
             flat.append((kind, text, pi))
     if not flat:
         return []

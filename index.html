@@ -30,6 +30,7 @@
   </div>
 
   <div class="or-line">OR</div>
+  <button class="btn-secondary" id="btn-browse-library">Browse the public-domain library</button>
   <button class="btn-secondary" id="btn-pick-files">Open individual books</button>
   <input type="file" id="file-input" accept=".pdf,.txt,.html,.htm" multiple hidden>
   <input type="file" id="dir-input" webkitdirectory directory hidden>
@@ -46,9 +47,13 @@
 <div class="screen" id="library-screen">
   <div class="lib-bar">
     <div class="brand">AETHERIA</div>
+    <div class="src-toggle" id="src-toggle" hidden>
+      <button class="src-btn active" data-src="bundled">Library</button>
+      <button class="src-btn" data-src="local">My books</button>
+    </div>
     <input type="search" class="lib-search" id="lib-search" placeholder="Search title or author…" autocomplete="off">
     <span class="lib-count" id="lib-count"></span>
-    <button class="btn-chip" id="btn-change-folder" title="Choose a different folder">Folder</button>
+    <button class="btn-chip" id="btn-change-folder" title="Choose a different folder" hidden>Folder</button>
     <button class="btn-icon" id="btn-lib-settings" title="Settings">
       <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="var(--muted)" stroke-width="2" stroke-linecap="round">
         <circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 01-2.83 2.83l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/>
@@ -206,8 +211,12 @@
 
       <div class="settings-section">
         <div class="settings-section-title">Storage</div>
+        <div class="setting-row" id="offline-row" hidden>
+          <div><div class="setting-name">Library offline</div><div class="setting-desc" id="offline-note">—</div></div>
+          <div class="setting-control"><button class="btn-pill" id="btn-offline">Download all</button></div>
+        </div>
         <div class="setting-row">
-          <div><div class="setting-name">Extracted text</div><div class="setting-desc" id="cache-note">—</div></div>
+          <div><div class="setting-name">Your extracted books</div><div class="setting-desc" id="cache-note">—</div></div>
           <div class="setting-control"><button class="btn-pill" id="btn-clear-cache">Clear</button></div>
         </div>
       </div>
