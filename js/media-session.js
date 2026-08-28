@@ -10,13 +10,23 @@
    Media Session metadata — so the book appears on the lock screen and
    the hardware media keys work.
 
-   The loop is *near* silent rather than digitally silent on purpose:
-   some browsers treat a stream of zeroes as "nothing is playing" and
-   the whole effect is lost. One least-significant bit is about 90 dB
-   below full scale — inaudible, but unmistakably a signal.
+   Two details decide whether this works at all:
+
+   The loop is *near* silent rather than digitally silent, because some
+   browsers treat a stream of zeroes as "nothing is playing". One
+   least-significant bit is about 90 dB below full scale — inaudible, but
+   unmistakably a signal.
+
+   And it is thirty seconds long. Chrome takes audio focus only for media
+   running longer than five seconds; anything shorter is written off as a
+   UI sound effect and ignored outright — no focus, no media notification,
+   no exemption from throttling. A short clip fails silently and looks for
+   all the world like the feature simply does not work.
    ═══════════════════════════════════════════════════════════════════ */
 
-function silentLoopUrl(seconds = 4, sampleRate = 8000) {
+const LOOP_SECONDS = 30;         // must clear Chrome's five-second floor
+
+function silentLoopUrl(seconds = LOOP_SECONDS, sampleRate = 8000) {
   const frames = seconds * sampleRate;
   const size = 44 + frames * 2;
   const buffer = new ArrayBuffer(size);
@@ -66,6 +76,7 @@ export class MediaSessionKeepAlive {
     this.url = null;
     this.book = null;
     this.registered = false;
+    this.lastError = null;
   }
 
   #element() {
@@ -108,9 +119,11 @@ export class MediaSessionKeepAlive {
     this.#registerActions();
     try {
       if (audio.paused) await audio.play();
-    } catch {
+      this.lastError = null;
+    } catch (err) {
       // Autoplay refused: speech still works, we just lose the lock screen
       // card and the throttling exemption.
+      this.lastError = err?.message || String(err);
     }
     this.setPlaying(true);
   }
@@ -140,6 +153,23 @@ export class MediaSessionKeepAlive {
   setPlaying(playing) {
     if (!('mediaSession' in navigator)) return;
     try { navigator.mediaSession.playbackState = playing ? 'playing' : 'paused'; } catch {}
+  }
+
+  /** What the browser actually granted, for reporting to the user. */
+  report() {
+    const a = this.audio;
+    const held = !!a && !a.paused && !a.ended;
+    return {
+      audioElement: !!a,
+      playing: held,
+      duration: a && isFinite(a.duration) ? Math.round(a.duration) : null,
+      longEnough: !!a && isFinite(a.duration) && a.duration > 5,
+      mediaSession: 'mediaSession' in navigator,
+      metadata: !!(navigator.mediaSession?.metadata),
+      playbackState: navigator.mediaSession?.playbackState ?? 'n/a',
+      handlers: this.registered,
+      error: this.lastError,
+    };
   }
 
   destroy() {

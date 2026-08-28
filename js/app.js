@@ -731,6 +731,7 @@ function wire() {
     show('library-screen');
   });
   $('btn-offline').addEventListener('click', downloadLibraryForOffline);
+  $('btn-bg-check').addEventListener('click', reportBackgroundState);
   $('lib-search').addEventListener('input', renderLibrary);
   $('btn-change-folder').addEventListener('click', pickFolder);
   $('btn-lib-settings').addEventListener('click', openSettings);
@@ -913,6 +914,33 @@ async function downloadLibraryForOffline() {
     btn.disabled = false;
     updateOfflineNote();
   }
+}
+
+/**
+ * Report whether the browser actually granted audio focus. Without it the
+ * page is throttled the moment it is hidden and there is no lock-screen
+ * card — and the failure is otherwise completely silent.
+ */
+function reportBackgroundState() {
+  const r = media.report();
+  const bits = [];
+
+  if (!r.audioElement) {
+    bits.push('Not started — press play first.');
+  } else {
+    bits.push(r.playing ? '✓ silent loop playing' : '✗ silent loop NOT playing');
+    bits.push(r.longEnough
+      ? `✓ loop ${r.duration}s (over the 5s floor)`
+      : `✗ loop ${r.duration ?? '?'}s — too short for audio focus`);
+  }
+  bits.push(r.mediaSession ? '✓ media session' : '✗ no media session');
+  bits.push(r.metadata ? '✓ lock-screen info set' : '✗ no lock-screen info');
+  bits.push(r.handlers ? '✓ media keys wired' : '✗ media keys not wired');
+  bits.push(`state: ${r.playbackState}`);
+  if (r.error) bits.push(`audio refused: ${r.error}`);
+  if (reader) bits.push(`speech: ${speechSynthesis.speaking ? 'speaking' : 'idle'}${speechSynthesis.pending ? ' +queued' : ''}`);
+
+  $('bg-note').textContent = bits.join(' · ');
 }
 
 async function updateOfflineNote() {

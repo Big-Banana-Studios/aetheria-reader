@@ -108,12 +108,20 @@ Three things address that:
 - **A near-silent loop.** A generated WAV at −90 dBFS (one least-significant
   bit — inaudible, but not digital zero, which some browsers discount)
   plays whenever reading is under way. An audible tab is exempt from
-  background throttling and may publish Media Session metadata.
+  background throttling and may publish Media Session metadata. The loop
+  runs **thirty seconds**: Chrome takes audio focus only for media longer
+  than five seconds, and writes anything shorter off as a UI sound effect
+  without a word of complaint.
 - **Media Session.** The book, chapter and cover appear on the lock screen
   and in the browser's media controls; play, pause and next/previous
   sentence work from there and from hardware media keys.
 
 A screen wake lock is also held while reading, where the browser offers one.
+
+**Settings → Background playback → Check** reports what the browser actually
+granted — whether the loop is playing, whether it cleared the five-second
+floor, and whether the lock-screen card and media keys were accepted. None of
+those failures announce themselves otherwise.
 
 ## Browser support
 
