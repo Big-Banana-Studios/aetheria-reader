@@ -102,33 +102,46 @@ export class MediaSessionKeepAlive {
     this.toneStopper = null;
     this.keeper = null;
     this.usingMusic = false;
+    this.musicEnabled = true;
     this.volume = 0.18;
     // Rendering takes a moment, so start it now rather than on first play.
     this.musicReady = ambienceUrl(LOOP_SECONDS);
   }
 
   /**
-   * Swap the near-silent placeholder for the real loop once it has been
-   * rendered. Volume 0 keeps the placeholder: focus is still held, but
-   * that is the configuration browsers are least willing to honour.
+   * Point the element at whichever loop the settings call for: the music,
+   * or the near-silent placeholder. Switching the source stops playback,
+   * so it is restarted if we are meant to be holding focus.
    */
-  async #useMusic() {
-    if (this.volume <= 0) return;
-    const url = await this.musicReady;
-    if (!url || this.usingMusic || !this.audio) return;
-    const wasPlaying = !this.audio.paused;
-    this.audio.src = url;
-    this.audio.volume = this.volume;
-    this.usingMusic = true;
-    if (wasPlaying || this.wanted) {
-      try { await this.audio.play(); } catch (err) { this.lastError = err?.message || String(err); }
+  async #applySource() {
+    const audio = this.audio;
+    if (!audio) return;
+    const wantMusic = this.musicEnabled && this.volume > 0;
+
+    if (wantMusic) {
+      const url = await this.musicReady;
+      if (!url) return;                     // still rendering; retried later
+      if (!this.usingMusic) {
+        audio.src = url;
+        this.usingMusic = true;
+      }
+      audio.volume = this.volume;
+    } else if (this.usingMusic) {
+      audio.src = this.url;                 // back to the near-silent loop
+      audio.volume = 1;                     // its samples are what is quiet
+      this.usingMusic = false;
+    }
+
+    if (this.wanted && audio.paused) {
+      try { await audio.play(); } catch (err) { this.lastError = err?.message || String(err); }
     }
   }
 
-  setVolume(fraction) {
-    this.volume = Math.max(0, Math.min(1, fraction));
-    if (this.audio && this.usingMusic) this.audio.volume = this.volume;
-    if (this.volume > 0) this.#useMusic();
+  /** @param {boolean} enabled @param {number} fraction 0–1 */
+  setMusic(enabled, fraction) {
+    this.musicEnabled = !!enabled;
+    if (typeof fraction === 'number') this.volume = Math.max(0, Math.min(1, fraction));
+    this.#applySource();
   }
 
   #element() {
@@ -214,7 +227,7 @@ export class MediaSessionKeepAlive {
     try {
       if (audio.paused) await audio.play();
       this.lastError = null;
-      this.#useMusic();
+      this.#applySource();
     } catch (err) {
       // Autoplay refused: speech still works, we just lose the lock screen
       // card and the throttling exemption.
@@ -293,6 +306,7 @@ export class MediaSessionKeepAlive {
       toneState: this.ctx ? this.ctx.state : 'none',
       wanted: this.wanted,
       music: this.usingMusic,
+      musicEnabled: this.musicEnabled,
       volume: this.volume,
     };
   }

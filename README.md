@@ -120,10 +120,11 @@ Three things address that:
   the platform pauses it, and a Web Audio tone runs alongside as a second
   anchor.
 
-Volume lives in **Settings → Reading music**. At zero the app falls back to
-a near-silent loop, which still asks for focus but is the arrangement
-browsers honour least reliably — so silence costs some of the background
-reliability.
+**Settings → Reading music** carries an on/off toggle and a volume. Switched
+off, the app falls back to the near-silent loop, which still asks for focus
+but is the arrangement browsers honour least reliably — so silence costs
+some of the background reliability, and the app says so when you turn it
+off.
 - **Media Session.** The book, chapter and cover appear on the lock screen
   and in the browser's media controls; play, pause and next/previous
   sentence work from there and from hardware media keys.

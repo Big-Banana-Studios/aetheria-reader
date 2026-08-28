@@ -457,9 +457,13 @@ function applySettings() {
   $('set-speed-val').textContent = settings.rate.toFixed(1) + '×';
   $('set-font').value = settings.fontSize;
   $('set-font-val').textContent = settings.fontSize + 'px';
+  const musicBtn = $('set-music-on');
+  musicBtn.textContent = settings.music ? 'On' : 'Off';
+  musicBtn.classList.toggle('on', settings.music);
   $('set-music').value = settings.musicVolume;
-  $('set-music-val').textContent = settings.musicVolume + '%';
-  media.setVolume(settings.musicVolume / 100);
+  $('set-music').disabled = !settings.music;
+  $('set-music-val').textContent = settings.music ? settings.musicVolume + '%' : '—';
+  media.setMusic(settings.music, settings.musicVolume / 100);
   $('set-para-pause').value = settings.paraPause;
   $('set-para-pause-val').textContent = settings.paraPause + 'ms';
   $('set-sec-pause').value = settings.sectionPause;
@@ -801,6 +805,13 @@ function wire() {
   bind('set-para-pause', 'paraPause', (v) => parseInt(v, 10));
   bind('set-sec-pause', 'sectionPause', (v) => parseInt(v, 10));
 
+  $('set-music-on').addEventListener('click', () => {
+    settings.music = !settings.music;
+    applySettings(); persist();
+    toast(settings.music
+      ? 'Reading music on.'
+      : 'Reading music off — background reading may be less reliable.');
+  });
   $('set-autoscroll').addEventListener('click', () => {
     settings.autoScroll = !settings.autoScroll;
     applySettings(); persist();
@@ -938,9 +949,8 @@ function reportBackgroundState() {
   if (!r.audioElement) {
     bits.push('audio not started');
   } else {
-    bits.push(r.playing
-      ? `✓ ${r.music ? 'music' : 'silent loop'} playing at ${Math.round(r.volume * 100)}%`
-      : `✗ ${r.music ? 'music' : 'silent loop'} NOT playing`);
+    const what = r.music ? `music at ${Math.round(r.volume * 100)}%` : 'silent loop';
+    bits.push(r.playing ? `✓ ${what} playing` : `✗ ${what} NOT playing`);
     bits.push(r.longEnough
       ? `✓ loop ${r.duration}s (over the 5s floor)`
       : `✗ loop ${r.duration ?? '?'}s — too short for audio focus`);
