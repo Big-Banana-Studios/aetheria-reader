@@ -7,10 +7,11 @@
    ═══════════════════════════════════════════════════════════════════ */
 
 const DB_NAME = 'aetheria-reader';
-const DB_VERSION = 1;
+const DB_VERSION = 2;
 const META = 'meta';        // directory handle, misc singletons
 const BOOKS = 'books';      // cleaned text, keyed by file identity
 const PROGRESS = 'progress';
+const SHELF = 'shelf';      // what the reader has added from their own device
 
 let dbPromise = null;
 
@@ -23,6 +24,7 @@ function openDb() {
       if (!db.objectStoreNames.contains(META)) db.createObjectStore(META);
       if (!db.objectStoreNames.contains(BOOKS)) db.createObjectStore(BOOKS);
       if (!db.objectStoreNames.contains(PROGRESS)) db.createObjectStore(PROGRESS);
+      if (!db.objectStoreNames.contains(SHELF)) db.createObjectStore(SHELF);
     };
     req.onsuccess = () => resolve(req.result);
     req.onerror = () => reject(req.error);
@@ -102,6 +104,40 @@ export async function cacheSize() {
 }
 
 export const clearBookCache = () => tx(BOOKS, 'readwrite', (s) => s.clear());
+
+/* ── The reader's own shelf ─────────────────────────────────────── */
+
+/**
+ * A record of every book added from this device.
+ *
+ * Only Chromium can remember a folder between visits, so on a phone the
+ * folder handle is gone the moment the app closes. The extracted text,
+ * though, is already in `BOOKS` — so the shelf remembers what was added
+ * and the book stays readable without asking for the file again.
+ */
+export const rememberOnShelf = (entry) => put(SHELF, entry.key, {
+  key: entry.key, name: entry.name, title: entry.title, author: entry.author,
+  year: entry.year, size: entry.size, addedAt: Date.now(),
+});
+
+export async function shelf() {
+  const db = await openDb();
+  return new Promise((resolve) => {
+    const out = [];
+    const t = db.transaction(SHELF, 'readonly');
+    const cursor = t.objectStore(SHELF).openCursor();
+    cursor.onsuccess = () => {
+      const c = cursor.result;
+      if (!c) return resolve(out);
+      out.push(c.value);
+      c.continue();
+    };
+    t.onerror = () => resolve(out);
+  });
+}
+
+export const forgetFromShelf = (key) => del(SHELF, key);
+export const clearShelf = () => tx(SHELF, 'readwrite', (s) => s.clear());
 
 /* ── Reading position ───────────────────────────────────────────── */
 

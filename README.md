@@ -13,9 +13,10 @@ anything.
 - **Ships a library.** 414 public-domain titles across two collections —
   Buddhism (149) and Mesopotamia (265) — 30.8 million words, printed between
   1801 and 1935. Cleaned text only: 172 MB, published with the app.
-- **Reads your own folder too.** Choose a folder of PDFs and the app lists
-  every book in it, extracts the text in the browser, and remembers the folder
-  for next time. Nothing is uploaded.
+- **Reads your own books too.** PDFs, Word documents, text and HTML, added a
+  file at a time or a whole folder at once. The text is extracted in the
+  browser and kept, so **My books** shows your shelf on every visit — even
+  on a phone, where no browser will remember a folder. Nothing is uploaded.
 - **Speaks the text.** Sentence-by-sentence playback with highlighting,
   adjustable speed and voice, paragraph and section pauses, and a contents
   list built from the book's own chapter headings.
@@ -247,8 +248,10 @@ js/store.js             IndexedDB: folder handle, book cache, progress
 js/ai.js                model catalogue and prompts
 js/ai-worker.js         transformers.js in a worker
 js/library.js           the published catalogue and offline pre-caching
+js/docx.js              Word documents, via mammoth
 library/                149 books as cleaned text, plus index.json
 vendor/pdfjs/           pdf.js 6.2.108, vendored so reading works offline
+vendor/mammoth/         mammoth 1.11, likewise
 sw.js                   precached shell + runtime cache for the AI libraries
 dev/selftest.html       browser self-test — see below
 tools/build_library.py  optional: bulk-check a folder from the command line
@@ -277,5 +280,6 @@ cleaner, and also reports which books in a folder lack a text layer.
 ## Credits
 
 [pdf.js](https://mozilla.github.io/pdf.js/) (Apache-2.0),
+[mammoth.js](https://github.com/mwilliamson/mammoth.js) (BSD-2-Clause),
 [transformers.js](https://huggingface.co/docs/transformers.js) (Apache-2.0),
 and [Liquid AI LFM2](https://huggingface.co/LiquidAI) models.

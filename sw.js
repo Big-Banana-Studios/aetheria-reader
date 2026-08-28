@@ -13,7 +13,7 @@
     survives going offline.)
    ═══════════════════════════════════════════════════════════════════ */
 
-const VERSION = 'v13';
+const VERSION = 'v14';
 const SHELL = `aetheria-shell-${VERSION}`;
 const LIBRARY = 'aetheria-library';
 const RUNTIME = `aetheria-runtime-${VERSION}`;
@@ -36,6 +36,8 @@ const SHELL_ASSETS = [
   './js/voices.js',
   './js/tts-worker.js',
   './js/ambience.js',
+  './js/docx.js',
+  './vendor/mammoth/mammoth.browser.min.js',
   './vendor/pdfjs/pdf.min.mjs',
   './vendor/pdfjs/pdf.worker.min.mjs',
   './icons/icon-192.png',

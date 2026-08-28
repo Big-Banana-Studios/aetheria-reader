@@ -6,6 +6,7 @@
    ═══════════════════════════════════════════════════════════════════ */
 
 import { extractPdf, NoTextLayerError } from './extract.js';
+import { extractDocx } from './docx.js';
 import { buildSections, parseFilename } from './textclean.js';
 import { Reader, toReaderDoc, countSentences } from './reader.js';
 import { Assistant, MODELS, hasWebGPU, buildPassage, explainMessages, questionMessages } from './ai.js';
@@ -15,7 +16,7 @@ import * as lib from './library.js';
 import * as store from './store.js';
 
 const $ = (id) => document.getElementById(id);
-const BOOK_RE = /\.(pdf|txt|html?)$/i;
+const BOOK_RE = /\.(pdf|docx|txt|html?|md)$/i;
 
 const COLORS = {
   gold:  { accent: '#c8a050', dim: '#c8a05022', mid: '#c8a05055' },
@@ -93,6 +94,39 @@ function entriesFromFiles(fileList) {
     .map((f) => ({ name: f.name, file: f }));
 }
 
+/**
+ * Books added from this device on an earlier visit.
+ *
+ * Only Chromium remembers a folder, so on a phone the handle is gone by
+ * the next launch. The extracted text is not, so the shelf still lists
+ * them and they open straight from the cache.
+ */
+async function shelvedBooks() {
+  const [rows, progress, keys] = await Promise.all([
+    store.shelf(), store.allProgress(), store.cachedKeys(),
+  ]);
+  const cached = new Set(keys);
+  return rows.map((r) => ({
+    ...parseFilename(r.name),
+    name: r.name,
+    handle: null,
+    file: null,
+    key: r.key,
+    size: r.size || 0,
+    progress: progress.get(r.name) || null,
+    cached: cached.has(r.key),
+    shelved: true,
+  }));
+}
+
+/** Merge freshly picked books into the shelf, keeping one entry per book. */
+function mergeLocal(existing, added) {
+  const byKey = new Map(existing.map((b) => [b.key, b]));
+  for (const b of added) byKey.set(b.key, b);
+  return [...byKey.values()]
+    .sort((a, b) => a.title.localeCompare(b.title, undefined, { sensitivity: 'base' }));
+}
+
 /** Attach metadata, cache keys and saved progress to raw entries. */
 async function materialise(raw) {
   const progress = await store.allProgress();
@@ -125,6 +159,7 @@ async function materialise(raw) {
   for (const e of entries) e.cached = keys.has(e.key);
 
   entries.sort((a, b) => a.title.localeCompare(b.title, undefined, { sensitivity: 'base' }));
+  for (const e of entries) store.rememberOnShelf(e).catch(() => {});
   return entries;
 }
 
@@ -132,30 +167,40 @@ async function materialise(raw) {
 async function fileFor(entry) {
   if (entry.file) return entry.file;
   if (entry.handle) return entry.handle.getFile();
-  throw new Error('This book is no longer reachable. Pick the folder again.');
+  throw new Error(entry.shelved
+    ? 'This browser cannot reopen the file on its own. Add it again to re-read it.'
+    : 'This book is no longer reachable. Pick the folder again.');
 }
 
 /* ── Shelves ────────────────────────────────────────────────────── */
 
 /**
  * Switch between the published library and books on this device.
- * Picking "my books" with nothing chosen yet opens the folder picker.
+ *
+ * "My books" shows the shelf. It only reaches for a picker when the shelf
+ * is genuinely empty — being sent to a file dialog every time you wanted
+ * to see what you already had was the wrong way round.
  */
 function setSource(next) {
-  // Nothing chosen yet: reopen the remembered folder if there is one
-  // (browsers only allow that prompt from a gesture like this click),
-  // otherwise ask for a folder outright.
-  if (next === 'local' && !localBooks.length) { (reopenFolder || pickFolder)(); return; }
   source = next;
   books = next === 'bundled' ? bundledBooks : localBooks;
   for (const btn of document.querySelectorAll('.src-btn')) {
     btn.classList.toggle('active', btn.dataset.src === next);
   }
-  $('btn-change-folder').hidden = next !== 'local';
+  $('btn-add-books').hidden = next !== 'local';
+  $('btn-change-folder').hidden = next !== 'local' || !supportsDirectoryPicker;
   $('lib-collection').hidden = next !== 'bundled' || $('lib-collection').options.length < 2;
   settings.lastSource = next;
   persist();
   renderLibrary();
+
+  if (next === 'local' && !localBooks.length) addBooks();
+}
+
+/** Add books from this device, without disturbing what is already here. */
+function addBooks() {
+  if (reopenFolder) { reopenFolder(); return; }
+  $('file-input').click();
 }
 
 /**
@@ -206,7 +251,9 @@ function renderLibrary() {
   if (!shown.length) {
     $('lib-empty').textContent = books.length
       ? 'Nothing here matches.'
-      : 'No books found in that folder.';
+      : (source === 'local'
+          ? 'No books added yet. Use “Add books” to open PDFs, Word documents or text files from this device.'
+          : 'No books found.');
     return;
   }
 
@@ -286,6 +333,9 @@ async function extractBook(entry, onProgress) {
 
   if (/\.pdf$/i.test(entry.name)) {
     return extractPdf(file, onProgress);
+  }
+  if (/\.docx$/i.test(entry.name)) {
+    return extractDocx(file);
   }
 
   let text = await file.text();
@@ -708,7 +758,7 @@ async function useDirectoryHandle(handle, { remember = true } = {}) {
     toast('No PDF, text or HTML books were found in that folder.');
     return false;
   }
-  localBooks = await materialise(raw);
+  localBooks = mergeLocal(localBooks, await materialise(raw));
   if (remember) { try { await store.setDirHandle(handle); } catch {} }
   setSource('local');
   show('library-screen');
@@ -738,12 +788,11 @@ async function useFiles(fileList, { label = 'books' } = {}) {
     $('welcome-error').textContent = `No readable ${label} in that selection.`;
     return;
   }
-  localBooks = await materialise(raw);
+  const added = await materialise(raw);
+  localBooks = mergeLocal(localBooks, added);
   setSource('local');
   show('library-screen');
-  if (!supportsDirectoryPicker) {
-    toast('This browser cannot remember a folder, so you will need to choose it again next time.', 5000);
-  }
+  toast(`Added ${added.length} book${added.length === 1 ? '' : 's'}.`);
 }
 
 /** Try to reopen the folder chosen on a previous visit. */
@@ -835,6 +884,7 @@ function wire() {
   $('lib-search').addEventListener('input', renderLibrary);
   $('lib-collection').addEventListener('change', renderLibrary);
   $('btn-change-folder').addEventListener('click', pickFolder);
+  $('btn-add-books').addEventListener('click', addBooks);
   $('btn-lib-settings').addEventListener('click', openSettings);
 
   // Loading
@@ -1222,6 +1272,11 @@ async function init() {
     $('kokoro-note').textContent = 'Selected — press Download to start it for this session.';
   }
 
+  // Read the remembered shelf before anything calls setSource, which
+  // writes it back — otherwise showing the library first always erases
+  // the fact that the reader was last in their own books.
+  const preferred = settings.lastSource;
+
   catalog = await lib.loadCatalog();
   if (catalog) {
     bundledBooks = lib.toEntries(catalog, await store.allProgress());
@@ -1231,10 +1286,13 @@ async function init() {
     show('library-screen');
   }
 
+  localBooks = await shelvedBooks();
   const restored = await restoreFolder();
-  if (restored && (settings.lastSource === 'local' || !catalog)) setSource('local');
+  const haveLocal = restored || localBooks.length > 0;
+  if (haveLocal && (preferred === 'local' || !catalog)) setSource('local');
   else if (catalog) setSource('bundled');
-  if (!catalog && !restored) show('welcome-screen');
+  if (!catalog && !restored && !localBooks.length) show('welcome-screen');
+  else if (!catalog) show('library-screen');
 
   if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('./sw.js').then((reg) => {
