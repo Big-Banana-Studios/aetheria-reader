@@ -9,6 +9,7 @@ import { extractPdf, NoTextLayerError } from './extract.js';
 import { buildSections, parseFilename } from './textclean.js';
 import { Reader, toReaderDoc, countSentences } from './reader.js';
 import { Assistant, MODELS, hasWebGPU, buildPassage, explainMessages, questionMessages } from './ai.js';
+import { MediaSessionKeepAlive } from './media-session.js';
 import * as lib from './library.js';
 import * as store from './store.js';
 
@@ -34,6 +35,15 @@ let current = null;        // the open book entry
 let assistant = null;
 let cancelLoad = false;
 let reopenFolder = null;   // set when a remembered folder needs a fresh gesture
+
+// Keeps the tab audible while reading, so the browser does not freeze it
+// and the operating system shows the book on the lock screen.
+const media = new MediaSessionKeepAlive({
+  play:  () => reader?.play(),
+  pause: () => reader?.stop(),
+  next:  () => reader?.skip(1),
+  prev:  () => reader?.skip(-1),
+});
 
 /* ── Screens & chrome ───────────────────────────────────────────── */
 
@@ -324,12 +334,13 @@ function startReading(entry, doc) {
 
   $('doc-title').textContent = entry.title.toUpperCase();
   reader.addEventListener('position', updateMeta);
-  reader.addEventListener('section', renderNav);
+  reader.addEventListener('section', () => { renderNav(); describeForLockScreen(); });
   reader.addEventListener('playing', (e) => {
     const on = e.detail.playing;
     $('btn-play').classList.toggle('playing', on);
     $('play-icon').hidden = on;
     $('pause-icon').hidden = !on;
+    if (on) media.start(); else media.stop();
   });
   reader.addEventListener('finished', () => toast('End of the book.'));
   reader.addEventListener('speech-error', () =>
@@ -337,8 +348,19 @@ function startReading(entry, doc) {
 
   reader.render();
   renderNav();
+  describeForLockScreen();
   applySettings();
   show('reader-screen');
+}
+
+/** Keep the lock-screen card naming the chapter being read. */
+function describeForLockScreen() {
+  if (!current || !reader) return;
+  media.setBook({
+    title: current.title,
+    author: current.author,
+    section: reader.section?.heading,
+  });
 }
 
 function updateMeta() {

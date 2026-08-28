@@ -23,6 +23,11 @@ anything.
   running in your browser on WebGPU, explains the passage, restates it in
   plain English, defines its Pali and Sanskrit terms, or answers a question
   you type.
+- **Keeps reading in the background.** Playback keeps several sentences
+  queued inside the speech engine, and a near-silent audio loop plays
+  alongside so the tab counts as audible — which stops the browser
+  throttling or freezing it, and puts the book on the lock screen with
+  working media keys.
 - **Works offline** after the first visit. The app and pdf.js are precached;
   any book you open is kept, and **Settings → Library offline** downloads the
   whole 57 MB collection in one go. The model persists too, once downloaded.
@@ -89,14 +94,42 @@ support WebGPU.
 The model only ever sees the passage on screen, and is told to say when a
 scan is too garbled to interpret rather than invent a reading.
 
+## Background playback
+
+Speech synthesis is not media playback. It holds no audio focus, so a
+browser is free to throttle timers and freeze the page once it is hidden,
+and the operating system has nothing to show on a lock screen.
+
+Three things address that:
+
+- **Queued playback.** Four utterances are handed to the engine at a time,
+  so it plays them back to back without waiting on JavaScript. A clamped
+  background timer can no longer stall the reading between sentences.
+- **A near-silent loop.** A generated WAV at −90 dBFS (one least-significant
+  bit — inaudible, but not digital zero, which some browsers discount)
+  plays whenever reading is under way. An audible tab is exempt from
+  background throttling and may publish Media Session metadata.
+- **Media Session.** The book, chapter and cover appear on the lock screen
+  and in the browser's media controls; play, pause and next/previous
+  sentence work from there and from hardware media keys.
+
+A screen wake lock is also held while reading, where the browser offers one.
+
 ## Browser support
 
-| | Folder picker | Remembers folder | Reading | Assistant |
-| --- | --- | --- | --- | --- |
-| Chrome / Edge desktop | yes | yes | yes | yes |
-| Chrome Android | yes | yes | yes | yes |
-| Firefox | folder upload | no | yes | yes |
-| Safari / iOS | folder upload | no | yes | needs Safari 26+ |
+| | Folder picker | Remembers folder | Reading | Background | Assistant |
+| --- | --- | --- | --- | --- | --- |
+| Chrome / Edge desktop | yes | yes | yes | yes | yes |
+| Chrome Android | yes | yes | yes | usually | yes |
+| Firefox | folder upload | no | yes | usually | yes |
+| Safari / iOS | folder upload | no | yes | unreliable | needs Safari 26+ |
+
+"Background" means another tab or another window, and — where the platform
+allows it — a locked screen. iOS suspends speech synthesis aggressively when
+Safari is not in the foreground; the silent loop and the lock-screen card
+help, but reading through a locked iPhone screen should not be relied on.
+Genuinely dependable lock-screen playback would need real audio files rather
+than speech synthesis.
 
 Only Chromium browsers implement `showDirectoryPicker`, which is what allows
 the app to reopen your folder on a later visit. Elsewhere the app falls back to

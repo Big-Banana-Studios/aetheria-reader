@@ -13,7 +13,7 @@
     survives going offline.)
    ═══════════════════════════════════════════════════════════════════ */
 
-const VERSION = 'v3';
+const VERSION = 'v4';
 const SHELL = `aetheria-shell-${VERSION}`;
 const LIBRARY = 'aetheria-library';
 const RUNTIME = `aetheria-runtime-${VERSION}`;
@@ -32,6 +32,7 @@ const SHELL_ASSETS = [
   './js/ai.js',
   './js/ai-worker.js',
   './js/library.js',
+  './js/media-session.js',
   './vendor/pdfjs/pdf.min.mjs',
   './vendor/pdfjs/pdf.worker.min.mjs',
   './icons/icon-192.png',
