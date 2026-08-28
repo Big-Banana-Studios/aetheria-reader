@@ -105,19 +105,25 @@ Three things address that:
 - **Queued playback.** Four utterances are handed to the engine at a time,
   so it plays them back to back without waiting on JavaScript. A clamped
   background timer can no longer stall the reading between sentences.
-- **A near-silent loop.** A generated WAV at −90 dBFS (one least-significant
-  bit — inaudible, but not digital zero, which some browsers discount)
-  plays whenever reading is under way. An audible tab is exempt from
-  background throttling and may publish Media Session metadata. The loop
-  runs **thirty seconds**: Chrome takes audio focus only for media longer
-  than five seconds, and writes anything shorter off as a UI sound effect
-  without a word of complaint.
-- **A Web Audio tone, and a restart loop.** On Android the speech engine
-  takes audio focus of its own when it starts talking, and the browser
-  pauses our element in response — killing the loop at the exact moment it
-  is needed. The element is restarted whenever anything pauses it, and a
-  −86 dBFS Web Audio tone runs alongside, which is not subject to the same
-  focus arbitration.
+- **Audible music.** A soft loop plays under the voice, and it is what
+  actually holds audio focus. Inaudible audio does not work for this:
+  browsers discount it deliberately, and on Android a silent loop earned
+  no focus at all — the speech engine took focus when it began talking and
+  the loop was paused underneath us. Real media is treated as media.
+  The loop is synthesised at load, not downloaded: a slow chord
+  progression under a low-pass filter with a little noise for texture,
+  cross-faded end to start so it comes round without a seam
+  (see [`js/ambience.js`](js/ambience.js)).
+- **Thirty seconds long, and self-restarting.** Chrome takes audio focus
+  only for media running longer than five seconds and writes anything
+  shorter off as a UI sound effect. The element is also restarted whenever
+  the platform pauses it, and a Web Audio tone runs alongside as a second
+  anchor.
+
+Volume lives in **Settings → Reading music**. At zero the app falls back to
+a near-silent loop, which still asks for focus but is the arrangement
+browsers honour least reliably — so silence costs some of the background
+reliability.
 - **Media Session.** The book, chapter and cover appear on the lock screen
   and in the browser's media controls; play, pause and next/previous
   sentence work from there and from hardware media keys.

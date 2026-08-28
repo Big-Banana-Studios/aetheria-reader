@@ -212,6 +212,16 @@
       <div class="settings-section">
         <div class="settings-section-title">Background playback</div>
         <div class="setting-row">
+          <div>
+            <div class="setting-name">Reading music</div>
+            <div class="setting-desc">A soft loop under the voice. It is also what holds audio focus, so the reading survives the screen going off — at zero the app falls back to a silent loop, which browsers honour far less reliably.</div>
+          </div>
+          <div class="setting-control">
+            <input type="range" id="set-music" min="0" max="60" step="5">
+            <span class="control-value" id="set-music-val"></span>
+          </div>
+        </div>
+        <div class="setting-row">
           <div><div class="setting-name">Audio focus</div><div class="setting-desc" id="bg-note">Start reading, then check.</div></div>
           <div class="setting-control"><button class="btn-pill" id="btn-bg-check">Check</button></div>
         </div>

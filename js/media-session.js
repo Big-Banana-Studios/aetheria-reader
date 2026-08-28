@@ -4,11 +4,19 @@
    the browser is free to freeze the page once it is hidden, and the
    operating system has nothing to show on the lock screen.
 
-   Playing a near-silent loop alongside the speech fixes both. The tab
-   counts as audible, which exempts it from background throttling and
-   keeps it from being frozen, and an audible page is allowed to publish
-   Media Session metadata — so the book appears on the lock screen and
-   the hardware media keys work.
+   Playing a loop alongside the speech fixes both. The tab counts as
+   audible, which exempts it from background throttling and keeps it from
+   being frozen, and an audible page is allowed to publish Media Session
+   metadata — so the book appears on the lock screen and the hardware
+   media keys work.
+
+   The loop is real, audible music by default (see ambience.js). That is
+   not decoration: browsers discount inaudible audio on purpose, and on
+   Android a silent loop earned no focus at all — the speech engine took
+   focus when it began talking and the loop was paused underneath us.
+   Audible media is treated as media. Turning the volume to zero falls
+   back to the near-silent loop below, which is better than nothing but
+   is the arrangement that gave trouble.
 
    Two details decide whether this works at all:
 
@@ -32,6 +40,8 @@
    is not subject to the same focus arbitration, so it holds the tab
    audible even in the moments the element has been taken away from us.
    ═══════════════════════════════════════════════════════════════════ */
+
+import { ambienceUrl } from './ambience.js';
 
 const LOOP_SECONDS = 30;         // must clear Chrome's five-second floor
 
@@ -91,12 +101,41 @@ export class MediaSessionKeepAlive {
     this.ctx = null;
     this.toneStopper = null;
     this.keeper = null;
+    this.usingMusic = false;
+    this.volume = 0.18;
+    // Rendering takes a moment, so start it now rather than on first play.
+    this.musicReady = ambienceUrl(LOOP_SECONDS);
+  }
+
+  /**
+   * Swap the near-silent placeholder for the real loop once it has been
+   * rendered. Volume 0 keeps the placeholder: focus is still held, but
+   * that is the configuration browsers are least willing to honour.
+   */
+  async #useMusic() {
+    if (this.volume <= 0) return;
+    const url = await this.musicReady;
+    if (!url || this.usingMusic || !this.audio) return;
+    const wasPlaying = !this.audio.paused;
+    this.audio.src = url;
+    this.audio.volume = this.volume;
+    this.usingMusic = true;
+    if (wasPlaying || this.wanted) {
+      try { await this.audio.play(); } catch (err) { this.lastError = err?.message || String(err); }
+    }
+  }
+
+  setVolume(fraction) {
+    this.volume = Math.max(0, Math.min(1, fraction));
+    if (this.audio && this.usingMusic) this.audio.volume = this.volume;
+    if (this.volume > 0) this.#useMusic();
   }
 
   #element() {
     if (this.audio) return this.audio;
     this.url = silentLoopUrl();
     const audio = new Audio(this.url);
+    this.usingMusic = false;
     audio.loop = true;
     audio.preload = 'auto';
     audio.volume = 1;                    // the samples are what is quiet
@@ -175,6 +214,7 @@ export class MediaSessionKeepAlive {
     try {
       if (audio.paused) await audio.play();
       this.lastError = null;
+      this.#useMusic();
     } catch (err) {
       // Autoplay refused: speech still works, we just lose the lock screen
       // card and the throttling exemption.
@@ -251,6 +291,9 @@ export class MediaSessionKeepAlive {
       error: this.lastError,
       revivals: this.revivals,
       toneState: this.ctx ? this.ctx.state : 'none',
+      wanted: this.wanted,
+      music: this.usingMusic,
+      volume: this.volume,
     };
   }
 

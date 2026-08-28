@@ -457,6 +457,9 @@ function applySettings() {
   $('set-speed-val').textContent = settings.rate.toFixed(1) + '×';
   $('set-font').value = settings.fontSize;
   $('set-font-val').textContent = settings.fontSize + 'px';
+  $('set-music').value = settings.musicVolume;
+  $('set-music-val').textContent = settings.musicVolume + '%';
+  media.setVolume(settings.musicVolume / 100);
   $('set-para-pause').value = settings.paraPause;
   $('set-para-pause-val').textContent = settings.paraPause + 'ms';
   $('set-sec-pause').value = settings.sectionPause;
@@ -794,6 +797,7 @@ function wire() {
   });
   bind('set-speed', 'rate', parseFloat, true);
   bind('set-font', 'fontSize', (v) => parseInt(v, 10));
+  bind('set-music', 'musicVolume', (v) => parseInt(v, 10));
   bind('set-para-pause', 'paraPause', (v) => parseInt(v, 10));
   bind('set-sec-pause', 'sectionPause', (v) => parseInt(v, 10));
 
@@ -925,15 +929,23 @@ function reportBackgroundState() {
   const r = media.report();
   const bits = [];
 
+  // Say plainly whether reading is under way: everything below is meant to
+  // be false when it is not, and reporting it without that context sent me
+  // chasing a fault that was not there.
+  const reading = !!reader?.playing;
+  bits.push(reading ? '▶ reading' : '⏸ NOT reading — press play, then check');
+
   if (!r.audioElement) {
-    bits.push('Not started — press play first.');
+    bits.push('audio not started');
   } else {
-    bits.push(r.playing ? '✓ silent loop playing' : '✗ silent loop NOT playing');
+    bits.push(r.playing
+      ? `✓ ${r.music ? 'music' : 'silent loop'} playing at ${Math.round(r.volume * 100)}%`
+      : `✗ ${r.music ? 'music' : 'silent loop'} NOT playing`);
     bits.push(r.longEnough
       ? `✓ loop ${r.duration}s (over the 5s floor)`
       : `✗ loop ${r.duration ?? '?'}s — too short for audio focus`);
   }
-  bits.push(r.toneState === 'running' ? '✓ web-audio tone running' : `✗ tone ${r.toneState}`);
+  if (reading) bits.push(r.toneState === 'running' ? '✓ web-audio tone running' : `✗ tone ${r.toneState}`);
   bits.push(r.mediaSession ? '✓ media session' : '✗ no media session');
   bits.push(r.metadata ? '✓ lock-screen info set' : '✗ no lock-screen info');
   bits.push(r.handlers ? '✓ media keys wired' : '✗ media keys not wired');

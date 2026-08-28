@@ -130,7 +130,7 @@ export const DEFAULTS = {
   rate: 1.0, fontSize: 20, voiceName: '', paraPause: 400,
   sectionPause: 800, autoScroll: true, highlightColor: 'gold',
   aiModel: 'onnx-community/LFM2-700M-ONNX', aiEnabled: true,
-  lastSource: 'bundled',
+  lastSource: 'bundled', musicVolume: 18,
 };
 
 export function loadSettings() {
