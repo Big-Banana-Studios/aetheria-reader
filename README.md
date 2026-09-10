@@ -10,10 +10,10 @@ anything.
 
 ## What it does
 
-- **Ships a library.** 424 public-domain titles across three collections —
-  Buddhism (149), Mesopotamia (265) and Tesla (10) — 31.5 million words.
-  Cleaned text only, published with the app. The library opens on its
-  collections rather than on every book at once.
+- **Ships a library.** 478 public-domain titles across four collections —
+  Buddhism (149), Mesopotamia (265), Spiritualism (54) and Tesla (10) —
+  34.4 million words. Cleaned text only, published with the app. The
+  library opens on its collections rather than on every book at once.
 - **Reads your own books too.** PDFs, Word documents, text and HTML, added
   singly with **+ File** or a whole folder at once with **+ Folder**. The text is extracted in the
   browser and kept, so **My books** shows your shelf on every visit — even
