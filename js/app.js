@@ -12,6 +12,7 @@ import { Reader, toReaderDoc, countSentences } from './reader.js';
 import { Assistant, MODELS, hasWebGPU, buildPassage, explainMessages, questionMessages } from './ai.js';
 import { MediaSessionKeepAlive } from './media-session.js';
 import { SystemVoice, NeuralVoice, KOKORO_VOICES, KOKORO_BUILDS, voiceGroups, hasWebGPU as gpuForVoice } from './voices.js';
+import { Translator, TRANSLATORS, canTranslate } from './translate.js';
 import * as lib from './library.js';
 import * as store from './store.js';
 
@@ -38,6 +39,8 @@ let current = null;        // the open book entry
 let assistant = null;
 let cancelLoad = false;
 let reopenFolder = null;   // set when a remembered folder needs a fresh gesture
+let translator = null;
+let translated = null;     // { sec, lines[] } for the section last rendered
 
 // Two ways of speaking; only the on-device one survives being hidden.
 const systemVoice = new SystemVoice(() => getVoice());
@@ -597,6 +600,9 @@ function startReading(entry, doc) {
   }
 
   $('doc-title').textContent = entry.title.toUpperCase();
+  // Only offered where it would do something: an English book needs none.
+  $('btn-translate').hidden = !entry.language || entry.language === 'English';
+  translated = null;
   reader.addEventListener('position', updateMeta);
   reader.addEventListener('section', () => { renderNav(); describeForLockScreen(); });
   reader.addEventListener('playing', (e) => {
@@ -695,6 +701,132 @@ function leaveReader() {
   reader?.stop();
   show('library-screen');
   applyView();          // keeps "Continue reading" honest
+}
+
+/* ── Translation ────────────────────────────────────────────────── */
+
+function setTrStatus(state, text) {
+  $('tr-dot').className = 'dot ' + state;
+  $('tr-status').textContent = text;
+}
+
+function openTranslate() {
+  if (!reader || !current) return;
+  reader.stop();
+  $('tr-overlay').classList.add('open');
+  $('tr-title').textContent = `${current.language} → English`;
+
+  const spec = TRANSLATORS[current.language];
+  const warn = $('tr-warn');
+  warn.hidden = true;
+  if (spec) {
+    warn.hidden = false;
+    warn.textContent =
+      'Translation is experimental. The model is around 220 MB and some '
+      + 'devices cannot load it at all — it downloads and then stops '
+      + 'responding. Stop will abandon it if that happens here.';
+  }
+  if (!spec) {
+    warn.textContent = `No on-device translator exists for ${current.language}. `
+      + 'The general multilingual model will be tried, but it does not cover '
+      + 'every language and the result may be poor.';
+    warn.hidden = false;
+  }
+
+  const size = (spec || TRANSLATORS.Other).size;
+  setTrStatus(translator?.ready ? 'ready' : 'idle',
+    translator?.ready ? `Ready · ${translator.language} → English`
+                      : `Needs a ${size} download, once per language`);
+  $('btn-tr-read').hidden = !translated || translated.sec !== reader.sec;
+}
+
+async function runTranslation() {
+  if (!reader || !current) return;
+  const section = reader.section;
+  const lines = section.sentences.filter((x) => x !== '¶');
+  if (!lines.length) { toast('Nothing to translate in this section.'); return; }
+
+  const start = $('btn-tr-start');
+  start.disabled = true;
+  $('btn-tr-stop').hidden = false;      // usable while loading, too
+
+  // Lay the passage out first, so the translation fills in beside it
+  const host = $('tr-pairs');
+  host.replaceChildren();
+  const targets = [];
+  for (const line of lines) {
+    const pair = document.createElement('div');
+    pair.className = 'tr-pair';
+    const src = document.createElement('div');
+    src.className = 'tr-source';
+    src.textContent = line;
+    const dst = document.createElement('div');
+    dst.className = 'tr-target waiting';
+    dst.textContent = '…';
+    pair.append(src, dst);
+    host.appendChild(pair);
+    targets.push(dst);
+  }
+
+  try {
+    if (!translator) {
+      translator = new Translator();
+      translator.addEventListener('load-dtype', (e) => {
+        setTrStatus('loading', `Trying the ${e.detail.dtype} build…`);
+      });
+      translator.addEventListener('load-progress', (e) => {
+        const { percent, total } = e.detail;
+        if (total) {
+          setTrStatus('loading',
+            `Downloading translator — ${Math.round(percent)}% of ${(total / 1048576).toFixed(0)} MB`);
+        }
+      });
+    }
+    if (!translator.ready || translator.language !== current.language) {
+      setTrStatus('loading', 'Starting…');
+      await translator.prepare(current.language);
+    }
+    setTrStatus('ready',
+      `Translating ${lines.length} sentences · ${translator.dtype} build`);
+
+    const out = new Array(lines.length).fill('');
+    let done = 0;
+    await translator.run(lines, (index, text, error) => {
+      out[index] = text;
+      const el = targets[index];
+      if (!el) return;
+      el.classList.remove('waiting');
+      el.textContent = error ? `[not translated: ${error}]` : text;
+      done++;
+      if (done % 3 === 0 || done === lines.length) {
+        setTrStatus('ready', `Translated ${done} of ${lines.length}`);
+      }
+    });
+
+    translated = { sec: reader.sec, lines: out.filter(Boolean) };
+    setTrStatus('ready', `Done · ${translated.lines.length} of ${lines.length} sentences`);
+    $('btn-tr-read').hidden = !translated.lines.length;
+  } catch (err) {
+    setTrStatus('error', err.message || String(err));
+    if (!translator?.ready) translator = null;      // let a retry start fresh
+  } finally {
+    start.disabled = false;
+    $('btn-tr-stop').hidden = true;
+  }
+}
+
+/**
+ * Swap the section being read for its translation, so the book can
+ * actually be listened to rather than merely looked at.
+ */
+function readTranslation() {
+  if (!reader || !translated || !translated.lines.length) return;
+  const section = reader.doc[translated.sec];
+  section.sentences = translated.lines.slice();
+  section.heading = `${section.heading}  ·  in English`;
+  reader.goTo(translated.sec, 0);
+  $('tr-overlay').classList.remove('open');
+  toast('This section is now the English translation. Reopen the book to get the original back.', 6000);
 }
 
 /* ── Voices & settings ──────────────────────────────────────────── */
@@ -1178,6 +1310,28 @@ function wire() {
     settings = { ...store.DEFAULTS, aiModel: keepModel };
     persist(); applySettings(); populateVoices();
     toast('Settings reset.');
+  });
+
+  // Translation
+  $('btn-translate').addEventListener('click', openTranslate);
+  $('btn-close-tr').addEventListener('click', () => $('tr-overlay').classList.remove('open'));
+  $('tr-overlay').addEventListener('click', (e) => {
+    if (e.target === $('tr-overlay')) $('tr-overlay').classList.remove('open');
+  });
+  $('btn-tr-start').addEventListener('click', runTranslation);
+  $('btn-tr-read').addEventListener('click', readTranslation);
+  $('btn-tr-stop').addEventListener('click', () => {
+    // Loading can wedge the worker thread beyond any timer's reach, so the
+    // one guaranteed way out is to throw the whole worker away.
+    if (translator && !translator.ready) {
+      translator.destroy();
+      translator = null;
+      setTrStatus('idle', 'Stopped. The model did not finish loading.');
+      $('btn-tr-start').disabled = false;
+      $('btn-tr-stop').hidden = true;
+      return;
+    }
+    translator?.cancel();
   });
 
   // Assistant

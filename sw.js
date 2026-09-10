@@ -13,7 +13,7 @@
     survives going offline.)
    ═══════════════════════════════════════════════════════════════════ */
 
-const VERSION = 'v18';
+const VERSION = 'v20';
 const SHELL = `aetheria-shell-${VERSION}`;
 const LIBRARY = 'aetheria-library';
 const RUNTIME = `aetheria-runtime-${VERSION}`;
@@ -35,6 +35,8 @@ const SHELL_ASSETS = [
   './js/media-session.js',
   './js/voices.js',
   './js/tts-worker.js',
+  './js/translate.js',
+  './js/translate-worker.js',
   './js/ambience.js',
   './js/docx.js',
   './vendor/mammoth/mammoth.browser.min.js',

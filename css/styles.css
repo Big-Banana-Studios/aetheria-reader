@@ -354,6 +354,18 @@ select:focus-visible, input:focus-visible, textarea:focus-visible { outline: 2px
   color: var(--muted); font-size: 12.5px; line-height: 1.6;
 }
 
+/* ── Translation ────────────────────────────────────────────────── */
+
+#tr-sheet { max-width: 640px; }
+.tr-pair { padding: 12px 18px; border-bottom: 1px solid var(--border); }
+.tr-source {
+  color: var(--muted); font-size: 13px; line-height: 1.6; font-style: italic;
+}
+.tr-target {
+  color: var(--text); font-size: 15.5px; line-height: 1.7; margin-top: 7px;
+}
+.tr-target.waiting { color: var(--dim); font-style: italic; }
+
 /* ── Toast ──────────────────────────────────────────────────────── */
 
 #toast {
