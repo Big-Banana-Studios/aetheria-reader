@@ -338,6 +338,45 @@ STOPWORDS = frozenset(
     "them".split())
 
 
+# Function words are the giveaway: they are frequent, short, and largely
+# unshared between languages. At the scale of a whole book the winner is
+# unambiguous, which is not true of a sentence.
+LANGUAGES = {
+    "English": "the of and to in is was that it as for with by his he on at from not this which were be or had have their but they all we you her she him them",
+    "Latin": "et in est ad non ut cum qui quod per hoc esse sunt sed enim ex si quae de atque autem eius nec ita quam tamen etiam aut nam ipse omnia",
+    "German": "der die und den von zu das mit dem des ist im nicht auch ein eine auf für sich als sie er es an werden aus wird bei nach oder",
+    "French": "le la les de des et en un une du dans est que qui pour par au avec sur ne pas ce il elle nous vous sont plus comme mais",
+    "Spanish": "el la los las de del y en un una que es por para con no se su al lo como mas pero sus le ya este",
+    "Italian": "il lo la gli le di del della e in un una che per non si con da al come piu ma anche sono nel alla",
+}
+LANG_SETS = {name: frozenset(words.split()) for name, words in LANGUAGES.items()}
+
+
+def detect_language(sections):
+    """
+    The language a book is actually written in.
+
+    These sets run from Latin incunabula to German Baroque prints, and
+    labelling every one of them "not English" tells the reader nothing
+    useful about what they are looking at.
+    """
+    text = " ".join(p for s in sections for p in s["p"])
+    mid = text[len(text) // 4: len(text) // 4 + 60000]
+    words = re.findall(r"[^\W\d_]+", mid.lower(), re.UNICODE)
+    if len(words) < 200:
+        return None, 0
+
+    scores = {name: sum(w in bag for w in words) / len(words)
+              for name, bag in LANG_SETS.items()}
+    best = max(scores, key=scores.get)
+    share = scores[best]
+    runner = max(v for k, v in scores.items() if k != best)
+    # Too weak, or too close to call: better to say nothing than to guess
+    if share < 0.04 or share < runner * 1.35:
+        return None, round(share * 100)
+    return best, round(share * 100)
+
+
 def prose_score(sections):
     """
     Roughly, how much of this reads as English prose.
@@ -413,9 +452,11 @@ def build_collection(src, dest, name, existing, force=False):
         if not force and slug in known and os.path.exists(out_path):
             row = dict(known[slug])
             row["c"] = coll_id
-            if "p" not in row:                     # scored after the fact
+            if "p" not in row or "l" not in row:   # scored after the fact
                 with open(out_path, encoding="utf-8") as fh:
-                    row["p"] = prose_score(json.load(fh)["sections"])
+                    secs = json.load(fh)["sections"]
+                row.setdefault("p", prose_score(secs))
+                row["l"] = detect_language(secs)[0]
             rows.append(row)
             print("kept")
             continue
@@ -444,17 +485,54 @@ def build_collection(src, dest, name, existing, force=False):
         rows.append({
             "id": slug, "t": title, "a": author, "y": year, "n": note,
             "w": words, "s": len(sections), "kb": kb, "c": coll_id,
-            "p": prose_score(sections),
+            "p": prose_score(sections), "l": detect_language(sections)[0],
         })
         print("%3d sec %8d words %6d KB" % (len(sections), words, kb))
 
     return coll_id, rows, skipped
 
 
+def rescore(dest):
+    """
+    Recompute the per-book measures from the text already extracted.
+
+    Useful whenever a new measure is added after the fact: the source PDFs
+    may be long gone — they live on someone's USB drive — but the cleaned
+    text is right here, and that is all these measures ever looked at.
+    """
+    index = load_index(dest)
+    books = index.get("books", [])
+    if not books:
+        print("Nothing to rescore in %s" % dest)
+        return
+
+    changed = 0
+    for n, row in enumerate(books, 1):
+        path = os.path.join(dest, row["id"] + ".json")
+        if not os.path.exists(path):
+            continue
+        with open(path, encoding="utf-8") as fh:
+            sections = json.load(fh)["sections"]
+        before = (row.get("p"), row.get("l"))
+        row["p"] = prose_score(sections)
+        row["l"] = detect_language(sections)[0]
+        if before != (row["p"], row["l"]):
+            changed += 1
+        if n % 25 == 0 or n == len(books):
+            sys.stdout.write("  %d/%d done" % (n, len(books)) + chr(13))
+            sys.stdout.flush()
+
+    with open(os.path.join(dest, "index.json"), "w", encoding="utf-8") as fh:
+        json.dump(index, fh, ensure_ascii=False, separators=(",", ":"))
+    print("")
+    print("rescored %d books, %d changed" % (len(books), changed))
+
+
 def main():
     ap = argparse.ArgumentParser(
         description="Build the Aetheria Reader library from folders of PDFs.")
-    ap.add_argument("source", help="folder of PDFs, or a parent of such folders with --sets")
+    ap.add_argument("source", nargs="?",
+                    help="folder of PDFs, or a parent of such folders with --sets")
     ap.add_argument("dest", nargs="?", default="library", help="output folder (default: library)")
     ap.add_argument("--name", help="collection name (default: the folder's own name)")
     ap.add_argument("--sets", action="store_true",
@@ -463,7 +541,15 @@ def main():
                     help="start a fresh catalogue instead of merging into the existing one")
     ap.add_argument("--force", action="store_true",
                     help="re-extract books even where their text is already built")
+    ap.add_argument("--rescore", action="store_true",
+                    help="recompute language and prose scores from the built text, no sources needed")
     args = ap.parse_args()
+
+    if args.rescore:
+        rescore(args.source if args.source and os.path.isdir(args.source) else args.dest)
+        return
+    if not args.source:
+        ap.error("a source folder is required unless --rescore is given")
 
     os.makedirs(args.dest, exist_ok=True)
     existing = {"collections": [], "books": []} if args.replace else load_index(args.dest)

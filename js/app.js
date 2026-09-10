@@ -255,10 +255,19 @@ function renderShelves() {
   const frag = document.createDocumentFragment();
 
   for (const c of sets) {
+    // Some sets are far from all English — the Alchemy shelf runs to Latin,
+    // French and German — and that is worth knowing before you go in
+    // expecting to listen to them.
+    const english = bundledBooks.filter(
+      (b) => b.collection === c.id && b.language === 'English').length;
+    const sub = english && english < c.count
+      ? `${english} in English · ${(c.words / 1e6).toFixed(1)}M words`
+      : `${(c.words / 1e6).toFixed(1)}M words`;
+
     frag.appendChild(shelfCard({
       name: c.name,
       count: `${c.count} book${c.count === 1 ? '' : 's'}`,
-      sub: `${(c.words / 1e6).toFixed(1)}M words`,
+      sub,
       onOpen: () => openCollection(c.id, c.name),
     }));
   }
@@ -327,6 +336,7 @@ function applyView() {
   $('shelf-view').hidden = !shelves;
   $('lib-grid').hidden = shelves;
   $('btn-shelves').hidden = shelves || source !== 'bundled';
+  if (shelves) $('btn-english').hidden = true;
   $('lib-collection').hidden = shelves || source !== 'bundled'
     || $('lib-collection').options.length < 2;
 
@@ -346,12 +356,18 @@ function renderLibrary() {
   const wanted = $('lib-collection').value;
   const grid = $('lib-grid');
 
+  const englishOnly = $('btn-english').classList.contains('active');
   const shown = books.filter((b) => {
     if (wanted && wanted !== '*' && b.collection !== wanted) return false;
+    if (englishOnly && b.language && b.language !== 'English') return false;
     if (!query) return true;
     return b.title.toLowerCase().includes(query)
         || (b.author || '').toLowerCase().includes(query);
   });
+
+  // Only offer the filter where there is something to filter out
+  const foreign = books.some((b) => b.language && b.language !== 'English');
+  $('btn-english').hidden = !foreign || source !== 'bundled';
 
   $('lib-count').textContent =
     shown.length === books.length
@@ -398,11 +414,15 @@ function bookCard(book) {
     : `${(book.size / 1048576).toFixed(1)} MB`);
   if (book.unreadable) {
     foot.appendChild(badge('no text layer', 'unreadable'));
+  } else if (book.language && book.language !== 'English') {
+    // These sets run to Latin incunabula and German Baroque prints.
+    // Naming the language is far more use than calling it "not English",
+    // and it warns that an English voice will make a mess of it.
+    foot.appendChild(badge(book.language, 'unreadable'));
   } else if (book.prose !== null && book.prose < 12) {
-    // Scholarly editions of transliterated cuneiform, and the odd volume
-    // in German or French. They read aloud as nonsense in an English
-    // voice, so say so before someone presses play.
-    foot.appendChild(badge('not English prose', 'unreadable'));
+    // English books that are mostly transliteration or tables: they read
+    // aloud as nonsense, so say so before someone presses play.
+    foot.appendChild(badge('little prose', 'unreadable'));
   } else if (book.cached) {
     foot.appendChild(badge('ready', 'ready'));
   }
@@ -1060,6 +1080,10 @@ function wire() {
   });
   $('lib-collection').addEventListener('change', renderLibrary);
   $('btn-shelves').addEventListener('click', backToShelves);
+  $('btn-english').addEventListener('click', () => {
+    $('btn-english').classList.toggle('active');
+    renderLibrary();
+  });
   $('btn-change-folder').addEventListener('click', addFolder);
   $('btn-add-books').addEventListener('click', addFiles);
   $('btn-lib-settings').addEventListener('click', openSettings);

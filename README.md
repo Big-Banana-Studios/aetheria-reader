@@ -10,10 +10,10 @@ anything.
 
 ## What it does
 
-- **Ships a library.** 478 public-domain titles across four collections —
-  Buddhism (149), Mesopotamia (265), Spiritualism (54) and Tesla (10) —
-  34.4 million words. Cleaned text only, published with the app. The
-  library opens on its collections rather than on every book at once.
+- **Ships a library.** 642 public-domain titles across five collections —
+  Alchemy (164), Buddhism (149), Mesopotamia (265), Spiritualism (54) and
+  Tesla (10) — 48 million words. Cleaned text only, published with the app.
+  The library opens on its collections rather than on every book at once.
 - **Reads your own books too.** PDFs, Word documents, text and HTML, added
   singly with **+ File** or a whole folder at once with **+ Folder**. The text is extracted in the
   browser and kept, so **My books** shows your shelf on every visit — even
@@ -51,6 +51,9 @@ python tools/build_library.py "G:/" library --name Mesopotamia
 
 # or treat every subfolder of a drive as its own collection
 python tools/build_library.py /e/BookSets library --sets
+
+# recompute language and prose scores from the built text, no sources needed
+python tools/build_library.py library --rescore
 ```
 
 Runs merge: collections not named are carried over untouched, and books
@@ -63,6 +66,13 @@ The source PDFs are deliberately not in this repository — they run to
 several gigabytes, far more than GitHub Pages will host, and the text is
 what the reader needs. Sixteen of 430 scans carry no OCR text layer at all
 and are skipped.
+
+Each book is tagged with the language it is actually written in, by
+function-word frequency — a measure that is unreliable on a sentence and
+unambiguous across a whole book. It matters here: the Alchemy set is only
+67 English out of 164, the rest being Latin, French, German and Italian.
+The shelf says so before you go in, each book carries its language, and an
+**English** filter hides the rest.
 
 Each book is also scored for how much of it reads as English prose. These
 sets include scholarly editions of transliterated cuneiform, and volumes in

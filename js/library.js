@@ -46,6 +46,7 @@ export function toEntries(catalog, progress) {
     note: b.n || null,
     collection: b.c || null,
     prose: typeof b.p === 'number' ? b.p : null,
+    language: b.l || null,
     words: b.w,
     sectionCount: b.s,
     bytes: (b.kb || 0) * 1024,
