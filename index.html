@@ -53,6 +53,7 @@
       <button class="src-btn active" data-src="bundled">Library</button>
       <button class="src-btn" data-src="local">My books</button>
     </div>
+    <button class="btn-chip" id="btn-shelves" hidden>‹ Shelves</button>
     <span class="lib-count" id="lib-count"></span>
     <button class="btn-chip" id="btn-add-books" title="Add one or more files" hidden>+ File</button>
     <button class="btn-chip" id="btn-change-folder" title="Add a whole folder" hidden>+ Folder</button>
@@ -68,6 +69,16 @@
    </div>
   </div>
   <div class="lib-scroll">
+    <div id="shelf-view" hidden>
+      <div class="shelf-block" id="continue-wrap" hidden>
+        <div class="shelf-heading">Continue reading</div>
+        <div class="lib-grid" id="continue-grid"></div>
+      </div>
+      <div class="shelf-block">
+        <div class="shelf-heading" id="shelf-heading">Collections</div>
+        <div class="shelf-grid" id="shelf-grid"></div>
+      </div>
+    </div>
     <div class="lib-grid" id="lib-grid"></div>
     <div class="lib-empty" id="lib-empty" hidden></div>
   </div>
@@ -184,8 +195,11 @@
           <div class="setting-control"><button class="btn-pill" id="set-engine"></button></div>
         </div>
         <div class="setting-row">
-          <div><div class="setting-name">Voice</div><div class="setting-desc">Graded by the model's own authors</div></div>
-          <div class="setting-control"><select id="set-kokoro-voice"></select></div>
+          <div><div class="setting-name">Voice</div><div class="setting-desc">All 28 English voices. The letter is the model authors' own grade — A is markedly better than D.</div></div>
+          <div class="setting-control">
+            <select id="set-kokoro-voice"></select>
+            <button class="btn-pill" id="btn-kokoro-try">Hear</button>
+          </div>
         </div>
         <div class="setting-row">
           <div><div class="setting-name">Build</div><div class="setting-desc" id="build-desc"></div></div>

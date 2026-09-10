@@ -98,22 +98,50 @@ export class SystemVoice {
 
 export const KOKORO_MODEL = 'onnx-community/Kokoro-82M-v1.0-ONNX';
 
-// Only the British and best-graded American voices: the full set of 54 is
-// more choice than it is help. Grades are the model card's own.
+// Every English voice Kokoro ships, best-graded first within each group.
+// Grades are the model card's own: they range from A down to F+, and the
+// difference is audible, so they are shown rather than hidden.
 export const KOKORO_VOICES = [
-  { id: 'bf_emma',     label: 'Emma — British',      grade: 'B−' },
-  { id: 'bf_isabella', label: 'Isabella — British',  grade: 'C'  },
-  { id: 'bf_alice',    label: 'Alice — British',     grade: 'D'  },
-  { id: 'bf_lily',     label: 'Lily — British',      grade: 'D'  },
-  { id: 'bm_george',   label: 'George — British',    grade: 'C'  },
-  { id: 'bm_fable',    label: 'Fable — British',     grade: 'C'  },
-  { id: 'bm_daniel',   label: 'Daniel — British',    grade: 'D'  },
-  { id: 'bm_lewis',    label: 'Lewis — British',     grade: 'D+' },
-  { id: 'af_heart',    label: 'Heart — American',    grade: 'A'  },
-  { id: 'af_bella',    label: 'Bella — American',    grade: 'A−' },
-  { id: 'am_michael',  label: 'Michael — American',  grade: 'C+' },
-  { id: 'am_fenrir',   label: 'Fenrir — American',   grade: 'C+' },
+  { id: 'bf_emma', label: 'Emma', accent: 'British', gender: 'Female', grade: 'B−' },
+  { id: 'bf_isabella', label: 'Isabella', accent: 'British', gender: 'Female', grade: 'C' },
+  { id: 'bf_alice', label: 'Alice', accent: 'British', gender: 'Female', grade: 'D' },
+  { id: 'bf_lily', label: 'Lily', accent: 'British', gender: 'Female', grade: 'D' },
+  { id: 'bm_george', label: 'George', accent: 'British', gender: 'Male', grade: 'C' },
+  { id: 'bm_fable', label: 'Fable', accent: 'British', gender: 'Male', grade: 'C' },
+  { id: 'bm_lewis', label: 'Lewis', accent: 'British', gender: 'Male', grade: 'D+' },
+  { id: 'bm_daniel', label: 'Daniel', accent: 'British', gender: 'Male', grade: 'D' },
+  { id: 'af_heart', label: 'Heart', accent: 'American', gender: 'Female', grade: 'A' },
+  { id: 'af_bella', label: 'Bella', accent: 'American', gender: 'Female', grade: 'A−' },
+  { id: 'af_nicole', label: 'Nicole', accent: 'American', gender: 'Female', grade: 'B−' },
+  { id: 'af_aoede', label: 'Aoede', accent: 'American', gender: 'Female', grade: 'C+' },
+  { id: 'af_kore', label: 'Kore', accent: 'American', gender: 'Female', grade: 'C+' },
+  { id: 'af_sarah', label: 'Sarah', accent: 'American', gender: 'Female', grade: 'C+' },
+  { id: 'af_alloy', label: 'Alloy', accent: 'American', gender: 'Female', grade: 'C' },
+  { id: 'af_nova', label: 'Nova', accent: 'American', gender: 'Female', grade: 'C' },
+  { id: 'af_sky', label: 'Sky', accent: 'American', gender: 'Female', grade: 'C−' },
+  { id: 'af_jessica', label: 'Jessica', accent: 'American', gender: 'Female', grade: 'D' },
+  { id: 'af_river', label: 'River', accent: 'American', gender: 'Female', grade: 'D' },
+  { id: 'am_fenrir', label: 'Fenrir', accent: 'American', gender: 'Male', grade: 'C+' },
+  { id: 'am_michael', label: 'Michael', accent: 'American', gender: 'Male', grade: 'C+' },
+  { id: 'am_puck', label: 'Puck', accent: 'American', gender: 'Male', grade: 'C+' },
+  { id: 'am_echo', label: 'Echo', accent: 'American', gender: 'Male', grade: 'D' },
+  { id: 'am_eric', label: 'Eric', accent: 'American', gender: 'Male', grade: 'D' },
+  { id: 'am_liam', label: 'Liam', accent: 'American', gender: 'Male', grade: 'D' },
+  { id: 'am_onyx', label: 'Onyx', accent: 'American', gender: 'Male', grade: 'D' },
+  { id: 'am_santa', label: 'Santa', accent: 'American', gender: 'Male', grade: 'D−' },
+  { id: 'am_adam', label: 'Adam', accent: 'American', gender: 'Male', grade: 'F+' },
 ];
+
+/** Voices arranged for a menu: British before American, women before men. */
+export function voiceGroups() {
+  const groups = new Map();
+  for (const v of KOKORO_VOICES) {
+    const key = `${v.accent} · ${v.gender}`;
+    if (!groups.has(key)) groups.set(key, []);
+    groups.get(key).push(v);
+  }
+  return [...groups].map(([label, voices]) => ({ label, voices }));
+}
 
 export const KOKORO_BUILDS = [
   { dtype: 'fp32',  device: 'webgpu', size: '310 MB', label: 'Best quality' },

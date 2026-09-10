@@ -129,7 +129,40 @@ select:focus-visible, input:focus-visible, textarea:focus-visible { outline: 2px
   position: absolute; left: 0; bottom: 0; height: 2px;
   background: var(--gold); border-radius: 0 0 0 var(--radius);
 }
+.book-wrap { position: relative; display: flex; }
+.book-wrap .book-card { flex: 1; padding-right: 38px; }
+.book-remove {
+  position: absolute; top: 8px; right: 8px;
+  width: 26px; height: 26px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  color: var(--dim); font-size: 18px; line-height: 1;
+}
+.book-remove:hover { background: #d9404022; color: var(--red); }
+
 .lib-empty { color: var(--muted); text-align: center; padding: 60px 20px; font-size: 14px; }
+
+/* ── Shelves ────────────────────────────────────────────────────── */
+
+#shelf-view { max-width: 1100px; margin: 0 auto; }
+.shelf-block { margin-bottom: 30px; }
+.shelf-heading {
+  color: var(--muted); font-size: 11px; letter-spacing: 2px;
+  text-transform: uppercase; margin: 0 2px 12px;
+}
+.shelf-grid {
+  display: grid; gap: 12px;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+}
+.shelf-card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 18px 16px; text-align: left;
+  display: flex; flex-direction: column; gap: 5px; min-height: 104px;
+  transition: border-color 0.15s, transform 0.15s;
+}
+.shelf-card:hover { border-color: var(--gold-mid); transform: translateY(-1px); }
+.shelf-name { color: var(--gold); font-size: 17px; letter-spacing: 0.5px; }
+.shelf-count { color: var(--text); font-size: 13px; }
+.shelf-sub { color: var(--dim); font-size: 11.5px; margin-top: auto; }
 
 /* ── Reader ─────────────────────────────────────────────────────── */
 

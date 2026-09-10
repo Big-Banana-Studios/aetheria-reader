@@ -11,7 +11,7 @@ import { buildSections, parseFilename } from './textclean.js';
 import { Reader, toReaderDoc, countSentences } from './reader.js';
 import { Assistant, MODELS, hasWebGPU, buildPassage, explainMessages, questionMessages } from './ai.js';
 import { MediaSessionKeepAlive } from './media-session.js';
-import { SystemVoice, NeuralVoice, KOKORO_VOICES, KOKORO_BUILDS, hasWebGPU as gpuForVoice } from './voices.js';
+import { SystemVoice, NeuralVoice, KOKORO_VOICES, KOKORO_BUILDS, voiceGroups, hasWebGPU as gpuForVoice } from './voices.js';
 import * as lib from './library.js';
 import * as store from './store.js';
 
@@ -31,6 +31,7 @@ let catalog = null;        // the published library, when one exists
 let bundledBooks = [];
 let localBooks = [];
 let source = 'bundled';    // which shelf the library screen is showing
+let view = 'shelves';      // 'shelves' (collection tiles) or 'books' (a list)
 let voices = [];
 let reader = null;
 let current = null;        // the open book entry
@@ -192,10 +193,12 @@ function setSource(next) {
   // a single file must always be possible.
   $('btn-add-books').hidden = next !== 'local';
   $('btn-change-folder').hidden = next !== 'local';
-  $('lib-collection').hidden = next !== 'bundled' || $('lib-collection').options.length < 2;
   settings.lastSource = next;
   persist();
-  renderLibrary();
+  // The published library lands on its shelves; a personal shelf is small
+  // enough to show outright.
+  view = next === 'bundled' ? 'shelves' : 'books';
+  applyView();
 
   if (next === 'local' && !localBooks.length) addFiles();
 }
@@ -239,6 +242,103 @@ function fillCollections(cat) {
   sel.hidden = false;
 }
 
+/* ── Shelf view ─────────────────────────────────────────────────── */
+
+/**
+ * The landing view. Four hundred book cards in one scroll is not a
+ * library, it is a wall — so the collections come first, and you go into
+ * one rather than being handed all of them at once.
+ */
+function renderShelves() {
+  const sets = catalog ? lib.collections(catalog) : [];
+  const grid = $('shelf-grid');
+  const frag = document.createDocumentFragment();
+
+  for (const c of sets) {
+    frag.appendChild(shelfCard({
+      name: c.name,
+      count: `${c.count} book${c.count === 1 ? '' : 's'}`,
+      sub: `${(c.words / 1e6).toFixed(1)}M words`,
+      onOpen: () => openCollection(c.id, c.name),
+    }));
+  }
+
+  frag.appendChild(shelfCard({
+    name: 'My books',
+    count: localBooks.length
+      ? `${localBooks.length} book${localBooks.length === 1 ? '' : 's'}`
+      : 'Nothing added yet',
+    sub: 'From this device',
+    onOpen: () => setSource('local'),
+  }));
+
+  grid.replaceChildren(frag);
+  renderContinue();
+}
+
+function shelfCard({ name, count, sub, onOpen }) {
+  const card = document.createElement('button');
+  card.className = 'shelf-card';
+  const n = document.createElement('div');
+  n.className = 'shelf-name';
+  n.textContent = name;
+  const c = document.createElement('div');
+  c.className = 'shelf-count';
+  c.textContent = count;
+  const s2 = document.createElement('div');
+  s2.className = 'shelf-sub';
+  s2.textContent = sub;
+  card.append(n, c, s2);
+  card.addEventListener('click', onOpen);
+  return card;
+}
+
+/** Books already begun, most recently read first. */
+function renderContinue() {
+  const started = [...bundledBooks, ...localBooks]
+    .filter((b) => b.progress && b.progress.pct > 0.005 && b.progress.pct < 0.995)
+    .sort((a, b) => (b.progress.at || 0) - (a.progress.at || 0))
+    .slice(0, 4);
+
+  $('continue-wrap').hidden = !started.length;
+  if (!started.length) return;
+  const frag = document.createDocumentFragment();
+  for (const b of started) frag.appendChild(bookCard(b));
+  $('continue-grid').replaceChildren(frag);
+}
+
+function openCollection(id, name) {
+  view = 'books';
+  $('lib-collection').value = id;
+  $('shelf-heading').textContent = name || 'Collections';
+  applyView();
+}
+
+function backToShelves() {
+  view = 'shelves';
+  $('lib-search').value = '';
+  $('lib-collection').value = '*';
+  applyView();
+}
+
+/** Show whichever of the two views is current, and the chrome for it. */
+function applyView() {
+  const shelves = view === 'shelves' && source === 'bundled';
+  $('shelf-view').hidden = !shelves;
+  $('lib-grid').hidden = shelves;
+  $('btn-shelves').hidden = shelves || source !== 'bundled';
+  $('lib-collection').hidden = shelves || source !== 'bundled'
+    || $('lib-collection').options.length < 2;
+
+  if (shelves) {
+    $('lib-empty').hidden = true;
+    $('lib-count').textContent = catalog ? `${catalog.count} books` : '';
+    renderShelves();
+  } else {
+    renderLibrary();
+  }
+}
+
 /* ── Library UI ─────────────────────────────────────────────────── */
 
 function renderLibrary() {
@@ -270,52 +370,93 @@ function renderLibrary() {
   }
 
   const frag = document.createDocumentFragment();
-  for (const book of shown) {
-    const card = document.createElement('button');
-    card.className = 'book-card';
-
-    const title = document.createElement('div');
-    title.className = 'book-title';
-    title.textContent = book.title;
-    card.appendChild(title);
-
-    if (book.author) {
-      const author = document.createElement('div');
-      author.className = 'book-author';
-      author.textContent = book.author;
-      card.appendChild(author);
-    }
-
-    const foot = document.createElement('div');
-    foot.className = 'book-foot';
-    if (book.year) foot.append(String(book.year));
-    foot.append(book.bundled
-      ? `${Math.round(book.words / 1000)}k words`
-      : `${(book.size / 1048576).toFixed(1)} MB`);
-    if (book.unreadable) {
-      foot.appendChild(badge('no text layer', 'unreadable'));
-    } else if (book.prose !== null && book.prose < 12) {
-      // Scholarly editions of transliterated cuneiform, and the odd volume
-      // in German or French. They read aloud as nonsense in an English
-      // voice, so say so before someone presses play.
-      foot.appendChild(badge('not English prose', 'unreadable'));
-    } else if (book.cached) {
-      foot.appendChild(badge('ready', 'ready'));
-    }
-    card.appendChild(foot);
-
-    const pct = book.progress?.pct;
-    if (pct > 0.01) {
-      const bar = document.createElement('div');
-      bar.className = 'book-progress';
-      bar.style.width = Math.min(100, pct * 100) + '%';
-      card.appendChild(bar);
-    }
-
-    card.addEventListener('click', () => openBook(book));
-    frag.appendChild(card);
-  }
+  for (const book of shown) frag.appendChild(bookCard(book));
   grid.appendChild(frag);
+}
+
+function bookCard(book) {
+  const card = document.createElement('button');
+  card.className = 'book-card';
+
+  const title = document.createElement('div');
+  title.className = 'book-title';
+  title.textContent = book.title;
+  card.appendChild(title);
+
+  if (book.author) {
+    const author = document.createElement('div');
+    author.className = 'book-author';
+    author.textContent = book.author;
+    card.appendChild(author);
+  }
+
+  const foot = document.createElement('div');
+  foot.className = 'book-foot';
+  if (book.year) foot.append(String(book.year));
+  foot.append(book.bundled
+    ? `${Math.round(book.words / 1000)}k words`
+    : `${(book.size / 1048576).toFixed(1)} MB`);
+  if (book.unreadable) {
+    foot.appendChild(badge('no text layer', 'unreadable'));
+  } else if (book.prose !== null && book.prose < 12) {
+    // Scholarly editions of transliterated cuneiform, and the odd volume
+    // in German or French. They read aloud as nonsense in an English
+    // voice, so say so before someone presses play.
+    foot.appendChild(badge('not English prose', 'unreadable'));
+  } else if (book.cached) {
+    foot.appendChild(badge('ready', 'ready'));
+  }
+  card.appendChild(foot);
+
+  const pct = book.progress?.pct;
+  if (pct > 0.01) {
+    const bar = document.createElement('div');
+    bar.className = 'book-progress';
+    bar.style.width = Math.min(100, pct * 100) + '%';
+    card.appendChild(bar);
+  }
+
+  card.addEventListener('click', () => openBook(book));
+
+  // Books added from this device can be taken off again. The published
+  // library is not the reader's to delete, so it carries no such control.
+  if (!book.bundled) {
+    const wrap = document.createElement('div');
+    wrap.className = 'book-wrap';
+    const remove = document.createElement('button');
+    remove.className = 'book-remove';
+    remove.type = 'button';
+    remove.title = `Remove “${book.title}” from My books`;
+    remove.setAttribute('aria-label', remove.title);
+    remove.textContent = '×';
+    remove.addEventListener('click', (e) => {
+      e.stopPropagation();
+      removeBook(book);
+    });
+    wrap.append(card, remove);
+    return wrap;
+  }
+  return card;
+}
+
+/** Forget a book added from this device: its listing, text and place. */
+async function removeBook(book) {
+  if (!confirm(`Remove “${book.title}” from My books?
+
+`
+             + 'The file on your device is not touched — only what this app '
+             + 'has stored about it.')) return;
+  try {
+    await Promise.all([
+      store.forgetFromShelf(book.key),
+      store.forgetCachedBook(book.key),
+      store.forgetProgress(book.name),
+    ]);
+  } catch {}
+  localBooks = localBooks.filter((b) => b.key !== book.key);
+  if (source === 'local') books = localBooks;
+  applyView();
+  toast(`Removed “${book.title}”.`);
 }
 
 function badge(text, cls) {
@@ -533,7 +674,7 @@ function leaveReader() {
   saveProgress();
   reader?.stop();
   show('library-screen');
-  renderLibrary();
+  applyView();          // keeps "Continue reading" honest
 }
 
 /* ── Voices & settings ──────────────────────────────────────────── */
@@ -867,6 +1008,7 @@ function wire() {
     setSource('bundled');
     show('library-screen');
   });
+  $('btn-back').addEventListener('click', () => { if (source === 'bundled') applyView(); });
   $('btn-offline').addEventListener('click', downloadLibraryForOffline);
   $('btn-bg-check').addEventListener('click', reportBackgroundState);
   $('btn-kokoro-load').addEventListener('click', downloadVoice);
@@ -887,14 +1029,37 @@ function wire() {
     settings.kokoroVoice = e.target.value;
     persist();
     if (neuralVoice) { neuralVoice.voiceId = settings.kokoroVoice; swapEngine(); }
+    renderVoiceSettings();
+  });
+  $('btn-kokoro-try').addEventListener('click', async () => {
+    if (!neuralVoice?.ready) { toast('Download the on-device voice first.'); return; }
+    const btn = $('btn-kokoro-try');
+    btn.disabled = true;
+    neuralVoice.voiceId = settings.kokoroVoice;
+    neuralVoice.cancel();
+    await neuralVoice.resume();
+    neuralVoice.enqueue(
+      'All conditioned things are impermanent. Work out your own salvation with diligence.',
+      { rate: settings.rate, onEnd: () => { btn.disabled = false; },
+        onError: () => { btn.disabled = false; } });
+    setTimeout(() => { btn.disabled = false; }, 12000);
   });
   $('set-kokoro-build').addEventListener('change', (e) => {
     settings.kokoroBuild = parseInt(e.target.value, 10);
     persist();
     $('kokoro-note').textContent = 'Press Download to fetch this build.';
   });
-  $('lib-search').addEventListener('input', renderLibrary);
+  $('lib-search').addEventListener('input', () => {
+    // Typing means you want books, not shelves.
+    if (view === 'shelves' && $('lib-search').value.trim()) {
+      view = 'books';
+      $('lib-collection').value = '*';
+      $('shelf-heading').textContent = 'Collections';
+    }
+    applyView();
+  });
   $('lib-collection').addEventListener('change', renderLibrary);
+  $('btn-shelves').addEventListener('click', backToShelves);
   $('btn-change-folder').addEventListener('click', addFolder);
   $('btn-add-books').addEventListener('click', addFiles);
   $('btn-lib-settings').addEventListener('click', openSettings);
@@ -1103,11 +1268,18 @@ function renderVoiceSettings() {
 
   const voiceSel = $('set-kokoro-voice');
   if (!voiceSel.options.length) {
-    for (const v of KOKORO_VOICES) {
-      const opt = document.createElement('option');
-      opt.value = v.id;
-      opt.textContent = `${v.label}  (${v.grade})`;
-      voiceSel.appendChild(opt);
+    // All 28, grouped by accent and gender rather than pruned to a
+    // shortlist — the grades say which are strongest without hiding the rest.
+    for (const group of voiceGroups()) {
+      const optgroup = document.createElement('optgroup');
+      optgroup.label = group.label;
+      for (const v of group.voices) {
+        const opt = document.createElement('option');
+        opt.value = v.id;
+        opt.textContent = `${v.label} · ${v.grade}`;
+        optgroup.appendChild(opt);
+      }
+      voiceSel.appendChild(optgroup);
     }
   }
   voiceSel.value = settings.kokoroVoice;
@@ -1294,6 +1466,7 @@ async function init() {
     bundledBooks = lib.toEntries(catalog, await store.allProgress());
     fillCollections(catalog);
     $('src-toggle').hidden = false;
+    view = 'shelves';
     setSource('bundled');
     show('library-screen');
   }

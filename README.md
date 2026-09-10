@@ -10,9 +10,10 @@ anything.
 
 ## What it does
 
-- **Ships a library.** 414 public-domain titles across two collections —
-  Buddhism (149) and Mesopotamia (265) — 30.8 million words, printed between
-  1801 and 1935. Cleaned text only: 172 MB, published with the app.
+- **Ships a library.** 424 public-domain titles across three collections —
+  Buddhism (149), Mesopotamia (265) and Tesla (10) — 31.5 million words.
+  Cleaned text only, published with the app. The library opens on its
+  collections rather than on every book at once.
 - **Reads your own books too.** PDFs, Word documents, text and HTML, added
   singly with **+ File** or a whole folder at once with **+ Folder**. The text is extracted in the
   browser and kept, so **My books** shows your shelf on every visit — even
@@ -189,12 +190,15 @@ download, the voice list and the build choice.
 
 ### Voices
 
-Kokoro ships four British female voices, of which `bf_emma` is much the
-best (the model card grades it B−, against C for Isabella and D for Alice
-and Lily), four British male, and the American voices, where `af_heart` (A)
-and `af_bella` (A−) are the strongest in the set. Note that a voice cannot
-be carried across engines: the ones your browser offers and the ones Kokoro
-offers are separate, unrelated sets.
+All 28 of Kokoro's English voices are offered, grouped by accent and
+gender and ordered best-first within each group. The letter beside each is
+the model card's own grade and the difference is audible: `af_heart` (A)
+and `af_bella` (A−) are the strongest in the set, `bf_emma` (B−) the best
+British, and the D and F voices are noticeably rougher. **Hear** auditions
+the selected voice without leaving the settings.
+
+Note that a voice cannot be carried across engines: the ones your browser
+offers and the ones Kokoro offers are separate, unrelated sets.
 
 Only Chromium browsers implement `showDirectoryPicker`, which is what allows
 the app to reopen your folder on a later visit. Elsewhere the app falls back to

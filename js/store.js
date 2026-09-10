@@ -104,6 +104,7 @@ export async function cacheSize() {
 }
 
 export const clearBookCache = () => tx(BOOKS, 'readwrite', (s) => s.clear());
+export const forgetCachedBook = (key) => del(BOOKS, key);
 
 /* ── The reader's own shelf ─────────────────────────────────────── */
 
@@ -142,6 +143,7 @@ export const clearShelf = () => tx(SHELF, 'readwrite', (s) => s.clear());
 /* ── Reading position ───────────────────────────────────────────── */
 
 export const getProgress = (id) => get(PROGRESS, id);
+export const forgetProgress = (id) => del(PROGRESS, id);
 export const setProgress = (id, pos) => put(PROGRESS, id, { ...pos, at: Date.now() });
 
 export async function allProgress() {
