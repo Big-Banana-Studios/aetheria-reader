@@ -13,7 +13,7 @@
     survives going offline.)
    ═══════════════════════════════════════════════════════════════════ */
 
-const VERSION = 'v20';
+const VERSION = 'v21';
 const SHELL = `aetheria-shell-${VERSION}`;
 const LIBRARY = 'aetheria-library';
 const RUNTIME = `aetheria-runtime-${VERSION}`;

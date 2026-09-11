@@ -262,7 +262,7 @@ function renderShelves() {
     // French and German — and that is worth knowing before you go in
     // expecting to listen to them.
     const english = bundledBooks.filter(
-      (b) => b.collection === c.id && b.language === 'English').length;
+      (b) => b.collection === c.id && (b.language === 'English' || b.english)).length;
     const sub = english && english < c.count
       ? `${english} in English · ${(c.words / 1e6).toFixed(1)}M words`
       : `${(c.words / 1e6).toFixed(1)}M words`;
@@ -362,7 +362,7 @@ function renderLibrary() {
   const englishOnly = $('btn-english').classList.contains('active');
   const shown = books.filter((b) => {
     if (wanted && wanted !== '*' && b.collection !== wanted) return false;
-    if (englishOnly && b.language && b.language !== 'English') return false;
+    if (englishOnly && b.language && b.language !== 'English' && !b.english) return false;
     if (!query) return true;
     return b.title.toLowerCase().includes(query)
         || (b.author || '').toLowerCase().includes(query);
@@ -417,6 +417,10 @@ function bookCard(book) {
     : `${(book.size / 1048576).toFixed(1)} MB`);
   if (book.unreadable) {
     foot.appendChild(badge('no text layer', 'unreadable'));
+  } else if (book.english) {
+    // Published with an English rendering beside the original, so it can
+    // be listened to after all. The original stays a tap away.
+    foot.appendChild(badge(`${book.language} · English`, 'translated'));
   } else if (book.language && book.language !== 'English') {
     // These sets run to Latin incunabula and German Baroque prints.
     // Naming the language is far more use than calling it "not English",
@@ -538,10 +542,14 @@ async function openBook(entry) {
     let data;
 
     if (entry.bundled) {
-      // Already cleaned and published; the service worker keeps a copy
-      $('loading-sub').textContent = 'Fetching the text…';
+      // Already cleaned and published; the service worker keeps a copy.
+      // A book with a published translation opens in English unless the
+      // reader has asked for the original: being listenable is the whole
+      // point, and the original is one tap away in the reader.
+      const english = wantsEnglish(entry);
+      $('loading-sub').textContent = english ? 'Fetching the English translation…' : 'Fetching the text…';
       $('loading-bar').style.width = '40%';
-      data = await lib.loadBook(entry.id);
+      data = await lib.loadBook(entry.id, { english });
       $('loading-bar').style.width = '100%';
     } else {
       data = await store.getCachedBook(entry.key);
@@ -599,9 +607,17 @@ function startReading(entry, doc) {
     reader.sen = Math.min(saved.sen ?? 0, doc[saved.sec].sentences.length - 1);
   }
 
-  $('doc-title').textContent = entry.title.toUpperCase();
+  const inEnglish = wantsEnglish(entry);
+  $('doc-title').textContent = entry.title.toUpperCase() + (inEnglish ? '  ·  IN ENGLISH' : '');
   // Only offered where it would do something: an English book needs none.
-  $('btn-translate').hidden = !entry.language || entry.language === 'English';
+  // Where a translation is published the button swaps between the two
+  // texts; otherwise it opens the on-device translator for this section.
+  const trBtn = $('btn-translate');
+  trBtn.hidden = !entry.language || entry.language === 'English';
+  trBtn.classList.toggle('on', inEnglish);
+  trBtn.title = !entry.english ? 'Translate this section'
+    : inEnglish ? `Reading the English translation — tap for the ${entry.language} original`
+    : `Reading the ${entry.language} original — tap for the English translation`;
   translated = null;
   reader.addEventListener('position', updateMeta);
   reader.addEventListener('section', () => { renderNav(); describeForLockScreen(); });
@@ -704,6 +720,24 @@ function leaveReader() {
 }
 
 /* ── Translation ────────────────────────────────────────────────── */
+
+/** Should this book open in its published English translation? */
+const wantsEnglish = (entry) => !!entry.english && !entry.showOriginal;
+
+/**
+ * Swap between a book's original text and its published translation.
+ * The two are sectioned identically, so the reader lands in the same
+ * chapter; the sentence within it is the closest the other text has.
+ */
+function toggleTranslation() {
+  if (!current?.english) return;
+  const entry = current;
+  entry.showOriginal = wantsEnglish(entry);
+  toast(entry.showOriginal
+    ? `Reopening in ${entry.language}. Tap the same button for English.`
+    : 'Reopening in English. Tap the same button for the original.', 4000);
+  openBook(entry);
+}
 
 function setTrStatus(state, text) {
   $('tr-dot').className = 'dot ' + state;
@@ -1313,7 +1347,9 @@ function wire() {
   });
 
   // Translation
-  $('btn-translate').addEventListener('click', openTranslate);
+  $('btn-translate').addEventListener('click', () => {
+    if (current?.english) toggleTranslation(); else openTranslate();
+  });
   $('btn-close-tr').addEventListener('click', () => $('tr-overlay').classList.remove('open'));
   $('tr-overlay').addEventListener('click', (e) => {
     if (e.target === $('tr-overlay')) $('tr-overlay').classList.remove('open');

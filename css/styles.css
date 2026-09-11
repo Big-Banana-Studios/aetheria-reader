@@ -125,6 +125,7 @@ select:focus-visible, input:focus-visible, textarea:focus-visible { outline: 2px
 }
 .badge.ready { border-color: var(--gold-mid); color: var(--gold); }
 .badge.unreadable { border-color: var(--red); color: var(--red); }
+.badge.translated { border-color: var(--gold-mid); color: var(--gold); }
 .book-progress {
   position: absolute; left: 0; bottom: 0; height: 2px;
   background: var(--gold); border-radius: 0 0 0 var(--radius);

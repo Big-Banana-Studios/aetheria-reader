@@ -12,6 +12,12 @@ const BASE = new URL('../library/', import.meta.url);
 
 export const bookUrl = (id) => new URL(`${id}.json`, BASE).href;
 
+// A book in another language may be published with an English rendering
+// beside it, made once by tools/translate_library.py. It has the same
+// shape as the original, section for section, so the reader treats it
+// as just another text.
+export const englishUrl = (id) => new URL(`${id}.en.json`, BASE).href;
+
 /** Fetch the catalogue. Returns null when no library is published. */
 export async function loadCatalog() {
   try {
@@ -24,9 +30,9 @@ export async function loadCatalog() {
   }
 }
 
-/** Fetch one book's cleaned text. */
-export async function loadBook(id) {
-  const res = await fetch(bookUrl(id));
+/** Fetch one book's cleaned text, or its published English translation. */
+export async function loadBook(id, { english = false } = {}) {
+  const res = await fetch(english ? englishUrl(id) : bookUrl(id));
   if (!res.ok) throw new Error(`That book could not be loaded (${res.status}).`);
   const data = await res.json();
   if (!data?.sections?.length) throw new Error('That book arrived empty.');
@@ -47,6 +53,8 @@ export function toEntries(catalog, progress) {
     collection: b.c || null,
     prose: typeof b.p === 'number' ? b.p : null,
     language: b.l || null,
+    english: !!b.e,               // an English translation is published
+    englishBytes: (b.e || 0) * 1024,
     words: b.w,
     sectionCount: b.s,
     bytes: (b.kb || 0) * 1024,
@@ -58,8 +66,9 @@ export function toEntries(catalog, progress) {
   }));
 }
 
-/** Every book URL in the catalogue, for pre-caching the whole library. */
-export const allBookUrls = (catalog) => catalog.books.map((b) => bookUrl(b.id));
+/** Every book URL in the catalogue, translations included, for pre-caching the whole library. */
+export const allBookUrls = (catalog) => catalog.books.flatMap((b) =>
+  b.e ? [bookUrl(b.id), englishUrl(b.id)] : [bookUrl(b.id)]);
 
 /** The collections in the catalogue, oldest format tolerated. */
 export const collections = (catalog) =>
@@ -67,7 +76,7 @@ export const collections = (catalog) =>
 
 /** Total published size, in bytes. */
 export const totalBytes = (catalog) =>
-  catalog.books.reduce((a, b) => a + (b.kb || 0) * 1024, 0);
+  catalog.books.reduce((a, b) => a + ((b.kb || 0) + (b.e || 0)) * 1024, 0);
 
 /** Ask the service worker to download the whole library for offline use. */
 export function cacheWholeLibrary(catalog, onProgress) {
