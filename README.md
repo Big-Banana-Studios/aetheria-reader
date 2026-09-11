@@ -1,9 +1,9 @@
 # Aetheria Reader
 
-A spoken-word reader for classic Buddhist texts. It ships with 149
-public-domain books, reads them aloud, keeps your place, and — if you want it —
-answers questions about the passage you are listening to, using a language
-model that runs on your own hardware.
+A spoken-word reader for classic texts. It ships with 642 public-domain
+books, reads them aloud, keeps your place, and — if you want it — answers
+questions about the passage you are listening to, using a language model
+that runs on your own hardware.
 
 It will also read your own books, straight off your disk, without uploading
 anything.
@@ -18,6 +18,12 @@ anything.
   singly with **+ File** or a whole folder at once with **+ Folder**. The text is extracted in the
   browser and kept, so **My books** shows your shelf on every visit — even
   on a phone, where no browser will remember a folder. Nothing is uploaded.
+- **Reads the foreign-language books in English.** Roughly a fifth of
+  the library is in French, German, Italian or Latin. Those books are
+  published with an English rendering beside the original, made once
+  with a translation model on the maintainer's machine — see
+  [Translations](#translations). Such a book opens in English and one tap
+  in the reader swaps to the original and back.
 - **Speaks the text.** Sentence-by-sentence playback with highlighting,
   adjustable speed and voice, paragraph and section pauses, and a contents
   list built from the book's own chapter headings.
@@ -31,7 +37,8 @@ anything.
   leave and resumes where you left off — see below for why.
 - **Works offline** after the first visit. The app and pdf.js are precached;
   any book you open is kept, and **Settings → Library offline** downloads the
-  whole 57 MB collection in one go. The model persists too, once downloaded.
+  whole collection — about 285 MB, translations included — in one go. The
+  model persists too, once downloaded.
 
 ## The library
 
@@ -79,6 +86,66 @@ sets include scholarly editions of transliterated cuneiform, and volumes in
 German and French; they extract perfectly well and are useless read aloud by
 an English voice, so the library marks them **not English prose** rather than
 letting someone find out by pressing play. Nineteen of 414 are flagged.
+
+## Translations
+
+Roughly half the Alchemy set is not in English, and there are German and
+French volumes in the other sets too. They extract perfectly well and are
+useless read aloud by an English voice. Rather than translate in the
+browser — a 220 MB model per language, which on some machines downloads
+and then never starts — the translation is done once, here, by
+[`tools/translate_library.py`](tools/translate_library.py), and the
+English text is published as `library/<id>.en.json` beside the original.
+
+The English file has exactly the shape of the original, section for
+section and paragraph for paragraph, so the reader needs nothing new to
+read it; the catalogue row carries an `e` field with its size. Such a
+book opens in English by default, its card says so (`French · English`),
+the **English** filter keeps it, and the translate button in the reader
+swaps between the two texts, landing in the same chapter.
+
+Two engines, chosen by language:
+
+| Language | Engine | Model |
+| --- | --- | --- |
+| French | Marian | `Helsinki-NLP/opus-mt-tc-big-fr-en` |
+| German | Marian | `Helsinki-NLP/opus-mt-de-en` |
+| Italian | Marian | `Helsinki-NLP/opus-mt-tc-big-it-en` |
+| Latin | LLM | see the script's `DEFAULT_LLM` |
+
+Marian is fast and good on clean prose and hopeless on OCR noise. Latin
+has no Marian pair at all, and every Latin book here is an early-modern
+print whose long s came through OCR as an *f*, so those go through a
+small instruction-tuned language model that is told what century the
+text is from and what OCR did to it.
+
+The script scores every book for OCR cleanliness first and skips the
+ones that are letter salad — the Fraktur German prints, mostly — because
+no translator turns letter salad into prose. `--list` shows the score
+for every candidate. Work is cached per paragraph under
+`tools/.translate-cache/`, so an interrupted run resumes.
+
+```bash
+# once: a Python 3.11 environment with CUDA torch
+py -3.11 -m venv tools/.venv
+tools/.venv/Scripts/pip install torch --index-url https://download.pytorch.org/whl/cu128
+tools/.venv/Scripts/pip install transformers sentencepiece sacremoses accelerate
+
+tools/.venv/Scripts/python tools/translate_library.py library --list
+tools/.venv/Scripts/python tools/translate_library.py library --lang French
+tools/.venv/Scripts/python tools/translate_library.py library --lang Latin
+tools/.venv/Scripts/python tools/translate_library.py library --sample <book-id>
+```
+
+Neither the venv nor the models go anywhere near the repository: the
+English text is what the reader needs, and text is cheap. On an RTX 4090
+laptop the French set takes about an hour.
+
+Books that ship without a translation still get the on-device translator
+in the reader ([`js/translate.js`](js/translate.js)), which renders the
+current section sentence by sentence and can hand the result to the
+voice. It is experimental: the Marian models it uses do not load on
+every machine, and Stop abandons a load that has wedged.
 
 ## Getting the text out of the books
 
@@ -217,8 +284,11 @@ remember the choice.
 
 ## Deploying to GitHub Pages
 
-The repository is about 59 MB — 2 MB of app and 57 MB of book text, well
-inside the 1 GB Pages allows. Push it and enable Pages:
+The repository is about 290 MB — 5 MB of app and vendored libraries, and
+285 MB of book text including the English renderings — well inside the
+1 GB Pages allows. A set of books has averaged about 55 MB, so there is
+room for several more before that ceiling matters. Push it and enable
+Pages:
 
 ```bash
 git init
@@ -261,14 +331,18 @@ js/textclean.js         OCR cleanup and sectioning
 js/store.js             IndexedDB: folder handle, book cache, progress
 js/ai.js                model catalogue and prompts
 js/ai-worker.js         transformers.js in a worker
-js/library.js           the published catalogue and offline pre-caching
+js/translate.js         the on-device section translator, for books without a published one
+js/translate-worker.js  its Marian model, in a worker
+js/library.js           the published catalogue, translations, and offline pre-caching
 js/docx.js              Word documents, via mammoth
-library/                149 books as cleaned text, plus index.json
+library/                642 books as cleaned text, plus index.json;
+                        <id>.en.json beside any book published in translation
 vendor/pdfjs/           pdf.js 6.2.108, vendored so reading works offline
 vendor/mammoth/         mammoth 1.11, likewise
 sw.js                   precached shell + runtime cache for the AI libraries
 dev/selftest.html       browser self-test — see below
-tools/build_library.py  optional: bulk-check a folder from the command line
+tools/build_library.py  builds library/ from a folder of PDFs
+tools/translate_library.py  publishes English renderings of the non-English books
 ```
 
 ## Development

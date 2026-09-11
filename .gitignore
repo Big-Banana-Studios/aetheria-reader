@@ -15,3 +15,9 @@ __pycache__/
 *.pyc
 .DS_Store
 Thumbs.db
+
+# The translation toolchain: a venv with CUDA torch, and the per-segment
+# cache that lets an interrupted run resume. Neither belongs in the repo;
+# the English text they produce goes in library/ like any other book.
+tools/.venv/
+tools/.translate-cache/
