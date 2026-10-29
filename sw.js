@@ -74,9 +74,13 @@ self.addEventListener('install', (event) => {
 
 self.addEventListener('activate', (event) => {
   event.waitUntil((async () => {
+    // Only this app's own versioned caches. Other Big Banana Studios apps share this
+    // origin (aetheria-voxel-*, divination-shell-*, operator-*), so a broad
+    // 'aetheria-' match would wipe their offline copies.
     const keep = new Set([SHELL, LIBRARY, RUNTIME]);
+    const ours = (key) => key.startsWith('aetheria-shell-') || key.startsWith('aetheria-runtime-');
     for (const key of await caches.keys()) {
-      if (key.startsWith('aetheria-') && !keep.has(key)) await caches.delete(key);
+      if (ours(key) && !keep.has(key)) await caches.delete(key);
     }
     await self.clients.claim();
   })());
