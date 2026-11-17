@@ -1,0 +1,705 @@
+---
+title: The Aetheria Tone Codex
+author: Joseph and Alisha Lewis, with Claude
+year: 2026
+---
+# Aetheria Tone Codex
+
+13 November 2026 · Joseph and Alisha Lewis, with Claude.
+
+This is the Reader's copy, from 17 November 2026.
+
+## What this is
+
+Every description of the 27 tones we could find in the Aetheria Framework project, gathered tone by tone, with the source of each line named. A dozen documents describe the tones; they agree on the structure and differ on the names.
+
+- **Nothing here changes the app.** The app's canon (its data files) changes only when you two decide it should.
+- **Disagreements are listed in To settle**, one question each.
+- **Health and body claims are left out of this copy.** Our working copy quotes them from the older sources, each marked as a claim, along with the Guidebook's one-line descriptions and a record of the old prescription engine. They are lore, not shown effects, and none can appear in the apps, so the Reader leaves them out.
+- **Each tone's lead name is its script name**, the name the app shows (The Chorus, The Vastness). Whether that should lead is the first question in To settle.
+
+## Your two tones: 4566 and 4920
+
+Joe's birth Moon was in Shravana, mansion 22, so his tone is 4566 Hz, The Chorus. Alisha's was in Dhanishta, mansion 23: 4920 Hz, The Vastness. They sit side by side in the HEAD layer, one step (354 Hz) apart.
+
+Without a birth time, the app offers every mansion the Moon crossed that day (one or two, rarely three). These are the tones the app showed you.
+
+### What joins them
+
+Each of these was checked against the numbers, not taken from a source.
+
+- **Neighbours in the sky.** Mansions 22 and 23 are next to each other. For two people chosen at random, the chance is 2 in 27, about 7%.
+- **One line of the magic square.** 4566 + 4920 + 5274 = 14,760, the HEAD layer's magic sum. The third tone on your line is 5274 Hz, The Temple.
+- **The pillar.** 4920 crowns the cube's central pillar, 528 → 2178 → 4920, which runs through SOURCE.
+- **The Vortex walk.** The Flying Star order (5, 6, 7, 8, 9, 1, 2, 3, 4) starts the HEAD layer at 4920 and ends it at 4566. It begins at Alisha's tone and ends at Joe's.
+- **Each hexagram holds the other's palace.** Alisha's hexagram, 57, is Wind doubled (☴ over ☴); Wind is the trigram of Joe's palace, the south-east. Joe's hexagram, 45, rests on Earth (☷), the element of Alisha's palace, the center.
+- **Two Judgments that share their words.** Of Legge's 64 Judgments, only 45 and 57 say both "in whatever direction" movement is advantageous and that it is advantageous to see or meet "the great man".
+
+Patterns like these are easy to find: each tone has a dozen attributes, so some pairs will always line up. The blind test we talked about is how to tell a real fit from a found one.
+
+### The HEAD layer
+
+South is at the top, as the Lo Shu is drawn. Your line runs from the south-east corner through the center to the north-west.
+
+| **4566 The Chorus** (Joe) · SE 4 | 6336 The Summit · S 9 | 3858 The Receiver · SW 2 |
+| --- | --- | --- |
+| 4212 The Signal · E 3 | **4920 The Vastness** (Alisha) · Center 5 | 5628 The Aurora · W 7 |
+| 5982 The Presence · NE 8 | 3504 The Forge · N 1 | **5274 The Temple** · NW 6 |
+
+### Side by side
+
+| | 4566 · The Chorus | 4920 · The Vastness |
+| --- | --- | --- |
+| Place in the cube | Position 22, HEAD, palace 4: south-east, Wood, ☴ Xun | Position 23, HEAD, palace 5: center of the layer, Earth |
+| Moon mansion | 22 Shravana | 23 Dhanishta |
+| Digit root | 3 | 6 |
+| Hexagram | 45 Gathering Together (萃 Cuì), ☱ Lake over ☷ Earth | 57 The Gentle (巽 Xùn), ☴ Wind over ☴ Wind |
+| Player's image line | "Lake/Earth — collective coherence" | "Wind/Wind — field awareness" |
+| Keyword (player, atlas) | Collective | Awareness |
+| State (atlas) | COLLECTIVE HARMONY | EXPANDED AWARENESS |
+| When the player plays it | All brainwave bands balanced | Alpha dominant |
+| Function name (Lo Shu canon) | Soul Star Connection | Expressive Truth |
+| Guidebook v8.1 | Soul Star Gate, "soul star connection": "Opens first transpersonal gate." | Spirit Gate, "spirit realm access": "Opens second transpersonal gate." |
+| Guidebook's body field | Soul Star Chakra, Higher Self | Spirit Communication Centers |
+| Other names | Soul Star (Lo Shu analysis) | Harmony (prescription engine) |
+| Sacred geometry | Harmonic Web: "The interconnected web of all harmonic relationships, visualizing the music of the spheres." | Field Lines: "The visible patterns of invisible forces, from magnetic fields to consciousness fields." |
+| Geometry's element | Connection | Force |
+| Colours | #30D4A0 player · #8568B0 Guidebook · #330066 constants | #50D480 player · #9575C9 Guidebook · #4B0082 constants |
+| As light, 37 octaves up | 477.7 nm, blue | 443.4 nm, violet |
+| Phase, order | Bloom, 8th order | Bloom, 8th order |
+
+### Legge's Judgments
+
+> 45 · In (the state denoted by) Žhui, the king will repair to his ancestral temple. It will be advantageous (also) to meet with the great man; and then there will be progress and success, though the advantage must come through firm correctness. The use of great victims will conduce to good fortune; and in whatever direction movement is made, it will be advantageous.
+
+> 57 · Sun intimates that (under the conditions which it denotes) there will be some little attainment and progress. There will be advantage in movement onward in whatever direction. It will be advantageous (also) to see the great man.
+
+### Your two mansions
+
+Both of your mansions take sound as their symbol: an ear for Joe, a drum or flute for Alisha. The lore below is from published tables (see The 27 mansions and Sources).
+
+| | Joe: 22 Shravana | Alisha: 23 Dhanishta |
+| --- | --- | --- |
+| Name means | "To Hear" | "Wealthiest" |
+| Deity | Vishnu, preserver of the universe | The Vasus, eight gods of fire and light |
+| Symbol | An ear, or three footprints | A drum or flute |
+| Ruling planet | Moon | Mars |
+| Stars | α, β and γ Aquilae (Altair and its two neighbours) | α, β, γ and δ Delphini (the Dolphin) |
+| Tone | 4566 The Chorus | 4920 The Vastness |
+
+- **The three footprints** are Vishnu's three strides from the Rigveda (1.22): one on the earth, one in the air, one in the sky.
+- **The Vasus** are elemental gods; one Purana makes one of them, Prabhasa, the light of all 27 mansions.
+- **One planet per pillar.** The ruling planets repeat every nine mansions, so each Lo Shu pillar of the cube has a single planet. Joe's pillar (417, 1935, 4566) is the Moon's; the central pillar (528, 2178, 4920) is Mars's. This follows from how the app numbers the tones, not from a tradition that pairs Lo Shu palaces with planets.
+
+## How the 27 are built
+
+Every source except Chapter 16 and the interval prompt's other frequency set (To settle, question 13) agrees on the structure: three layers of nine tones, each laid out as a Lo Shu square. All 27 hexagrams, script names and geometries match across the app, the harmonic player and the cube atlas.
+
+- **GUT, 174–963 Hz:** the nine Solfeggio tones. Digit roots run 3, 6, 9 three times.
+- **HEART, 1206–2178–3150 Hz:** a step of 243 (3⁵). Every digit root is 9.
+- **HEAD, 3504–4920–6336 Hz:** a step of 354. Digit roots run 3, 6, 9.
+- **Totals:** six tones with root 3, six with root 6, fifteen with root 9.
+- **Magic sums:** every line of HEART sums to 6534, every line of HEAD to 14,760. In GUT, seven lines sum to 1665 and the 4–5–6 diagonal to 1584, 81 short.
+- **Centers:** 528, 2178 and 4920. 2178, The Source, is the center of the whole cube.
+- **Seed and Bloom** (Guidebook v8.1): GUT is the Seed (orders 1–3), HEART and HEAD the Bloom (orders 4–9). 963 is marked as the turn and 6336 as the end.
+
+### The nine palaces
+
+| Palace | Direction | Element | Trigram | GUT | HEART | HEAD |
+| --- | --- | --- | --- | --- | --- | --- |
+| 1 | North | Water | ☵ Kan | 174 | 1206 | 3504 |
+| 2 | South-west | Earth | ☷ Kun | 285 | 1449 | 3858 |
+| 3 | East | Wood | ☳ Zhen | 396 | 1692 | 4212 |
+| 4 | South-east | Wood | ☴ Xun | 417 | 1935 | 4566 |
+| 5 | Center | Earth | none | 528 | 2178 | 4920 |
+| 6 | North-west | Metal | ☰ Qian | 639 | 2421 | 5274 |
+| 7 | West | Metal | ☱ Dui | 741 | 2664 | 5628 |
+| 8 | North-east | Earth | ☶ Gen | 852 | 2907 | 5982 |
+| 9 | South | Fire | ☲ Li | 963 | 3150 | 6336 |
+
+The trigrams are the Later Heaven arrangement, as the app's canon and the Lo Shu analysis both give them.
+
+### What the layers stand for
+
+- **v7 book:** GUT is the foundation (root, sacral and solar plexus centers). HEART is "the bridge", where lower and higher integrate. HEAD is expression, vision and transcendence (throat, third eye, crown).
+- **v7 book, pp. 49–50:** the three layers line up with Buddhism's three domains (desire, form, formless), the three bardos, Nada Yoga's struck to unstruck sound, and the Hermetic scale from dense matter to spirit.
+- **Chapter 16:** the enteric, cardiac and cranial fields.
+
+### How a birth tone is found
+
+The app takes the Moon's sidereal longitude at birth (Lahiri), finds which of the 27 mansions of 13°20′ it falls in, and gives the tone with the same number. Mansion 1, Ashwini, is 174 Hz; mansion 27, Revati, is 6336 Hz.
+
+### How the sources ask to be read
+
+*The Science* (2026) asks readers to take the traditional names as "folklore and intention", not medicine. The app follows the same rule: frequencies are offered as practice and intention.
+
+## To settle
+
+Thirteen places where the sources disagree. "Suggested" is our lean where the answer is arithmetic or a rule the app already follows; tradition calls are yours.
+
+| # | Question | A | B | Suggested |
+| --- | --- | --- | --- | --- |
+| 1 | Which name leads each tone? | The script name the app shows (The Chorus) | The function name from the books (Soul Star Connection) | A, with B beside it |
+| 2 | Which HEART names? Only 1206 and 1449 agree. | Lo Shu canon, v7 book, Sub-bass: Gateway Integration, Harmonic Bridging, Unified Field Access, Emotional Alchemy, Compassion Activation, Heart Coherence, Relational Harmony, Soul Connection, Heart Completion | Guidebook v8.1 (constants.ts, Collider, player guide): Gateway integration, Harmonic bridging, Heart completion, Stellar alignment, Quantum consciousness, Dimensional awareness, Universal love, Divine source connection, Unity consciousness bridge | Yours to call |
+| 3 | What is 4920 called? | Expressive Truth (Lo Shu canon, Sub-bass, Lo Shu analysis; the v7 book lists "expressive truth" among HEAD's gifts) | Spirit Gate, "spirit realm access" (Guidebook v8.1). The prescription engine also calls it Harmony. | Yours to call |
+| 4 | Which tone is SOURCE? | 2178, as the app, the atlas, the walks and the prescription engine have it; 6336 keeps "Embodiment" as its own word | 6336 as well: "SOURCE Embodiment" (Lo Shu canon), "SOURCE Unity" (Guidebook), geometry element "SOURCE" | A |
+| 5 | Which tone is "Intuition"? | 741: "Awakening Intuition" (Lo Shu canon, v7 book), "Intuition" (Lo Shu analysis) | 852: the player's keyword and the prescription engine's name. The player calls 741 "Awakening". | Yours to call |
+| 6 | 6336's keyword | Unity (cube atlas) | Summit (player) | Yours to call |
+| 7 | Where do the chakras sit? | v7 book: GUT holds root, sacral and solar plexus; throat, third eye and crown belong to HEAD | Guidebook v8.1: the nine GUT tones run Earth Star to Crown (741 throat, 852 third eye, 963 crown); HEART and HEAD get named gates instead | Yours to call |
+| 8 | Chapter 16 puts 417, 528, 639 in HEART and 741, 852, 963 in HEAD | Correct Chapter 16: every other source puts all nine Solfeggio tones in GUT | Leave it, with a note on why it differs | A |
+| 9 | Chapter 16 says nine tones reduce to each of 3, 6 and 9 | Correct it: the sums give six, six and fifteen (The Science agrees) | Leave it | A (arithmetic) |
+| 10 | How to word 528's lore | The Science's wording everywhere: lore, not shown in a human being | Keep each source's own wording (v7 book, Guidebook; Chapter 16 rates it Tier 2) | A |
+| 11 | Health and body claims in this codex | Keep them, quoted and marked as lore (as now) | Leave them out of the codex | A |
+| 12 | Which colour is a tone's colour? | One palette (say which: player, Guidebook v8.1 or constants.ts) | Keep all three, labelled, plus the octave-to-light colour | Yours to call |
+| 13 | The interval-analysis prompt's other frequency set (1074, 1185, 1296, 1317, 1539, 1740, 1851, 1962, 3615, 3726, 3747, 3969, 5031; no 4566). It also names 285 "Quantum Field", the Guidebook's name for 2178. | Mark it superseded: the prompt itself says to check against the codebase | Keep it as an alternate set | A |
+
+### Your decisions
+
+Picked on 13 Nov 2026: 1 keep both, labelled · 2 A · 3 A · 4 A · 5 B · 6 B · 7 B · 8 A · 9 A · 10 A · 11 A · 12 keep both, labelled · 13 A · 14 A.
+
+On 14 Nov 2026: the HEAD prose is approved, GUT and HEART have theirs in the same voice, and 14 is done as a rewrite of the engine's words.
+
+### Your decisions next to the Guide
+
+The Aetheria 432 Guide (reviewed Oct 2026) shows different names in six places. To match your picks, the Guide would change in these rows:
+
+| # | Your decision | What the Guide shows now |
+| --- | --- | --- |
+| 1 | Keep both names, labelled | Function names only; a script name appears once ("174 Hz — The Circle, Foundation") |
+| 2 | A: the Lo Shu canon's HEART names | The Guidebook set (Gateway, Harmonic bridge, Heart completion at 1692, Stellar connection…), with "SOURCE · compassion" at 2178 |
+| 3 | A: Expressive Truth for 4920 | "Spirit gate" |
+| 5 | B: 852 is Intuition | 741 "Intuition", 852 "Spiritual order" |
+| 6 | B: Summit for 6336 | "Completion" |
+| 7 | B: chakras as the Guidebook places them | Chakras only as a cell colour ("Chakra (original)"); the regime cards name body systems instead |
+
+The Guide already agrees with 4 (SOURCE is 2178; 6336 is "the journey's outer turning point"), 8 (all nine Solfeggio tones in GUT), 10 and 11, and 13. On 10 and 11 its rule is that we don't say a sound heals or cures: "Where a tradition teaches that, we write 'Traditionally associated with …'."
+
+**One thing to check in the Guide's colours.** It says 174 Hz is tinted at the infrared edge and 6336 Hz violet. By octave doubling, 6336 Hz lands at 688.5 nm (red) or 344.3 nm (ultraviolet), never violet. 174 Hz lands at 783.5 nm (the infrared edge) or 391.8 nm (violet); the Collider uses the violet one.
+
+## GUT · 174–963 Hz
+
+The nine Solfeggio tones, the Seed of the cube. Every source names them, so they carry the most names and the most health claims.
+
+### 1 · 174 Hz · The Circle
+
+GUT · palace 1, north, Water, ☵ Kan · digit root 3 · Moon mansion 1 Ashwini
+
+**In words**: The Circle is where the climb begins, the first and lowest of the 27 tones. Its function name is Foundation. Its hexagram, 8 Holding Together, is water over the earth, water gathering into one body on the ground, and Legge's Judgment says "those who have not rest will then come to him." Its geometry, the Seed of Life, is seven circles from which every other form grows. It sits in the north palace, Water (☵ Kan), and its Moon mansion is Ashwini, "the horsemen", the twin Ashvins who open the zodiac. In the Aetheria framework, The Circle is the ground everything else stands on.
+
+- **Hexagram:** 8 Holding Together (比 Bǐ), ☵ Water over ☷ Earth. Player: "Water/Earth — fields seeking union".
+- **Names:** Foundation (Lo Shu canon, player, atlas, Lo Shu analysis, prescription engine) · Foundation, pain relief (v7 book) · Earth Star: "Foundation, pain relief" (Guidebook v8.1, Collider) · "a tone of foundation and security" (The Science) · Foundation, security, pain reduction (Chapter 16).
+- **State:** SCATTERED FIELD (atlas). The player plays it when: No coherence detected. Its line: "174Hz (Seed of Life) — the most fundamental grounding."
+- **Geometry:** Seed of Life, "Foundation Genesis", element Earth: "The seven-circle pattern that forms the basis of all creation. The seed from which all geometric forms emerge."
+- **Element fit** (Lo Shu analysis): strong. "Water = flow, foundation, essential for life. 174 Hz = Foundation, pain relief."
+- **Colour:** #8B2500 player · #DC2E2E Guidebook · #8B0000 constants.ts · as light 391.8 nm, violet (42 octaves up).
+- **Phase:** Seed, order 1.
+
+### 2 · 285 Hz · The Mirror
+
+GUT · palace 2, south-west, Earth, ☷ Kun · digit root 6 · Moon mansion 2 Bharani
+
+**In words**: The Mirror is the second step of the GUT layer. Its function name is Renewal, the Guide's word for it. Its hexagram, 22 Grace, is a mountain over fire, light at the mountain's foot that shows its shape, and Legge's Judgment says "there should be free course," with "little advantage" in pushing ahead. Its geometry, the Flower of Life, holds the whole pattern of creation inside its circles. It sits in the south-west palace, Earth (☷ Kun), and its Moon mansion is Bharani, "the bearer", held by Yama, lord of dharma, its symbol the womb. In the Aetheria framework, The Mirror is seeing yourself clearly enough to begin again.
+
+- **Hexagram:** 22 Grace (賁 Bì), ☶ Mountain over ☲ Fire. Player: "Mountain/Fire — inner illumination".
+- **Names:** Tissue Repair (Lo Shu canon, Collider, Lo Shu analysis) · Tissue repair, quantum cognition (v7 book) · Root (Muladhara): "Tissue repair, quantum cognition" (Guidebook v8.1) · Restoration (player, atlas) · "a tone of tissue healing" (The Science) · Tissue healing, cellular regeneration (Chapter 16) · Quantum Field (prescription engine).
+- **State:** BODY RESTORING (atlas). The player plays it when: Low coherence, alpha flickering. Its line: "285Hz (Flower of Life) — cellular restoration."
+- **Geometry:** Flower of Life, "Universal Pattern", element Creation: "The complete pattern of creation containing all platonic solids, the Tree of Life, and Metatron's Cube within it."
+- **Element fit** (Lo Shu analysis): good. "Earth = nourishment, material body. 285 Hz = Tissue repair. Decent."
+- **Colour:** #B8500A player · #E64020 Guidebook · #FF0000 constants.ts · as light 478.4 nm, blue (41 octaves up).
+- **Phase:** Seed, order 1.
+
+### 3 · 396 Hz · The Storm
+
+GUT · palace 3, east, Wood, ☳ Zhen · digit root 9 · Moon mansion 3 Krittika
+
+**In words**: The Storm closes the first order of the GUT layer. Its function name is Liberating Fear & Guilt. Its hexagram, 51 The Arousing, is thunder over thunder, a crash that "terrifies all within a hundred lî," and yet in Legge's Judgment its subject is found "smiling and talking cheerfully." Its geometry, the Vesica Piscis, is two circles overlapping into an almond, a doorway, the portal of birth. It sits in the east palace, Wood (☳ Zhen), and its Moon mansion is Krittika, "to cut", the Pleiades, held by Agni, god of fire, its symbol a blade. In the Aetheria framework, The Storm is fear met and passed through, so that what it held can go.
+
+- **Hexagram:** 51 The Arousing (震 Zhèn), ☳ Thunder over ☳ Thunder. Player: "Thunder/Thunder — shock that liberates".
+- **Names:** Liberating Fear & Guilt (Lo Shu canon, Collider) · Liberating fear and guilt (v7 book, Chapter 16) · Root (Muladhara): "Liberating fear and guilt" (Guidebook v8.1) · Liberation (player, atlas, Lo Shu analysis, prescription engine) · "releasing fear and guilt" (The Science).
+- **State:** SYMPATHETIC ACTIVATION (atlas). The player plays it when: Beta dominant — stress response active. Its line: "396Hz (Vesica Piscis) liberates stored charge."
+- **Geometry:** Vesica Piscis, "Divine Portal", element Union: "The sacred almond shape formed by two overlapping circles. Represents the feminine principle and the portal of birth."
+- **Element fit** (Lo Shu analysis): strong. "Wood = growth, breaking through. 396 Hz = Liberating fear/guilt = breaking through blockage."
+- **Colour:** #C47A14 player · #F28028 Guidebook · #FF4500 constants.ts · as light 688.6 nm, red (40 octaves up).
+- **Phase:** Seed, order 1 (constants.ts says Second).
+
+### 4 · 417 Hz · The Gate
+
+GUT · palace 4, south-east, Wood, ☴ Xun · digit root 3 · Moon mansion 4 Rohini
+
+**In words**: The Gate opens the second order of the GUT layer. Its function name is Facilitating Change. Its hexagram, 53 Development, is wind over a mountain, progress that comes gradually, and Legge's Judgment speaks of "the marriage of a young lady, and the good fortune" that attends it. Its geometry, the Icosahedron, is Plato's solid for water, the shape of change that flows. It sits in the south-east palace, Wood (☴ Xun), and its Moon mansion is Rohini, "radiant maiden", held by Prajapati, the Creator. In the Aetheria framework, The Gate is change that comes the way a bride crosses a threshold, step by chosen step.
+
+- **Hexagram:** 53 Development (漸 Jiàn), ☴ Wind over ☶ Mountain. Player: "Wind/Mountain — gradual progress".
+- **Names:** Facilitating Change (Lo Shu canon, Collider, The Science) · Facilitating change, undoing situations (v7 book) · Sacral (Svadhishthana): "Facilitating change, undoing situations" (Guidebook v8.1) · Change (player, atlas, Lo Shu analysis) · Facilitating change, clearing trauma (Chapter 16, which places it in HEART) · Transmutation (prescription engine).
+- **State:** STATE TRANSITION (atlas). The player plays it when: Beta releasing, alpha emerging. Its line: "417Hz (Icosahedron) — facilitating change."
+- **Geometry:** Icosahedron, "Fluidity & Change", element Water: "The 20-faced polyhedron representing water, emotions, and the flow of change through life."
+- **Element fit** (Lo Shu analysis): strong. "Wood = new growth, spring energy. 417 Hz = Facilitating change = Wood's nature."
+- **Colour:** #2E8B57 player · #F5A030 Guidebook · #FF8C00 constants.ts · as light 653.9 nm, red (40 octaves up).
+- **Phase:** Seed, order 2.
+
+### 5 · 528 Hz · The Drift
+
+GUT · palace 5, center, Earth · center of its layer · digit root 6 · Moon mansion 5 Mrigashira
+
+**In words**: The Drift is the center of the GUT layer and the foot of the cube's central pillar, 528 → 2178 → 4920. Its function name is Transformation. Its hexagram, 2 The Receptive, is earth upon earth, all six lines open, and Legge's Judgment gives it "the firmness of a mare": "if he follow, he will find" his way. Its geometry, Metatron's Cube, holds all five Platonic solids, a blueprint of creation. It sits in the center palace, Earth, and its Moon mansion is Mrigashira, "the deer's head", held by Soma, the moon god. In the Aetheria framework, The Drift is change that comes by yielding, the ground that receives the seed.
+
+- **Hexagram:** 2 The Receptive (坤 Kūn), ☷ Earth over ☷ Earth. Player: "Earth/Earth — surrender to healing".
+- **Names:** Transformation/Miracles (Lo Shu canon) · Transformation, miracles (v7 book) · Solar Plexus (Manipura): transformation, miracles (Guidebook v8.1) · Transformation (Collider) · Transformation (player, atlas, Lo Shu analysis) · the "love frequency" (The Science) · Transformation, "Love frequency" (Chapter 16, which places it in HEART) · Love Frequency (prescription engine).
+- **State:** SUBCONSCIOUS DRIFT (atlas). The player plays it when: Theta dominant, alpha absent. Its line: "528Hz (Metatron's Cube) — deep transformation."
+- **Geometry:** Metatron's Cube, "Divine Blueprint", element Light: "Contains all five Platonic solids and represents the map of creation itself. The architect's blueprint of the universe."
+- **Element fit** (Lo Shu analysis): strong. "Earth/Center = pivot of transformation. 528 Hz = Miracles/Transformation. The center holds the key."
+- **Colour:** #2873B8 player · #F5C730 Guidebook · #FFD700 constants.ts · as light 516.4 nm, green (40 octaves up).
+- **Phase:** Seed, order 2.
+
+### 6 · 639 Hz · The Root
+
+GUT · palace 6, north-west, Metal, ☰ Qian · digit root 9 · Moon mansion 6 Ardra
+
+**In words**: The Root closes the second order of the GUT layer. Its function name is Connecting Relationships. Its hexagram, 24 Return, is the earth over thunder, one strong line coming back at the bottom after the dark, and Legge's Judgment says "friends come to him, and no error is committed," and "in seven days comes his return." Its geometry, the Star Tetrahedron, is two tetrahedra interlocked, the masculine and the feminine in balance. It sits in the north-west palace, Metal (☰ Qian), and its Moon mansion is Ardra, "the moist one", held by Rudra, the storm, its symbol a teardrop. In the Aetheria framework, The Root is coming home to the people you belong to.
+
+- **Hexagram:** 24 Return (復 Fù), ☷ Earth over ☳ Thunder. Player: "Earth/Thunder — root of growth".
+- **Names:** Connecting Relationships (Lo Shu canon, Collider) · Connecting relationships, harmony (v7 book) · Heart (Anahata): "Connecting relationships, harmony" (Guidebook v8.1) · Connection (player, atlas, Lo Shu analysis, prescription engine) · "harmonizing relationships" (The Science) · Harmonizing relationships, connection (Chapter 16, which places it in HEART).
+- **State:** GROUNDING (atlas). The player plays it when: Delta-theta dominant. Its line: "639Hz (Star Tetrahedron) — anchoring the field."
+- **Geometry:** Star Tetrahedron, "Merkaba Activation", element Integration: "Two interlocking tetrahedrons creating the light body vehicle. Represents perfect balance of masculine and feminine."
+- **Element fit** (Lo Shu analysis): good. "Metal = precision, grief/letting go. 639 Hz = Relationships. Metal governs boundaries in relationship."
+- **Colour:** #5048C4 player · #4BC04B Guidebook · #008000 constants.ts · as light 426.7 nm, violet (40 octaves up).
+- **Phase:** Seed, order 2.
+
+### 7 · 741 Hz · The Spark
+
+GUT · palace 7, west, Metal, ☱ Dui · digit root 3 · Moon mansion 7 Punarvasu
+
+**In words**: The Spark opens the third and last order of the GUT layer. Its function name is Awakening; the Aetheria EEG player plays it when its reading shows alpha rising. Its hexagram, 30 Radiance, is fire upon fire, light that clings to what it lights, and Legge's Judgment promises "free course and success" to one who will "nourish" a docility like the cow's. Its geometry, the Dodecahedron, is the shape Plato gave the cosmos itself. It sits in the west palace, Metal (☱ Dui), and its Moon mansion is Punarvasu, "return of the light", held by Aditi, the infinite. In the Aetheria framework, The Spark is the first light of waking.
+
+- **Hexagram:** 30 Radiance (離 Lí), ☲ Fire over ☲ Fire. Player: "Fire/Fire — cellular illumination".
+- **Names:** Awakening Intuition (Lo Shu canon, Collider) · Awakening intuition, problem solving (v7 book) · Throat (Vishuddha): "Awakening intuition, problem solving" (Guidebook v8.1) · Awakening (player, atlas, prescription engine) · Intuition (Lo Shu analysis) · "awakening expression" (The Science) · Awakening intuition, expression (Chapter 16, which places it in HEAD).
+- **State:** AWAKENING (atlas). The player plays it when: Alpha rising. Its line: "741Hz (Dodecahedron) — awareness opening."
+- **Geometry:** Dodecahedron, "Cosmic Consciousness", element Ether: "The 12-faced form of spirit and universe. Plato said the cosmos itself is shaped like a dodecahedron."
+- **Element fit** (Lo Shu analysis): strong. "Metal = clarity, discernment, inner knowing. 741 Hz = Intuition/problem solving."
+- **Colour:** #7B50D4 player · #3DA5D9 Guidebook · #00BFFF constants.ts · as light 735.9 nm, red (39 octaves up).
+- **Phase:** Seed, order 3.
+
+### 8 · 852 Hz · The Still Point
+
+GUT · palace 8, north-east, Earth, ☶ Gen · digit root 6 · Moon mansion 8 Pushya
+
+**In words**: The Still Point is the GUT layer at rest. Its function name is Intuition. Its hexagram, 52 Keeping Still, is mountain over mountain, and Legge's Judgment describes a rest "like that of the back," in which one "loses all consciousness of self." Its geometry, the Octahedron, is a double pyramid, balanced between above and below. It sits in the north-east palace, Earth (☶ Gen), and its Moon mansion is Pushya, "the nourisher", held by Brihaspati, counsellor of the gods. In the Aetheria framework, The Still Point is the knowing that arrives when the mind stops reaching; the Aetheria EEG player names it wu wei.
+
+- **Hexagram:** 52 Keeping Still (艮 Gèn), ☶ Mountain over ☶ Mountain. Player: "Mountain/Mountain — wu wei".
+- **Names:** Spiritual Order (Lo Shu canon, Collider, Lo Shu analysis) · Returning to spiritual order (v7 book, Chapter 16, which places it in HEAD) · Third Eye (Ajna): "Returning to spiritual order" (Guidebook v8.1) · Intuition (player, atlas, prescription engine) · "returning to order" (The Science).
+- **State:** INNER STILLNESS (atlas). The player plays it when: Alpha-theta balanced, beta quiet. Its line: "852Hz (Octahedron) — wu wei."
+- **Geometry:** Octahedron, "Perfect Balance", element Air: "The double pyramid representing air element, mental clarity, and the balance between above and below."
+- **Element fit** (Lo Shu analysis): strong. "Earth = stability, order, spiritual grounding. 852 Hz = Returning to spiritual order."
+- **Colour:** #9050C4 player · #B067D9 Guidebook · #4B0082 constants.ts · as light 640.1 nm, red (39 octaves up).
+- **Phase:** Seed, order 3.
+
+### 9 · 963 Hz · The Tide
+
+GUT · palace 9, south, Fire, ☲ Li · digit root 9 · Moon mansion 9 Ashlesha
+
+**In words**: The Tide is the top of the GUT layer and its turn: the Seed ends here, and the next step, 963 + 243, is the heart. Its function name is Divine Consciousness. Its hexagram, 61 Inner Truth, is wind over a lake, its center open like a heart, and Legge's Judgment says it moves even "pigs and fish" and "there will be advantage in crossing the great stream." Its geometry, the Sri Yantra, is nine interlocking triangles around one point. It sits in the south palace, Fire (☲ Li), and its Moon mansion is Ashlesha, "the embrace", held by the Nagas, the serpent beings. In the Aetheria framework, The Tide is the pull that turns the climb from the body toward the heart.
+
+- **Hexagram:** 61 Inner Truth (中孚 Zhōng Fú), ☴ Wind over ☱ Lake. Player: "Wind/Lake — heart coherence".
+- **Names:** Divine Consciousness (Lo Shu canon, Lo Shu analysis) · Divine consciousness, pineal activation (v7 book) · Crown (Sahasrara): "Divine consciousness, pineal activation" (Guidebook v8.1) · Pineal / phase transition (Collider) · Divine (player, atlas) · "openness, oneness" (The Science) · Divine consciousness, oneness (Chapter 16, which places it in HEAD) · Sri Yantra (prescription engine).
+- **State:** COHERENCE BUILDING (atlas). The player plays it when: Theta-alpha resonance building. Its line: "963Hz (Sri Yantra) — heart coherence deepening."
+- **Geometry:** Sri Yantra, "Divine Union", element Void: "The supreme sacred geometry of Hindu tantra. Nine interlocking triangles forming 43 smaller triangles around a central point."
+- **Element fit** (Lo Shu analysis): strong. "Fire = illumination, consciousness, upward. 963 Hz = Divine consciousness, crown."
+- **Colour:** #A840B8 player · #D9479A Guidebook · #EE82EE constants.ts · as light 566.3 nm, green (39 octaves up).
+- **Phase:** Seed, the turn (☉), order 3.
+
+## HEART · 1206–3150 Hz
+
+The bridge layer, a step of 243 Hz, every digit root 9. Its names split into two sets (To settle, question 2).
+
+### 10 · 1206 Hz · The River
+
+HEART · palace 1, north, Water, ☵ Kan · digit root 9 · Moon mansion 10 Magha
+
+**In words**: The River opens the HEART layer, the first step past the body (963 + 243). Its function name is Gateway Integration. Its hexagram, 29 The Abysmal, is water upon water, and in the north palace, Water (☵ Kan), the river runs three times over. Legge's Judgment finds in it "the possession of sincerity, through which the mind is penetrating." Its geometry, the Torus Knot, is a ring that passes through itself and keeps on circling. Its Moon mansion is Magha, "the mighty", held by the Pitrs, the ancestors, its symbol a royal throne. In the Aetheria framework, The River is feeling allowed to move, the gateway from body to heart.
+
+- **Hexagram:** 29 The Abysmal (坎 Kǎn), ☵ Water over ☵ Water. Player: "Water/Water — emotional mastery".
+- **Names:** Gateway Integration (Lo Shu canon, v7 book) · Gateway Integration: "Gateway integration" (Guidebook v8.1, Collider) · Flow (player, atlas) · Gateway (Lo Shu analysis).
+- **State:** PAIN PROCESSING (atlas). The player plays it when: Beta+Delta pattern. Its line: "1206Hz (Torus Knot) — emotional flow through pain."
+- **Geometry:** Torus Knot, "Infinite Loop", element Flow: "A torus that passes through itself, representing the endless circulation of energy through dimensional gateways."
+- **Body field** (Guidebook): Heart Gateway, Emotional Centers.
+- **Colour:** #C43A6A player · #E04D8F Guidebook · #FF69B4 constants.ts · as light 452.2 nm, blue (39 octaves up).
+- **Phase:** Bloom, order 4.
+
+### 11 · 1449 Hz · The Fog
+
+HEART · palace 2, south-west, Earth, ☷ Kun · digit root 9 · Moon mansion 11 Purva Phalguni
+
+**In words**: The Fog is learning before knowing. Its function name is Harmonic Bridging. Its hexagram, 4 Youthful Folly, is a mountain over water, a spring at the mountain's foot still finding its way, and in Legge's Judgment the teacher says, "I do not (go and) seek the youthful and inexperienced, but he comes and seeks me." Its geometry, the Lemniscate, is the figure-eight of infinity, a balance between two forces. It sits in the south-west palace, Earth (☷ Kun), and its Moon mansion is Purva Phalguni, "the former reddish one", held by Bhaga, god of marital bliss, its symbol the front legs of a bed. In the Aetheria framework, The Fog is sensing your way through what you can't yet see; the Aetheria EEG player calls it Sensing.
+
+- **Hexagram:** 4 Youthful Folly (蒙 Méng), ☶ Mountain over ☵ Water. Player: "Mountain/Water — learning by feel".
+- **Names:** Harmonic Bridging (Lo Shu canon, v7 book) · Harmonic Bridge: "Harmonic bridging" (Guidebook v8.1) · Harmonic bridging · UV (Collider) · Sensing (player, atlas) · Harmonic Bridge (Lo Shu analysis).
+- **State:** SENSORY FOG (atlas). The player plays it when: Delta dominant, other bands suppressed. Its line: "1449Hz (Lemniscate) — sensing through fog."
+- **Geometry:** Lemniscate, "Infinity Bridge", element Eternity: "The figure-eight symbol of infinity, representing eternal flow and balance between dual forces."
+- **Body field** (Guidebook): Emotional Body, Energy Bridges.
+- **Colour:** #D43070 player · #D93B79 Guidebook · #FF1493 constants.ts · as light 376.4 nm, ultraviolet, unseen (39 octaves up).
+- **Phase:** Bloom, order 4.
+
+### 12 · 1692 Hz · The Edge
+
+HEART · palace 3, east, Wood, ☳ Zhen · digit root 9 · Moon mansion 12 Uttara Phalguni
+
+**In words**: The Edge closes the first order of the HEART layer, in the east palace, Wood (☳ Zhen), where growing things push out. Its function name is Unified Field Access. Its hexagram, 34 Power of the Great, is thunder over heaven, strength at its height, and Legge's Judgment gives that strength one condition: "it will be advantageous to be firm and correct." Its geometry, the Fibonacci Spiral, is the golden ratio's growth, found in galaxies and shells. Its Moon mansion is Uttara Phalguni, "the latter reddish one", held by Aryaman, god of patronage and favours. In the Aetheria framework, The Edge is the heart reaching past the body's boundary, its power held steady; the Aetheria EEG player calls it Extension.
+
+- **Hexagram:** 34 Power of the Great (大壯 Dà Zhuàng), ☳ Thunder over ☰ Heaven. Player: "Thunder/Heaven — field projection".
+- **Names:** Unified Field Access (Lo Shu canon, v7 book) · Heart Completion: "Heart completion" (Guidebook v8.1, Collider) · Extension (player, atlas) · Unified Field (Lo Shu analysis).
+- **State:** FIELD EXTENSION (atlas). The player plays it when: Gamma elevated — field extending beyond body. Its line: "1692Hz (Fibonacci Spiral) — expansion."
+- **Geometry:** Fibonacci Spiral, "Golden Growth", element Evolution: "The spiral of nature based on the Golden Ratio, found in galaxies and shells."
+- **Body field** (Guidebook): Heart Integration Centers.
+- **Colour:** #E02878 player · #D93B3B Guidebook · #DC143C constants.ts · as light 644.6 nm, red (38 octaves up).
+- **Phase:** Bloom, order 4.
+
+### 13 · 1935 Hz · The Lighthouse
+
+HEART · palace 4, south-east, Wood, ☴ Xun · digit root 9 · Moon mansion 13 Hasta
+
+**In words**: The Lighthouse opens the fifth order. Its function name is Emotional Alchemy. Its hexagram, 20 Contemplation, is wind moving over the earth, looking and being looked at, and Legge's Judgment pictures "the worshipper who has washed his hands, but not (yet) presented his offerings," waiting "with sincerity and an appearance of dignity." Its geometry, the Vesica Matrix, is many vesicas overlapping into one network. It sits in the south-east palace, Wood (☴ Xun), and its Moon mansion is Hasta, "the hand", held by Savitr, the sun god, its symbol a hand. In the Aetheria framework, The Lighthouse is feeling turned into seeing: the clean hand, raised before the offering.
+
+- **Hexagram:** 20 Contemplation (觀 Guān), ☴ Wind over ☷ Earth. Player: "Wind/Earth — remote perception".
+- **Names:** Emotional Alchemy (Lo Shu canon, v7 book, Lo Shu analysis) · Stellar Connection: "Stellar alignment" (Guidebook v8.1, Collider) · Perception (player, atlas).
+- **State:** INTUITIVE PERCEPTION (atlas). The player plays it when: Alpha-gamma bridge. Its line: "1935Hz (Vesica Matrix) — perceiving beyond senses."
+- **Geometry:** Vesica Matrix, "Multi-Vesica Network", element Networks: "Multiple overlapping Vesica Piscis creating a matrix of interconnected consciousness portals."
+- **Body field** (Guidebook): Etheric Body, Astral Connections.
+- **Colour:** #D44040 player · #9E6FCC Guidebook · #8A2BE2 constants.ts · as light 563.7 nm, green (38 octaves up).
+- **Phase:** Bloom, order 5.
+
+### 14 · 2178 Hz · The Source
+
+HEART · palace 5, center, Earth · center of the cube (SOURCE) · digit root 9 · Moon mansion 14 Chitra
+
+**In words**: The Source is the center of the whole cube, SOURCE, and the middle of its central pillar, 528 → 2178 → 4920. Its function name is Compassion Activation. Its hexagram, 11 Peace, is the earth above heaven, the light rising and the heavy settling until they meet, and Legge's Judgment sees "the little gone and the great come." Its geometry, the Torus, is the shape of flow from atoms to galaxies, circling back through its own center. It sits in the center palace, Earth, and its Moon mansion is Chitra, "the bright one", held by Tvashtar, the artisan god, its symbol a bright jewel. In the Aetheria framework, The Source is the still center every walk passes through.
+
+- **Hexagram:** 11 Peace (泰 Tài), ☷ Earth over ☰ Heaven. Player: "Earth/Heaven — center point".
+- **Names:** Compassion Activation (Lo Shu canon, v7 book) · Quantum Field: "Quantum consciousness" (Guidebook v8.1, Collider) · Source (player, atlas, prescription engine) · Compassion (Lo Shu analysis).
+- **State:** DEEP MEDITATION (atlas). The player plays it when: High coherence, theta-alpha dominant. Its line: "2178Hz (Torus) — the source point."
+- **Geometry:** Torus, "Universal Flow", element Energy: "The primary shape of energy flow in the universe, from atoms to galaxies to the human aura."
+- **Body field** (Guidebook): Quantum Field Interface.
+- **Colour:** #FF4477 player · #8D5EC9 Guidebook · #9370DB constants.ts · as light 500.8 nm, green (38 octaves up).
+- **Phase:** Bloom, order 5.
+
+### 15 · 2421 Hz · The Autumn
+
+HEART · palace 6, north-west, Metal, ☰ Qian · digit root 9 · Moon mansion 15 Swati
+
+**In words**: The Autumn is letting go. Its function name is Heart Coherence. Its hexagram, 23 Splitting Apart, is a mountain over the earth, worn away from below until one strong line is left at the top, and Legge's Judgment counsels stillness: "it will not be advantageous to make a movement in any direction whatever." Its geometry, the Rose Curve, opens into petals by sacred ratios. It sits in the north-west palace, Metal (☰ Qian), and its Moon mansion is Swati, "the independent one", held by Vayu, the wind god, its symbol a young shoot. In the Aetheria framework, The Autumn is the heart releasing what has run its course, so that something new can grow; the Aetheria EEG player calls it Release.
+
+- **Hexagram:** 23 Splitting Apart (剝 Bō), ☶ Mountain over ☷ Earth. Player: "Mountain/Earth — composting grief".
+- **Names:** Heart Coherence (Lo Shu canon, v7 book, Lo Shu analysis) · Dimensional Portal: "Dimensional awareness" (Guidebook v8.1, Collider) · Release (player, atlas).
+- **State:** EMOTIONAL RELEASE (atlas). The player plays it when: Theta rising, coherence falling — releasing. Its line: "2421Hz (Rose Curve) — composting grief."
+- **Geometry:** Rose Curve, "Sacred Petals", element Beauty: "Mathematical rose patterns with petals based on sacred number ratios, representing divine beauty and harmony."
+- **Body field** (Guidebook): Multidimensional Centers.
+- **Colour:** #D46030 player · #6B4D80 Guidebook · #4B0082 constants.ts · as light 450.5 nm, blue (38 octaves up).
+- **Phase:** Bloom, order 5.
+
+### 16 · 2664 Hz · The Vessel
+
+HEART · palace 7, west, Metal, ☱ Dui · digit root 9 · Moon mansion 16 Vishakha
+
+**In words**: The Vessel opens the sixth order. Its function name is Relational Harmony. Its hexagram, 50 The Caldron, is fire over wind, wood feeding the flame beneath the ritual cauldron, and Legge's Judgment is short: "great progress and success." Its geometry, the Merkaba, is the star tetrahedron set spinning. It sits in the west palace, Metal (☱ Dui), and its Moon mansion is Vishakha, "branching out", held by Indra and Agni together, its symbol a potter's wheel. In the Aetheria framework, The Vessel is what we hold together and cook into something shared.
+
+- **Hexagram:** 50 The Caldron (鼎 Dǐng), ☲ Fire over ☴ Wind. Player: "Fire/Wind — transmuting pain".
+- **Names:** Relational Harmony (Lo Shu canon, v7 book, Lo Shu analysis) · Cosmic Heart: "Universal love" (Guidebook v8.1, Collider) · Beyond (player, atlas).
+- **State:** TRANSMUTATION (atlas). The player plays it when: Beta-theta — processing intensity. Its line: "2664Hz (Merkaba) — transmuting pain into light."
+- **Geometry:** Merkaba, "Light Vehicle", element Ascension: "The fully activated star tetrahedron spinning in opposite directions, creating the light body vehicle."
+- **Body field** (Guidebook): Cosmic Heart Center.
+- **Colour:** #E07020 player · #A069D9 Guidebook · #6A5ACD constants.ts · as light 409.4 nm, violet (38 octaves up).
+- **Phase:** Bloom, order 6.
+
+### 17 · 2907 Hz · The Dawn
+
+HEART · palace 8, north-east, Earth, ☶ Gen · digit root 9 · Moon mansion 17 Anuradha
+
+**In words**: The Dawn is change that is seen to be true only once it has come. Its function name is Soul Connection. Its hexagram, 49 Revolution, is a lake over fire, and Legge's Judgment says it "is believed in only after it has been accomplished," with "great progress and success." Its geometry, the Lissajous figure, draws two vibrations moving together into one curve. It sits in the north-east palace, Earth (☶ Gen), and its Moon mansion is Anuradha, "following Radha", held by Mitra, god of friendship and partnership. In the Aetheria framework, The Dawn is a new day made with others; the Aetheria EEG player calls it Creation.
+
+- **Hexagram:** 49 Revolution (革 Gé), ☱ Lake over ☲ Fire. Player: "Lake/Fire — creative revolution".
+- **Names:** Soul Connection (Lo Shu canon, v7 book, Lo Shu analysis) · Source Code: "Divine source connection" (Guidebook v8.1) · Divine source connection · UV (Collider) · Creation (player, atlas).
+- **State:** CREATIVE FLOW (atlas). The player plays it when: Alpha-theta-gamma triad. Its line: "2907Hz (Lissajous) — creative revolution."
+- **Geometry:** Lissajous, "Harmonic Patterns", element Resonance: "Complex curved figures showing the visual representation of harmonic frequencies in motion."
+- **Body field** (Guidebook): Divine Interface, Creation Matrix.
+- **Colour:** #F08030 player · #8860D9 Guidebook · #483D8B constants.ts · as light 375.2 nm, ultraviolet, unseen (38 octaves up).
+- **Phase:** Bloom, order 6.
+
+### 18 · 3150 Hz · The Garden
+
+HEART · palace 9, south, Fire, ☲ Li · digit root 9 · Moon mansion 18 Jyeshtha
+
+**In words**: The Garden completes the HEART layer; the next step, 3150 + 354, is the mind. Its function name is Heart Completion. Its hexagram, 46 Pushing Upward, is the earth over wind, wood rising through the soil, and Legge's Judgment promises "great progress and success" and says "advance to the south will be fortunate." The Garden sits in the south palace, Fire (☲ Li). Its geometry, the Penrose Tiling, never repeats, yet keeps a perfect order. Its Moon mansion is Jyeshtha, "the eldest", held by Indra, king of the gods. In the Aetheria framework, The Garden is the heart's work grown to its full height.
+
+- **Hexagram:** 46 Pushing Upward (升 Shēng), ☷ Earth over ☴ Wind. Player: "Earth/Wind — forgiveness growth".
+- **Names:** Heart Completion (Lo Shu canon, v7 book, Lo Shu analysis) · Unity Bridge: "Unity consciousness bridge" (Guidebook v8.1, Collider) · Renewal (player, atlas).
+- **State:** RENEWAL (atlas). The player plays it when: Alpha dominant, coherence rising. Its line: "3150Hz (Penrose Tiling) — forgiveness and growth."
+- **Geometry:** Penrose Tiling, "Aperiodic Order", element Paradox: "Non-repeating patterns that maintain perfect symmetry, representing order within chaos."
+- **Body field** (Guidebook): Unity Consciousness Interface.
+- **Colour:** #D4A030 player · #6B6BE0 Guidebook · #2E1B8B constants.ts · as light 692.5 nm, red (37 octaves up).
+- **Phase:** Bloom, order 6.
+
+## HEAD · 3504–6336 Hz
+
+The crown layer, a step of 354 Hz. Joe's tone (22) and Alisha's (23) are here.
+
+### 19 · 3504 Hz · The Forge
+
+HEAD · palace 1, north, Water, ☵ Kan · digit root 3 · Moon mansion 19 Mula
+
+**In words**: The Forge is where the HEAD layer begins, the first step past the heart (3150 + 354). Its function name is Mental Clarity. Its hexagram, 21 Biting Through, is fire over thunder: a bite that closes on what stands in the way. Legge's Judgment promises "successful progress" and says "it will be advantageous to use legal constraints." Its geometry, the Chladni Star, is sand on a sounding plate settling into a pattern, frequency giving form. It sits in the north palace, Water, and its Moon mansion is Mula, "the root". In the Aetheria framework, The Forge is clear thinking that keeps its roots.
+
+- **Hexagram:** 21 Biting Through (噬嗑 Shì Hé), ☲ Fire over ☳ Thunder. Player: "Fire/Thunder — precision".
+- **Names:** Mental Clarity (Lo Shu canon, Lo Shu analysis) · Mental Clarity: "Mental clarity" (Guidebook v8.1, Collider) · Focus (player, atlas) · Crown Activation (prescription engine).
+- **State:** FOCUSED ATTENTION (atlas). The player plays it when: Beta-alpha balanced. Its line: "3504Hz (Chladni Star) — precision focus."
+- **Geometry:** Chladni Star, "Sound Visualization", element Vibration: "The star patterns formed by sound vibrations on a plate, showing how frequency creates form."
+- **Body field** (Guidebook): Mental Body, Clarity Centers.
+- **Colour:** #40A8D4 player · #5E4C70 Guidebook · #1E0066 constants.ts · as light 622.5 nm, red (37 octaves up).
+- **Phase:** Bloom, order 7.
+
+### 20 · 3858 Hz · The Receiver
+
+HEAD · palace 2, south-west, Earth, ☷ Kun · digit root 6 · Moon mansion 20 Purva Ashadha
+
+**In words**: The Receiver is listening before speaking. Its function name is Sacred Geometry, the Guide's "divine architecture". Its hexagram, 48 The Well, is water over wood: a town may move, Legge says, but its well stays, and "those who come and those who go can draw and enjoy the benefit." Its geometry, the Wave Function, holds every possible state at once, before one is chosen. It sits in the south-west palace, the receptive Earth (☷ Kun), and its Moon mansion, Purva Ashadha, belongs to Apah, the waters. In the Aetheria framework, The Receiver is the mind emptied so it can be filled.
+
+- **Hexagram:** 48 The Well (井 Jǐng), ☵ Water over ☴ Wind. Player: "Water/Wind — emptying to receive".
+- **Names:** Sacred Geometry (Lo Shu canon, Lo Shu analysis) · Divine Architecture: "Sacred geometry" (Guidebook v8.1, Collider) · Receiving (player, atlas).
+- **State:** RECEPTIVE STATE (atlas). The player plays it when: Theta dominant, stable coherence. Its line: "3858Hz (Wave Function) — emptying to receive."
+- **Geometry:** Wave Function, "Quantum Probability", element Potential: "The mathematical visualization of quantum probability waves, showing all possible states simultaneously."
+- **Body field** (Guidebook): Sacred Geometry Matrix.
+- **Colour:** #30B8C4 player · #6B527E Guidebook · #0D0040 constants.ts · as light 565.4 nm, green (37 octaves up).
+- **Phase:** Bloom, order 7.
+
+### 21 · 4212 Hz · The Signal
+
+HEAD · palace 3, east, Wood, ☳ Zhen · digit root 9 · Moon mansion 21 Uttara Ashadha
+
+**In words**: The Signal answers The Receiver: what was taken in is now sent out. Its function name is Consciousness Mastery. Its hexagram, 58 The Joyous, is lake over lake, two open surfaces mirroring each other, and Legge's Judgment says "there will be progress and attainment." Its geometry, the Antenna Array, both receives and transmits. It sits in the east palace, Wood, where Thunder (☳) wakes things, and its Moon mansion, Uttara Ashadha, belongs to all the gods gathered. In the Aetheria framework, The Signal is a clear mind speaking so that others can hear.
+
+- **Hexagram:** 58 The Joyous (兌 Duì), ☱ Lake over ☱ Lake. Player: "Lake/Lake — resonant communication".
+- **Names:** Consciousness Mastery (Lo Shu canon, Lo Shu analysis) · Consciousness Mastery: "Consciousness mastery" (Guidebook v8.1, Collider) · Sending (player, atlas).
+- **State:** FIELD BROADCAST (atlas). The player plays it when: Alpha-beta coherent. Its line: "4212Hz (Antenna Array) — broadcasting signal."
+- **Geometry:** Antenna Array, "Cosmic Reception", element Reception: "Sacred geometric antenna patterns that receive and transmit consciousness across dimensions."
+- **Body field** (Guidebook): Master Consciousness Grid.
+- **Colour:** #20C8B4 player · #7759A0 Guidebook · #000033 constants.ts · as light 517.9 nm, green (37 octaves up).
+- **Phase:** Bloom, order 7.
+
+### 22 · 4566 Hz · The Chorus
+
+HEAD · palace 4, south-east, Wood, ☴ Xun · digit root 3 · Moon mansion 22 Shravana
+
+**In words**: The Chorus is the first tone past the single self; the Guide calls it the first transpersonal gate, the soul star. Its hexagram, 45 Gathering Together, is a lake over the earth, water collecting where the ground is low. In Legge's Judgment "the king will repair to his ancestral temple," and "in whatever direction movement is made, it will be advantageous." Its geometry, the Harmonic Web, ties every harmonic to every other. It sits in the south-east palace, Wood (☴), and its Moon mansion is Shravana, "to hear", whose symbol is an ear. In the Aetheria framework, The Chorus is many voices heard as one.
+
+- **Hexagram:** 45 Gathering Together (萃 Cuì), ☱ Lake over ☷ Earth. Player: "Lake/Earth — collective coherence".
+- **Names:** Soul Star Connection (Lo Shu canon) · Soul Star Gate: "Soul star connection" (Guidebook v8.1, Collider) · Collective (player, atlas) · Soul Star (Lo Shu analysis).
+- **State:** COLLECTIVE HARMONY (atlas). The player plays it when: All bands balanced. Its line: "4566Hz (Harmonic Web) — collective coherence."
+- **Geometry:** Harmonic Web, "Frequency Network", element Connection: "The interconnected web of all harmonic relationships, visualizing the music of the spheres."
+- **Body field** (Guidebook): Soul Star Chakra, Higher Self.
+- **Colour:** #30D4A0 player · #8568B0 Guidebook · #330066 constants.ts · as light 477.7 nm, blue (37 octaves up).
+- **Phase:** Bloom, order 8.
+
+### 23 · 4920 Hz · The Vastness
+
+HEAD · palace 5, center, Earth · center of its layer · digit root 6 · Moon mansion 23 Dhanishta
+
+**In words**: The Vastness is the center of the HEAD layer and the top of the cube's central pillar, 528 → 2178 → 4920. Its function name is Expressive Truth. Its hexagram, 57 The Gentle, is wind upon wind, a soft force that reaches everywhere; Legge's Judgment promises "some little attainment and progress" and "advantage in movement onward in whatever direction." Its geometry, Field Lines, draws invisible forces so they can be seen. Its Moon mansion is Dhanishta, "wealthiest", held by the Vasus, and its symbol is a drum. In the Aetheria framework, The Vastness is awareness wide enough to hold the truth and gentle enough to say it.
+
+- **Hexagram:** 57 The Gentle (巽 Xùn), ☴ Wind over ☴ Wind. Player: "Wind/Wind — field awareness".
+- **Names:** Expressive Truth (Lo Shu canon, Lo Shu analysis) · Spirit Gate: "Spirit realm access" (Guidebook v8.1, Collider) · Awareness (player, atlas) · Harmony (prescription engine).
+- **State:** EXPANDED AWARENESS (atlas). The player plays it when: Alpha dominant. Its line: "4920Hz (Field Lines) — field awareness expanding."
+- **Geometry:** Field Lines, "Force Visualization", element Force: "The visible patterns of invisible forces, from magnetic fields to consciousness fields."
+- **Body field** (Guidebook): Spirit Communication Centers.
+- **Colour:** #50D480 player · #9575C9 Guidebook · #4B0082 constants.ts · as light 443.4 nm, violet (37 octaves up).
+- **Phase:** Bloom, order 8.
+
+### 24 · 5274 Hz · The Temple
+
+HEAD · palace 6, north-west, Metal, ☰ Qian · digit root 9 · Moon mansion 24 Shatabhisha
+
+**In words**: The Temple is the third transpersonal gate, the universal mind, and it completes the line that runs from The Chorus through The Vastness (4566 + 4920 + 5274 = 14,760). Its hexagram, 42 Increase, is wind over thunder, and Legge's Judgment says it will be advantageous "to cross the great stream." Its geometry, the Healing Mandala, pictures the journey from scattered parts to a whole. It sits in the north-west palace, Metal (☰), and its Moon mansion, Shatabhisha, belongs to Varuna, god of the celestial waters. In the Aetheria framework, The Temple is the quiet room where the parts come together.
+
+- **Hexagram:** 42 Increase (益 Yì), ☴ Wind over ☳ Thunder. Player: "Wind/Thunder — healing projected".
+- **Names:** Universal Mind Access (Lo Shu canon) · Universal Mind Gate: "Universal mind access" (Guidebook v8.1, Collider) · Healing (player, atlas) · Universal Mind (Lo Shu analysis).
+- **State:** HEALING RESONANCE (atlas). The player plays it when: Theta-alpha coherent. Its line: "5274Hz (Healing Mandala) — healing projected."
+- **Geometry:** Healing Mandala, "Wholeness Pattern", element Healing: "Complex circular patterns representing the journey from fragmentation to wholeness and healing."
+- **Body field** (Guidebook): Universal Mind Interface.
+- **Colour:** #70D460 player · #A775D9 Guidebook · #6600CC constants.ts · as light 413.6 nm, violet (37 octaves up).
+- **Phase:** Bloom, order 8.
+
+### 25 · 5628 Hz · The Aurora
+
+HEAD · palace 7, west, Metal, ☱ Dui · digit root 3 · Moon mansion 25 Purva Bhadrapada
+
+**In words**: The Aurora opens the last order of the climb. Its function name is Galactic Consciousness, and the Aetheria EEG player's word for it is Vision. Its hexagram, 55 Abundance, is thunder over fire, a flash at full strength; Legge's Judgment says, "Let him be as the sun at noon." Its geometry, the Dream Lattice, is the crystal structure of the dream realm. It sits in the west palace, Metal (☱), and its Moon mansion, Purva Bhadrapada, belongs to Ajaikapada, the one-footed aspect of Shiva. In the Aetheria framework, The Aurora is seeing far, the way light at the poles shows the sky's hidden field.
+
+- **Hexagram:** 55 Abundance (豐 Fēng), ☳ Thunder over ☲ Fire. Player: "Thunder/Fire — peak vision".
+- **Names:** Galactic Consciousness (Lo Shu canon, Lo Shu analysis) · Galactic Center: "Galactic consciousness" (Guidebook v8.1, Collider) · Vision (player, atlas).
+- **State:** PEAK VISION (atlas). The player plays it when: Gamma-alpha bridge, high coherence. Its line: "5628Hz (Dream Lattice) — peak vision."
+- **Geometry:** Dream Lattice, "Dream Architecture", element Dreams: "The crystalline lattice structure of the dream realm and collective unconscious."
+- **Body field** (Guidebook): Galactic Interface.
+- **Colour:** #90D440 player · #B076DE Guidebook · #7700FF constants.ts · as light 387.6 nm, violet (37 octaves up).
+- **Phase:** Bloom, order 9.
+
+### 26 · 5982 Hz · The Presence
+
+HEAD · palace 8, north-east, Earth, ☶ Gen · digit root 6 · Moon mansion 26 Uttara Bhadrapada
+
+**In words**: The Presence is two becoming one surface. Its function name is Divine Source Portal; the Aetheria EEG player calls it Learning and plays it when its reading shows theta rising. Its hexagram, 31 Influence, is a lake resting on a mountain, each moving the other, and Legge's Judgment promises "free course and success." Its geometry, the Möbius Strip, has only one side, so inside and outside are the same path. It sits in the north-east palace, Earth (☶), and its Moon mansion, Uttara Bhadrapada, belongs to Ahirbudhnya, the serpent of the deep. In the Aetheria framework, The Presence is being fully here, with nothing left outside.
+
+- **Hexagram:** 31 Influence (咸 Xián), ☱ Lake over ☶ Mountain. Player: "Lake/Mountain — mutual resonance".
+- **Names:** Divine Source Portal (Lo Shu canon) · Divine Gateway: "Divine source portal" (Guidebook v8.1, Collider) · Learning (player, atlas) · Divine Source (Lo Shu analysis) · Light Body (prescription engine).
+- **State:** INTEGRATION (atlas). The player plays it when: Theta rising — integrating experience. Its line: "5982Hz (Möbius Strip) — mutual resonance."
+- **Geometry:** Möbius Strip, "One-Sided Unity", element Paradox: "The twisted loop with only one surface, representing the unity of all apparent opposites."
+- **Body field** (Guidebook): Divine Source Interface.
+- **Colour:** #B0D420 player · #BD6BE3 Guidebook · #8800FF constants.ts · as light 729.3 nm, red (36 octaves up).
+- **Phase:** Bloom, order 9.
+
+### 27 · 6336 Hz · The Summit
+
+HEAD · palace 9, south, Fire, ☲ Li · digit root 9 · Moon mansion 27 Revati
+
+**In words**: The Summit is the top of the climb. Its function name is SOURCE Embodiment: SOURCE itself is 2178 at the center, and The Summit is where the ascent turns for home. Its hexagram, 1 The Creative, is heaven upon heaven, all six lines unbroken; Legge's Judgment calls it "great and originating, penetrating, advantageous, correct and firm." Its geometry is the Unified Field. Its Moon mansion is Revati, the last of the 27, held by Pushan, the nourisher who guides souls on their way. In the Aetheria framework, The Summit is an arrival that already holds the way back.
+
+- **Hexagram:** 1 The Creative (乾 Qián), ☰ Heaven over ☰ Heaven. Player: "Heaven/Heaven — pure creation".
+- **Names:** SOURCE Embodiment (Lo Shu canon) · SOURCE Unity: "SOURCE embodiment" (Guidebook v8.1, Collider) · Summit (player, prescription engine) · Unity (atlas) · SOURCE (Lo Shu analysis).
+- **State:** SUMMIT COHERENCE (atlas). The player plays it when: Peak coherence. Its line: "6336Hz (Unified Field) — pure creation. Heaven over Heaven."
+- **Geometry:** Unified Field, "All-That-Is", element SOURCE: "The geometric representation of the unified field of consciousness where all possibilities exist as ONE."
+- **Body field** (Guidebook): SOURCE Field, Infinite Unity.
+- **Colour:** #D4C420 player · #D040E8 Guidebook · #9933FF constants.ts · as light 688.6 nm, red (36 octaves up).
+- **Phase:** Bloom, the end (Ω), order 9.
+
+## The 27 mansions
+
+The Moon mansion at birth picks the birth tone, mansion 1 to tone 1 and so on. Meanings, deities, symbols and stars follow the table in Wikipedia's Nakshatra article, which follows A. L. Basham; ruling planets follow Brihat Parashara Hora Shastra 46.12. All of it is tradition, and texts differ in places: the Taittiriya Brahmana, for one, gives Purva Phalguni to Aryaman.
+
+| # | Mansion and meaning | Deity | Symbol | Ruling planet | Stars | Tone |
+| --- | --- | --- | --- | --- | --- | --- |
+| 1 | Ashwini, "The Horsemen" | the Ashvins, horse-headed twins, physicians to the gods | horse's head | Ketu | β and γ Arietis | 174 The Circle |
+| 2 | Bharani, "The Bearer" | Yama, god of death and dharma | yoni, the womb | Venus | 35, 39 and 41 Arietis | 285 The Mirror |
+| 3 | Krittika, "To Cut" | Agni, god of fire | knife or spear | Sun | the Pleiades | 396 The Storm |
+| 4 | Rohini, "Radiant Maiden" | Prajapati, the Creator | cart or chariot, temple, banyan tree | Moon | Aldebaran | 417 The Gate |
+| 5 | Mrigashira, "The Deer's Head" | Soma, the moon god | deer's head | Mars | λ, φ Orionis | 528 The Drift |
+| 6 | Ardra, "The Moist One" | Rudra, the fierce form of Shiva | teardrop, diamond, a human head | Rahu | Betelgeuse | 639 The Root |
+| 7 | Punarvasu, "Return of the Light" | Aditi, the infinite, mother of the Adityas | bow and quiver | Jupiter | Castor and Pollux | 741 The Spark |
+| 8 | Pushya, "The Nourisher" | Brihaspati, counsellor of the gods | cow's udder, lotus, arrow and circle | Saturn | γ, δ and θ Cancri | 852 The Still Point |
+| 9 | Ashlesha, "The Embrace" | the Nagas, serpent beings | serpent | Mercury | δ, ε, η, ρ and σ Hydrae | 963 The Tide |
+| 10 | Magha, "The Mighty" | the Pitrs, the ancestors | royal throne | Ketu | Regulus | 1206 The River |
+| 11 | Purva Phalguni, "The Former Reddish One" | Bhaga, god of marital bliss and prosperity | front legs of a bed, hammock, fig tree | Venus | δ and θ Leonis | 1449 The Fog |
+| 12 | Uttara Phalguni, "The Latter Reddish One" | Aryaman, god of patronage and favours | four legs of a bed, hammock | Sun | Denebola | 1692 The Edge |
+| 13 | Hasta, "The Hand" | Savitr, the sun god | hand or fist | Moon | α, β, γ, δ and ε Corvi | 1935 The Lighthouse |
+| 14 | Chitra, "The Bright One" | Tvashtar (Vishwakarma), the artisan god | bright jewel or pearl | Mars | Spica | 2178 The Source |
+| 15 | Swati, "The Independent One" | Vayu, the wind god | shoot of a plant, coral | Rahu | Arcturus | 2421 The Autumn |
+| 16 | Vishakha, "Branching Out" | Indra and Agni together (Indragni), gods of thunder and fire | triumphal arch, potter's wheel | Jupiter | α, β, γ and ι Librae | 2664 The Vessel |
+| 17 | Anuradha, "Following Radha" | Mitra, god of friendship and partnership | triumphal archway, lotus, bamboo | Saturn | β, δ and π Scorpii | 2907 The Dawn |
+| 18 | Jyeshtha, "The Eldest" | Indra, king of the gods | circular amulet, umbrella, earring | Mercury | α, σ and τ Scorpii | 3150 The Garden |
+| 19 | Mula, "The Root" | Nirrti, goddess of decay and sorrow | bunch of roots tied together, elephant goad | Ketu | ε to ν Scorpii (the tail) | 3504 The Forge |
+| 20 | Purva Ashadha, "The Former Unconquered" | Apah, the waters | elephant tusk, fan, winnowing basket | Venus | δ and ε Sagittarii | 3858 The Receiver |
+| 21 | Uttara Ashadha, "The Latter Unconquered" | the Vishvedevas, all the gods gathered | elephant tusk, small bed | Sun | ζ and σ Sagittarii | 4212 The Signal |
+| 22 | Shravana, "To Hear" | Vishnu, preserver of the universe | ear, or three footprints | Moon | α, β and γ Aquilae (Altair) | 4566 The Chorus |
+| 23 | Dhanishta, "Wealthiest" | the Vasus, eight gods of fire and light | drum or flute | Mars | α, β, γ and δ Delphini | 4920 The Vastness |
+| 24 | Shatabhisha, "A Hundred Physicians" | Varuna, god of the celestial waters | empty circle, 1,000 flowers or stars | Rahu | λ Aquarii | 5274 The Temple |
+| 25 | Purva Bhadrapada, "The Former Blessed Feet" | Ajaikapada, the one-footed aspect of Shiva | swords, front legs of a funeral cot, a man with two faces | Jupiter | α and β Pegasi | 5628 The Aurora |
+| 26 | Uttara Bhadrapada, "The Latter Blessed Feet" | Ahirbudhnya, serpent of the deep | twins, back legs of a funeral cot, snake in the water | Saturn | γ Pegasi and α Andromedae | 5982 The Presence |
+| 27 | Revati, "Prosperous" | Pushan, the nourisher, guide of souls | fish or a pair of fish, drum | Mercury | ζ Piscium | 6336 The Summit |
+
+### One planet per pillar
+
+The ruling planets run in a cycle of nine, so mansions n, n + 9 and n + 18 share a planet. Those are the three tones of one Lo Shu pillar, so each pillar of the cube has one planet.
+
+| Palace | 1 N | 2 SW | 3 E | 4 SE | 5 Center | 6 NW | 7 W | 8 NE | 9 S |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| Planet | Ketu | Venus | Sun | Moon | Mars | Rahu | Jupiter | Saturn | Mercury |
+
+This is arithmetic from how the app numbers the tones. No source we read pairs the Lo Shu palaces with planets this way, so read it as a correspondence from the app's numbering, not a teaching.
+
+## What the Guide says (Aetheria 432, Oct 2026)
+
+The in-app Guide of the Aetheria 432 player is the newest public text on the tones. It tags every claim (Arithmetic, Tier 1 to 3, Open question, Design choice, Tradition) and lists "whether any of the 27 crystals has an effect of its own" as an Open question.
+
+It adds four facts to the structure:
+
+- **The intervals add up:** 111 + 243 = 354, so the HEAD step is the GUT step plus the HEART step. Their roots, 3 + 9 + 3, make 15, the Lo Shu's own sum.
+- **Lo Shu Perfect GUT:** 75, 186, 297, 408, 519, 630, 741, 852, 963, a step of 111, every line summing to 1557. The Solfeggio tones are this row with three moved up 99 Hz and three moved up 9 Hz.
+- **The nadi compression:** 72,000 nadis, 108 junctions, 27 nodes (108 ÷ 4), offered "as a correspondence, not a proof".
+- **The Tree of Life's central pillar** is the cube's central axis, 528 → 2178 → 4920.
+
+| Tone | Guide name | The Guide's line |
+| --- | --- | --- |
+| 174 | Foundation | Traditionally associated with foundation, security and relief from pain. |
+| 285 | Renewal | Traditionally associated with tissue repair and quantum cognition. |
+| 396 | Liberation | Traditionally associated with liberating fear and guilt. |
+| 417 | Change | Traditionally associated with facilitating change and undoing situations. |
+| 528 | Transformation | Traditionally associated with transformation and miracles. In Solfeggio teaching it is called "the miracle tone". |
+| 639 | Connection | Traditionally associated with connecting relationships and harmony. |
+| 741 | Intuition | Traditionally associated with awakening intuition and problem solving. |
+| 852 | Spiritual order | Traditionally associated with returning to spiritual order and inner strength. |
+| 963 | Divine consciousness | Traditionally associated with divine consciousness, unity and pineal activation. |
+| 1206 | Gateway | In the Aetheria framework, the gateway between the physical and the emotional. |
+| 1449 | Harmonic bridge | …a harmonic bridge between emotional states. |
+| 1692 | Heart completion | …the completion of the heart cycle. |
+| 1935 | Stellar connection | …alignment with stellar energies. |
+| 2178 | SOURCE · compassion | …SOURCE: compassion, at the centre of the Lo Shu cube. |
+| 2421 | Dimensional awareness | …awareness of many dimensions. |
+| 2664 | Universal love | …universal love. |
+| 2907 | Divine source | …connection with the divine source. |
+| 3150 | Unity bridge | …a bridge into unity consciousness. |
+| 3504 | Mental clarity | …mental clarity. |
+| 3858 | Divine architecture | …sacred geometry: divine architecture. |
+| 4212 | Consciousness mastery | …mastery of consciousness. |
+| 4566 | Soul star | …the first transpersonal gate: the soul star. |
+| 4920 | Spirit gate | …the second transpersonal gate: spirit. |
+| 5274 | Universal mind | …the third transpersonal gate: the universal mind. |
+| 5628 | Galactic centre | …galactic consciousness. |
+| 5982 | Divine gateway | …a portal to the divine source. |
+| 6336 | Completion | …SOURCE embodiment and the completion of the ascent. |
+
+From 1206 on, each line begins "In the Aetheria framework". 285's Guide name, Renewal, is a fourth name for it beside Tissue Repair, Restoration and Quantum Field.
+
+## The music: a song reading
+
+Joe's idea: upload a favourite song and see what it says through the tones. Two halves already exist. The Aetheria 432 player gives every track a crystal ("a song with a clear key goes first to a crystal whose tone fits its key"), and this codex says what each crystal holds. A song reading joins them:
+
+1. Pick a song file. It stays on the phone.
+2. The app finds its crystal the same way the 432 player does, so a song gets the same tone in both apps.
+3. It shows that tone's entry from this codex, its hexagram in Legge's words, its mansion, and how it sits beside your birth tone: same pillar, same line, or neighbours.
+
+The Guide tags a track's crystal as a Design choice, "an assignment, not a measured pitch", and the reading would say so.
+
+Open: which app it lives in (the Divination app, the 432 player, or both), and the 432 player's crystal-matching code, which is not in the project.
+
+## Sources
+
+All from the Aetheria Framework project and the app's repository, read on 13 Nov 2026.
+
+| Name used here | Document | What it gives |
+| --- | --- | --- |
+| App canon | aetheria-divination repo: data/frequencies.json, hexagrams.json, trigrams.json, mansions.json, legge.json | Hz, script names, hexagrams, palaces, mansions, Legge's text |
+| Lo Shu canon | LoShu.md ("Canonical Frequencies (AUTHORITATIVE)"); the same table is in SUB_BASS_IMPLEMENTATION.md | Function names for all 27 |
+| v7 book | v7 Aetheria Final Draft (pdf), pp. 49–50 and 88–112 | GUT and HEART names, what each layer stands for |
+| Guidebook v8.1 | constants.ts and regime_collider.html, whose table says it comes from the Aetheria Guidebook v8.1 | Gates, benefits, descriptions, body fields, orders, colours, Seed and Bloom |
+| Collider | regime_collider.html | Its own short names, colours and octave-to-light wavelengths |
+| Geometry table | constants.ts | Sacred geometry for all 27 |
+| Player | index.html, the EEG harmonic player | Keywords, image lines, colours, the brain states it plays each tone for |
+| Atlas | index.html, the Lo Shu cube atlas | Keywords and states |
+| The Science | AETHERIA_THE_SCIENCE_COMPLETE.md | The GUT tones as tradition names them, and how to read those names |
+| Chapter 16 | 18_Chapter16_27Frequencies.docx | Six GUT tones in other layers, the Tier ratings |
+| Lo Shu analysis | aetheria_loshu_cube.html | Short names, elements, the Wuxing fit for GUT |
+| Prescription engine | prescription-engine.js and aetheria_interval_analysis_prompt.md | Short names |
+
+Added on 13 Nov 2026:
+
+- **The Guide:** the Aetheria 432 player's in-app Guide, reviewed Oct 2026, as Joe shared it.
+- [Nakshatra — Wikipedia](https://en.wikipedia.org/wiki/Nakshatra): meanings, deities, symbols and stars, in a table that follows A. L. Basham, *The Wonder That Was India*.
+- [Brihat Parashara Hora Shastra 46.12](https://enjoylearningsanskrit.com/scriptures/parashara/chapter-46/verse-12): the ruling-planet cycle, counted from Krittika.
+- [Vasu — Wikipedia](https://en.wikipedia.org/wiki/Vasu): the Vishnu Purana's Prabhasa as the light of the 27 mansions.
+- [Trivikrama — Wikipedia](https://en.wikipedia.org/wiki/Trivikrama): Vishnu's three strides in Rigveda 1.22.
+- aetheria_loshu_cube.html and prescription-engine.js, now read in full.
+
+### How the entries were checked
+
+Each source's table was copied into a data file, and a script checked it. All 27 hexagrams, script names, geometries and trigrams agree across the app, the player and the atlas. The HEART and HEAD Hz match the app's formulas, and the Guidebook's "+243" and "+354" sums add up. The Collider's wavelengths match the speed of light ÷ (Hz × 2 to the power of its octave count), within 0.15 nm.
+
+### Still missing
+
+- **The music.** The song reading waits on where it lives and on the 432 player's crystal-matching code.
+- **Prose for GUT and HEART.** Done on 14 Nov: the HEAD prose was approved, and GUT and HEART now have theirs, in the same voice. All 27 are in the Divination app.
+- **Deeper mansion lore.** The table gives meaning, deity, symbol, planet and stars; each mansion's further traits, and its Chinese and Arabic counterparts, are not here yet.
+- **Filled on 13 Nov:** the 27 mansions, the HEAD drafts, the Lo Shu analysis's palace 9 line, and the Guide in place of the missing Guidebook v8.1.

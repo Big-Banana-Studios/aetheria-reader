@@ -411,10 +411,12 @@ function bookCard(book) {
 
   const foot = document.createElement('div');
   foot.className = 'book-foot';
-  if (book.year) foot.append(String(book.year));
-  foot.append(book.bundled
+  // One text run: two text nodes side by side in a flex row merge into a
+  // single item, and the year ran straight into the size ("190814k words").
+  const size = book.bundled
     ? `${Math.round(book.words / 1000)}k words`
-    : `${(book.size / 1048576).toFixed(1)} MB`);
+    : `${(book.size / 1048576).toFixed(1)} MB`;
+  foot.append(book.year ? `${book.year} · ${size}` : size);
   if (book.unreadable) {
     foot.appendChild(badge('no text layer', 'unreadable'));
   } else if (book.english) {

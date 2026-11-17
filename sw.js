@@ -4,16 +4,18 @@
 
      shell     the app itself — precached on install, replaced whenever
                VERSION changes, so updates actually reach people
-     library   the public-domain book texts — cached as they are read and
-               deliberately NOT versioned, so an app update never throws
-               away 57 MB the reader has already downloaded
+     library   the book texts — cached as they are read and deliberately
+               NOT versioned, so an app update never throws away what the
+               reader has already downloaded. The Aetheria shelf's texts
+               (ids starting "aetheria-") are the authors' own and may be
+               revised, so those are refreshed behind the cached copy.
      runtime   the AI libraries pulled from jsDelivr, cached on first use
 
    (transformers.js keeps model weights in its own cache, which likewise
     survives going offline.)
    ═══════════════════════════════════════════════════════════════════ */
 
-const VERSION = 'v21';
+const VERSION = 'v22';
 const SHELL = `aetheria-shell-${VERSION}`;
 const LIBRARY = 'aetheria-library';
 const RUNTIME = `aetheria-runtime-${VERSION}`;
@@ -60,6 +62,9 @@ const isLibraryBook = (url) =>
   url.pathname.includes('/library/') &&
   url.pathname.endsWith('.json') &&
   !url.pathname.endsWith('/index.json');
+
+// Joe and Alisha's own texts: served from the cache, refreshed behind it
+const isRevisable = (url) => /\/library\/aetheria-[^/]*\.json$/.test(url.pathname);
 
 self.addEventListener('install', (event) => {
   event.waitUntil((async () => {
@@ -169,7 +174,9 @@ self.addEventListener('fetch', (event) => {
   // Book texts never change once published, and are far too bulky to
   // re-fetch: keep them in their own cache, and keep them for good.
   if (isLibraryBook(url)) {
-    event.respondWith(cacheFirst(request, LIBRARY));
+    event.respondWith(isRevisable(url)
+      ? staleWhileRevalidate(request, LIBRARY)
+      : cacheFirst(request, LIBRARY));
     return;
   }
 

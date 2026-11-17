@@ -1,6 +1,7 @@
 /* ═══════════════════════════════════════════════════════════════════
    BUNDLED LIBRARY
-   The public-domain collection published alongside the app. Only the
+   The collection published alongside the app: the public-domain sets
+   and the Aetheria shelf. Only the
    cleaned text ships — the source PDFs are far too large for a static
    host, and the text is what the reader actually needs.
 

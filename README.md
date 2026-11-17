@@ -1,7 +1,7 @@
 # Aetheria Reader
 
 A spoken-word reader for classic texts. It ships with 642 public-domain
-books, reads them aloud, keeps your place, and — if you want it — answers
+books and the Aetheria shelf of our own, reads them aloud, keeps your place, and — if you want it — answers
 questions about the passage you are listening to, using a language model
 that runs on your own hardware.
 
@@ -13,6 +13,8 @@ anything.
 - **Ships a library.** 642 public-domain titles across five collections —
   Alchemy (164), Buddhism (149), Mesopotamia (265), Spiritualism (54) and
   Tesla (10) — 48 million words. Cleaned text only, published with the app.
+  The **Aetheria** shelf beside them holds 15 books, papers and notes by
+  Joseph and Alisha Lewis — see [The Aetheria shelf](#the-aetheria-shelf).
   The library opens on its collections rather than on every book at once.
 - **Reads your own books too.** PDFs, Word documents, text and HTML, added
   singly with **+ File** or a whole folder at once with **+ Folder**. The text is extracted in the
@@ -86,6 +88,40 @@ sets include scholarly editions of transliterated cuneiform, and volumes in
 German and French; they extract perfectly well and are useless read aloud by
 an English voice, so the library marks them **not English prose** rather than
 letting someone find out by pressing play. Nineteen of 414 are flagged.
+
+## The Aetheria shelf
+
+The one shelf that is not public domain: the books, papers and working notes
+of the Aetheria framework, by Joseph and Alisha Lewis, for anyone who wants
+the methods and the thinking behind the apps.
+
+- **The printed books** — *Aetheria*, *Aetheria: The Science*, *Cosmic
+  Rhythms*, *Shit For Brains*, *The Unified Lewis Framework* and its
+  *Mathematical Proofs* — extracted from their PDFs with the same cleaner as
+  every other book, and split at their own chapters (listed in the
+  manifest), since none of the PDFs carries bookmarks.
+- **The codex and methods** — the Aetheria Tone Codex (the Reader's copy,
+  without the health claims the working copy quotes from older sources),
+  Titīrṣā's Lexicon, the Lo Shu Cube chapter, the Lo Shu, walk and sub-bass
+  notes, and three papers — kept as Markdown in `tools/aetheria/texts/` and
+  split at their headings.
+- **Notes.** Where a book or note says something the apps no longer say —
+  claims about DNA, or that a sound heals — it is published as written, and
+  a short note from the authors opens it to say so. The notes live in
+  `tools/aetheria/manifest.json`.
+
+```bash
+# everything, with the books' PDFs in a folder of their own
+python tools/build_aetheria.py --pdfs "D:/Aetheria books" library
+# texts and notes only: the books already built are kept
+python tools/build_aetheria.py library
+```
+
+These ids all start with `aetheria-`. The service worker caches every other
+book for good, but refreshes these behind the cached copy, so a revised
+codex or note reaches readers on their next visit. Running
+`build_library.py --name Aetheria` would rebuild this shelf from PDFs alone
+and drop the texts; use `build_aetheria.py` instead.
 
 ## Translations
 
@@ -335,13 +371,14 @@ js/translate.js         the on-device section translator, for books without a pu
 js/translate-worker.js  its Marian model, in a worker
 js/library.js           the published catalogue, translations, and offline pre-caching
 js/docx.js              Word documents, via mammoth
-library/                642 books as cleaned text, plus index.json;
+library/                657 books as cleaned text, plus index.json;
                         <id>.en.json beside any book published in translation
 vendor/pdfjs/           pdf.js 6.2.108, vendored so reading works offline
 vendor/mammoth/         mammoth 1.11, likewise
 sw.js                   precached shell + runtime cache for the AI libraries
 dev/selftest.html       browser self-test — see below
 tools/build_library.py  builds library/ from a folder of PDFs
+tools/build_aetheria.py builds the Aetheria shelf from tools/aetheria/ and the books' PDFs
 tools/translate_library.py  publishes English renderings of the non-English books
 ```
 
