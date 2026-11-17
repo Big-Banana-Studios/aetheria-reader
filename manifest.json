@@ -1,6 +1,6 @@
 {
   "name": "Aetheria Reader",
-  "short_name": "Aetheria",
+  "short_name": "Aetheria Reader",
   "description": "A spoken-word reader for your own library of books, with an on-device assistant that explains passages as you listen. Everything runs locally.",
   "start_url": "./index.html",
   "scope": "./",
@@ -8,12 +8,36 @@
   "background_color": "#0d0d1a",
   "theme_color": "#0d0d1a",
   "orientation": "portrait-primary",
-  "categories": ["books", "education", "productivity"],
+  "categories": [
+    "books",
+    "education",
+    "productivity"
+  ],
   "lang": "en",
   "icons": [
-    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
-    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
-    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "maskable" },
-    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+    {
+      "src": "icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/maskable-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "icons/maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
   ]
 }

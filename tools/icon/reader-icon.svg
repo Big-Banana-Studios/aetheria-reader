@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <!-- Aetheria Reader: an open book with its voice rising from the spine. Full bleed, so the same
+       art serves as the maskable icon; everything that matters sits inside the central safe circle. -->
+  <defs>
+    <radialGradient id="bg" cx="50%" cy="40%" r="75%">
+      <stop offset="0" stop-color="#22193f"/>
+      <stop offset="0.55" stop-color="#140f2a"/>
+      <stop offset="1" stop-color="#0a0915"/>
+    </radialGradient>
+    <linearGradient id="gold" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#f6d58e"/>
+      <stop offset="1" stop-color="#d49a45"/>
+    </linearGradient>
+    <linearGradient id="page" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#f6d58e" stop-opacity="0.22"/>
+      <stop offset="1" stop-color="#d49a45" stop-opacity="0.08"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="50%" cy="50%" r="50%">
+      <stop offset="0" stop-color="#f6d58e" stop-opacity="0.28"/>
+      <stop offset="1" stop-color="#f6d58e" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="512" height="512" fill="url(#bg)"/>
+  <circle cx="256" cy="262" r="170" fill="url(#glow)"/>
+  <g transform="translate(256 262) scale(1.2) translate(-256 -262)">
+
+  <!-- the voice: three arcs rising from the top of the spine -->
+  <g fill="none" stroke="url(#gold)" stroke-linecap="round">
+    <path d="M 222 214 A 48 48 0 0 1 290 214" stroke-width="11" opacity="0.95"/>
+    <path d="M 197 190 A 84 84 0 0 1 315 190" stroke-width="10" opacity="0.78"/>
+    <path d="M 172 166 A 120 120 0 0 1 340 166" stroke-width="9" opacity="0.58"/>
+  </g>
+
+  <!-- the book -->
+  <g stroke="url(#gold)" stroke-width="10" stroke-linejoin="round" stroke-linecap="round">
+    <path d="M 256 262 C 226 244 186 240 146 250 L 146 348 C 186 338 226 342 256 360 Z" fill="url(#page)"/>
+    <path d="M 256 262 C 286 244 326 240 366 250 L 366 348 C 326 338 286 342 256 360 Z" fill="url(#page)"/>
+  </g>
+  <!-- lines of text -->
+  <g fill="none" stroke="#f1c879" stroke-width="5" stroke-linecap="round" opacity="0.75">
+    <path d="M 170 278 C 194 272 218 274 238 282"/>
+    <path d="M 170 302 C 194 296 218 298 238 306"/>
+    <path d="M 170 326 C 194 320 212 321 226 326"/>
+    <path d="M 274 282 C 294 274 318 272 342 278"/>
+    <path d="M 274 306 C 294 298 318 296 342 302"/>
+    <path d="M 286 326 C 300 321 318 320 342 326"/>
+  </g>
+  </g>
+</svg>

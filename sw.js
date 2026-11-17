@@ -15,7 +15,7 @@
     survives going offline.)
    ═══════════════════════════════════════════════════════════════════ */
 
-const VERSION = 'v24';
+const VERSION = 'v25';
 const SHELL = `aetheria-shell-${VERSION}`;
 const LIBRARY = 'aetheria-library';
 const RUNTIME = `aetheria-runtime-${VERSION}`;
@@ -46,6 +46,9 @@ const SHELL_ASSETS = [
   './vendor/pdfjs/pdf.worker.min.mjs',
   './icons/icon-192.png',
   './icons/icon-512.png',
+  './icons/maskable-192.png',
+  './icons/maskable-512.png',
+  './icons/apple-touch-icon.png',
   './library/index.json',
 ];
 
