@@ -347,10 +347,12 @@ def main():
                 # title, author and note from the manifest, so they can be
                 # revised without the source.
                 with open(built, encoding="utf-8") as fh:
-                    old = json.load(fh)["sections"]
+                    prev = json.load(fh)
+                old = prev["sections"]
                 if old and old[0]["h"] == heading:
                     old = old[1:]
-                row = write_book(args.dest, item, with_note(old, item.get("note"), heading))
+                row = write_book(args.dest, item, with_note(old, item.get("note"), heading),
+                                 pages=prev.get("pages"))
             else:
                 print("MISSING (no PDF matching %s)" % item["pdf"])
                 continue

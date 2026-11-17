@@ -105,6 +105,12 @@ the methods and the thinking behind the apps.
   Titīrṣā's Lexicon, the Lo Shu Cube chapter, the Lo Shu, walk and sub-bass
   notes, and three papers — kept as Markdown in `tools/aetheria/texts/` and
   split at their headings.
+- **The Mansions of the Moon** — the 27 lunar mansions as the Mansions tab in
+  Divination Freq and Titīrṣā shows them, one section each: arc, quarters,
+  tone and hexagram, Chinese and Arabic counterparts, traits and star lore.
+  It is generated from Divination's canon, so never edit its Markdown by
+  hand; regenerate it with `node tools/aetheria/mansions-book.mjs
+  ../aetheria-divination` (the path to a Divination checkout).
 - **Notes.** Where a book or note says something the apps no longer say —
   claims about DNA, or that a sound heals — it is published as written, and
   a short note from the authors opens it to say so. The notes live in
