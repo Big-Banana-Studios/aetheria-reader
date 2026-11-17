@@ -179,7 +179,7 @@ Flying Star (玄空飛星) walk path inspired by traditional Daoist nine-palace 
 
 ## Since then: the Ouroboros and CABI
 
-Added for the Reader on 17 November 2026, from the Aetheria 432 player's walk lists. The player's Ouroboros is the official one, as Joe decided that day. Titīrṣā already walks it, and the Lo Shu Cube Explorer is to follow.
+Added for the Reader on 17 November 2026, from the Aetheria 432 player's walk lists. The player's Ouroboros is the official one, as Joe decided that day. Titīrṣā and the Lo Shu Cube Explorer walk it too.
 
 **The combined walk, CAB.** 81 steps: the Vortex (C), then the Ascent (A), then the Pillar walk (B). Centres first, then layers, then pillars.
 
