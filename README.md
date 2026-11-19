@@ -111,6 +111,12 @@ the methods and the thinking behind the apps.
   It is generated from Divination's canon, so never edit its Markdown by
   hand; regenerate it with `node tools/aetheria/mansions-book.mjs
   ../aetheria-divination` (the path to a Divination checkout).
+- **The Presence: What All Religions Agree On** — Joe and Alisha's book, one
+  section per chapter. It is written in a shared doc: export the doc as
+  Markdown to `tools/aetheria/presence/manuscript.md` and run
+  `python tools/aetheria/presence/build.py`, which writes its Markdown here.
+  With `--print out` the same script also builds the KDP paperback interior
+  (6 x 9 in PDF, with pandoc and xelatex) and the Kindle eBook (EPUB).
 - **Notes.** Where a book or note says something the apps no longer say —
   claims about DNA, or that a sound heals — it is published as written, and
   a short note from the authors opens it to say so. The notes live in

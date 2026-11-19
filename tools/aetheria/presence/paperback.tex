@@ -1,0 +1,130 @@
+% Pandoc template (for xelatex) for the KDP paperback interior of The Presence: 6 x 9 in,
+% no bleed, mirrored margins wide enough for KDP's rules at up to 150 pages
+% (inside at least 0.375 in, outside at least 0.25 in).
+\documentclass[11pt,twoside,openright]{book}
+\usepackage[paperwidth=6in,paperheight=9in,inner=0.85in,outer=0.6in,top=0.8in,bottom=0.85in,
+  headsep=0.22in,footskip=0.42in]{geometry}
+\usepackage{fontspec}
+\setmainfont{texgyrepagella}[Path=$fontdir$, Extension=.otf, UprightFont=*-regular,
+  ItalicFont=*-italic, BoldFont=*-bold, BoldItalicFont=*-bolditalic, Ligatures=TeX]
+\usepackage{microtype}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+\usepackage{enumitem}
+\usepackage{longtable,booktabs,array,calc}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\usepackage{tocloft}
+
+\urlstyle{same}
+\setlength{\parindent}{1.2em}
+\setlength{\emergencystretch}{1.5em}
+\linespread{1.07}
+\widowpenalty=10000
+\clubpenalty=10000
+\raggedbottom
+\hyphenation{Vi-ve-ka-nan-da Pa-tan-ja-li Upa-ni-shad Upa-ni-shads Chan-do-gya Mac-au-liffe}
+\setcounter{secnumdepth}{-2}
+\setcounter{tocdepth}{0}
+\providecommand{\tightlist}{\setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setlist{leftmargin=1.4em, itemsep=2pt, topsep=5pt}
+
+% Quotations: set in from both sides, a size smaller.
+\renewenvironment{quote}{\list{}{\leftmargin=1.4em\rightmargin=0.8em\topsep=6pt\parsep=4pt}\item\relax\small}{\endlist}
+
+% Headings inside a chapter.
+\titleformat{\subsection}{\normalfont\large\itshape}{}{0pt}{}
+\titlespacing*{\subsection}{0pt}{15pt plus 4pt minus 2pt}{6pt}
+\titleformat{\subsubsection}{\normalfont\normalsize\bfseries}{}{0pt}{}
+\titlespacing*{\subsubsection}{0pt}{11pt plus 3pt}{4pt}
+
+% Running heads: the book on the left, the chapter on the right, the page at the foot.
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[LE]{\footnotesize\scshape the presence}
+\fancyhead[RO]{\footnotesize\scshape\rightmark}
+\fancyfoot[C]{\footnotesize\thepage}
+\renewcommand{\headrulewidth}{0pt}
+\fancypagestyle{plain}{\fancyhf{}\fancyfoot[C]{\footnotesize\thepage}\renewcommand{\headrulewidth}{0pt}}
+
+% Contents.
+\renewcommand{\cfttoctitlefont}{\hfill\Large}
+\renewcommand{\cftaftertoctitle}{\hfill}
+\renewcommand{\cftpartfont}{\normalsize\scshape}
+\cftpagenumbersoff{part}
+\setlength{\cftbeforepartskip}{11pt}
+\renewcommand{\cftchapfont}{\normalfont}
+\renewcommand{\cftchappagefont}{\normalfont}
+\renewcommand{\cftchapleader}{\cftdotfill{\cftdotsep}}
+\setlength{\cftbeforechapskip}{2.5pt}
+\setlength{\cftchapnumwidth}{1.6em}
+
+\makeatletter
+% The first paragraph after a heading of ours starts flush left.
+\newcommand{\nofirstindent}{\everypar{{\setbox0\lastbox}\everypar{}}}
+% A blank left-hand page carries no page number or heading.
+\renewcommand{\cleardoublepage}{\clearpage\if@twoside\ifodd\c@page\else
+  \hbox{}\thispagestyle{empty}\newpage\fi\fi}
+
+% \bookpart{Part One}{The Question}: a page of its own, on the right.
+\newcommand{\bookpart}[2]{\cleardoublepage\thispagestyle{empty}\vspace*{2.3in}
+  \begin{center}{\small\scshape\addfontfeature{LetterSpace=10}\MakeLowercase{#1}\par}
+  \vspace{10pt}{\LARGE #2\par}\end{center}
+  \addcontentsline{toc}{part}{#1: #2}\markboth{}{}\cleardoublepage}
+
+% \bookchapter{3}{Indigenous Traditions}{"The Great Mystery"}{running head}
+\newcommand{\bookchapter}[4]{\clearpage\thispagestyle{plain}\vspace*{0.85in}
+  \begin{center}{\small\scshape\addfontfeature{LetterSpace=10}chapter #1\par}
+  \vspace{9pt}{\Large #2\par}\if\relax\detokenize{#3}\relax\else\vspace{5pt}{\large\itshape #3\par}\fi
+  \end{center}\par\vspace{0.32in}
+  \addcontentsline{toc}{chapter}{\protect\numberline{#1}#2\if\relax\detokenize{#3}\relax\else, #3\fi}
+  \markboth{}{#4}\nofirstindent}
+
+% \bookfront{A Note Before We Start}: front and back matter, unnumbered.
+\newcommand{\bookfront}[1]{\clearpage\thispagestyle{plain}\vspace*{0.85in}
+  \begin{center}{\Large #1\par}\end{center}\par\vspace{0.32in}
+  \addcontentsline{toc}{chapter}{#1}\markboth{}{#1}\nofirstindent}
+\makeatother
+
+% The sources at the back, a size smaller.
+\newenvironment{sources}{\small}{}
+
+\begin{document}
+\frontmatter
+\pagestyle{empty}
+
+\vspace*{1.5in}
+\begin{center}
+{\Huge The Presence\par}
+\vspace{14pt}
+{\Large\itshape What All Religions Agree On\par}
+\vfill
+{\large Joseph and Alisha Lewis\par}
+\vspace{0.7in}
+{\small\scshape big banana studios\par}
+\end{center}
+\clearpage
+
+\vspace*{\fill}
+{\small\setlength{\parindent}{0pt}\setlength{\parskip}{6pt}
+\emph{The Presence: What All Religions Agree On}
+
+Copyright \textcopyright\ 2026 Joseph Lewis and Alisha Lewis. All rights reserved.
+
+Published by Big Banana Studios.
+
+The quotations from scriptures and other older writings come from translations in the public domain in the United States. Translations and Sources, at the back of the book, lists every one. Rights in the Authorized (King James) Version of the Bible in the United Kingdom are vested in the Crown.
+
+Written with the help of two AI collaborators, Formant and Selah (Claude, by Anthropic). How We Wrote This tells who did what.
+
+This book is offered for reflection. Nothing in it is medical or psychological advice.
+
+First edition, 2026.\par}
+\clearpage
+
+\pagestyle{fancy}
+\tableofcontents
+
+$body$
+
+\end{document}
