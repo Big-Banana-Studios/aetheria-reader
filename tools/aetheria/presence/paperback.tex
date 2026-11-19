@@ -15,6 +15,7 @@
 \usepackage{xurl}
 \usepackage[hidelinks]{hyperref}
 \usepackage{tocloft}
+\usepackage{xcolor}
 
 \urlstyle{same}
 \setlength{\parindent}{1.2em}
@@ -86,6 +87,13 @@
   \addcontentsline{toc}{chapter}{#1}\markboth{}{#1}\nofirstindent}
 \makeatother
 
+% A page of light rules for the reader's own notes.
+\newcommand{\notespage}{\thispagestyle{empty}\vspace*{0.35in}
+  \begin{center}{\Large Notes\par}\end{center}\vspace{0.3in}
+  {\color{black!28}\count255=0
+   \loop\hrule height 0.4pt\vskip 0.3in
+   \advance\count255 by 1 \ifnum\count255<18 \repeat}\clearpage}
+
 % The sources at the back, a size smaller.
 \newenvironment{sources}{\small}{}
 
@@ -129,6 +137,10 @@ First edition, 2026.\par}
 
 $body$
 
-% KDP prints an even number of pages: end on a blank left-hand page if need be.
-\cleardoublepage
+% KDP prints an even number of pages. Rather than leave the last one blank,
+% the book ends with a ruled page for the reader's notes (two if needed).
+\clearpage
+\notespage
+% (\notespage ends its page, so the counter now holds the next page's number.)
+\ifodd\value{page}\else\notespage\fi
 \end{document}
