@@ -203,12 +203,13 @@ def font_face():
     return "\n".join(faces)
 
 
-def front_words(left, top, w, h):
-    """Title, subtitle and names, placed on a front panel of trim size w x h."""
+def front_words(left, top, w, h, names_y=0.885):
+    """Title, subtitle and names, placed on a front panel of trim size w x h.
+    names_y is how far down the panel the names sit (0 top, 1 bottom)."""
     return f"""
 <div class="title" style="left:{left}pt; top:{top + 0.13 * h}pt; width:{w}pt">The Presence</div>
 <div class="sub" style="left:{left}pt; top:{top + 0.13 * h + 62}pt; width:{w}pt">What All Religions Agree On</div>
-<div class="names" style="left:{left}pt; top:{top + 0.885 * h}pt; width:{w}pt">Joseph and Alisha Lewis</div>"""
+<div class="names" style="left:{left}pt; top:{top + names_y * h}pt; width:{w}pt">Joseph and Alisha Lewis</div>"""
 
 
 STYLE = """
@@ -259,7 +260,7 @@ def prepared_art(art, full_w, full_h, front_x, scale, out_png):
         canvas = fill(im, W, H)
     else:
         fx = int(front_x * scale)
-        front = fill(im, W - fx, H)
+        front = fit_portrait(im, W - fx, H)
         # The back: the picture's sky alone, stretched, softened and darkened,
         # so the words over it stay easy to read.
         sky = front.crop((0, 0, front.width, int(front.height * 0.42)))
@@ -269,6 +270,24 @@ def prepared_art(art, full_w, full_h, front_x, scale, out_png):
         canvas.paste(back, (0, 0))
         canvas.paste(front, (fx, 0))
     canvas.save(out_png)
+
+
+def fit_portrait(im, w, h):
+    """Fit a picture into w x h without losing its sides: a picture a little
+    wider than the space is scaled to its width, and the sky at its top is
+    mirrored upward to fill the height above."""
+    if im.width / im.height <= w / h:
+        return fill(im, w, h)
+    k = w / im.width
+    im = im.resize((w, round(im.height * k)), Image.LANCZOS)
+    out = Image.new("RGB", (w, h))
+    extra = h - im.height
+    while extra > 0:
+        band = im.crop((0, 0, w, min(extra, im.height))).transpose(Image.FLIP_TOP_BOTTOM)
+        out.paste(band, (0, extra - band.height))
+        extra -= band.height
+    out.paste(im, (0, h - im.height))
+    return out
 
 
 def fill(im, w, h):
@@ -284,6 +303,8 @@ def main():
     ap.add_argument("out")
     ap.add_argument("--pages", type=int, required=True, help="the interior's page count")
     ap.add_argument("--art", help="a picture to use instead of the drawn one")
+    ap.add_argument("--names-y", type=float, default=0.885,
+                    help="how far down the front the names sit, 0 to 1 (default 0.885)")
     args = ap.parse_args()
     os.makedirs(args.out, exist_ok=True)
     work = os.path.join(args.out, "cover-work")
@@ -316,7 +337,7 @@ def main():
 @page {{ size: {full_w / PT}in {full_h / PT}in; margin: 0; }}</style></head><body>
 <div class="page" style="width:{full_w}pt; height:{full_h}pt">
 <img src="{data_url(art_png)}" style="width:{full_w}pt; height:{full_h}pt">
-{front_words(front_x, BLEED, TRIM_W, TRIM_H)}
+{front_words(front_x, BLEED, TRIM_W, TRIM_H, args.names_y)}
 <div class="epigraph" style="left:{back_x + m}pt; top:{BLEED + 0.62 * PT}pt; width:{TRIM_W - 2 * m}pt">{EPIGRAPH}</div>
 <div class="cite" style="left:{back_x + m}pt; top:{BLEED + 1.55 * PT}pt; width:{TRIM_W - 2 * m}pt">‘ABDU’L-BAHÁ, PARIS, 1911</div>
 <div class="blurb" style="left:{back_x + m}pt; top:{BLEED + 2.2 * PT}pt; width:{TRIM_W - 2 * m}pt">{blurb}</div>
@@ -346,18 +367,16 @@ def main():
             im = Image.open(args.art).convert("RGB")
             if im.width / im.height > 1.0:  # a wraparound picture: take its front
                 im = im.crop((int(im.width * front_x / full_w), 0, im.width, im.height))
-            src_ratio, dst_ratio = im.width / im.height, ew / eh
-            if src_ratio > dst_ratio:
-                nw = int(im.height * dst_ratio)
-                im = im.crop(((im.width - nw) // 2, 0, (im.width - nw) // 2 + nw, im.height))
-            im.resize((1600, 2560), Image.LANCZOS).save(ebook_art)
+            fit_portrait(im, 1600, 2560).save(ebook_art)
         else:
             render_svg(page, art_svg(ew, eh, 0, ew, (eh - TRIM_H) / 2, TRIM_H), ew, eh, 1600 / ew, ebook_art)
+        # The Kindle cover is taller than the book: the names go lower, into the dark.
+        ebook_names = (0.915 * eh - (eh - TRIM_H) / 2) / TRIM_H
         ebook_html = os.path.join(work, "ebook.html")
         with open(ebook_html, "w", encoding="utf-8") as fh:
             fh.write(f"""<!doctype html><html><head><meta charset="utf-8"><style>{styles()}</style></head><body>
 <div class="page" style="width:{ew}pt; height:{eh}pt"><img src="{data_url(ebook_art)}" style="width:{ew}pt; height:{eh}pt">
-{front_words(0, (eh - TRIM_H) / 2, ew, TRIM_H)}</div></body></html>""")
+{front_words(0, (eh - TRIM_H) / 2, ew, TRIM_H, ebook_names)}</div></body></html>""")
         eb = browser.new_page(device_scale_factor=1600 / (ew * 4 / 3))
         eb.set_viewport_size({"width": int(round(ew * 4 / 3)), "height": int(round(eh * 4 / 3))})
         eb.goto("file://" + ebook_html)

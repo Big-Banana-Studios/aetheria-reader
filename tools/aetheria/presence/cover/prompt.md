@@ -52,4 +52,9 @@ detailed painting, and leave out all the lettering."
 
     python tools/aetheria/presence/cover/make_cover.py out --pages 117 --art the-painting.png
 
+`painting.jpg`, here, is the painting Joe made from the front-cover prompt on
+19 November 2026, with our cover as the reference. It is the book's cover:
+
+    python tools/aetheria/presence/cover/make_cover.py out --pages 117 --art tools/aetheria/presence/cover/painting.jpg
+
 Use the interior's final page count: the spine's width depends on it.
