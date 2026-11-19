@@ -397,6 +397,18 @@ function bookCard(book) {
   const card = document.createElement('button');
   card.className = 'book-card';
 
+  if (book.cover) {
+    // Cover art, where a book has some: a small picture beside the words.
+    card.classList.add('with-cover');
+    const img = document.createElement('img');
+    img.className = 'book-cover';
+    img.src = book.cover;
+    img.alt = '';
+    img.loading = 'lazy';
+    img.decoding = 'async';
+    card.appendChild(img);
+  }
+
   const title = document.createElement('div');
   title.className = 'book-title';
   title.textContent = book.title;
@@ -656,6 +668,7 @@ function describeForLockScreen() {
     title: current.title,
     author: current.author,
     section: reader.section?.heading,
+    cover: current.cover,
   });
 }
 

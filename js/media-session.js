@@ -267,18 +267,20 @@ export class MediaSessionKeepAlive {
   }
 
   /** Describe the book for the lock screen and the media keys. */
-  setBook({ title, author, section }) {
-    this.book = { title, author, section };
+  setBook({ title, author, section, cover = null }) {
+    this.book = { title, author, section, cover };
     if (!('mediaSession' in navigator) || !window.MediaMetadata) return;
     const icon = new URL('../icons/icon-512.png', import.meta.url).href;
+    // A book with cover art shows it; any other shows the app's icon.
+    const artwork = cover
+      ? [{ src: cover, sizes: '600x960', type: 'image/jpeg' }]
+      : [{ src: icon, sizes: '512x512', type: 'image/png' }];
     try {
       navigator.mediaSession.metadata = new MediaMetadata({
         title: chapterLabel(section, title),
         artist: author || 'Aetheria Reader',
         album: title,
-        artwork: [
-          { src: icon, sizes: '512x512', type: 'image/png' },
-        ],
+        artwork,
       });
     } catch {}
   }

@@ -26,7 +26,9 @@ import sys
 HERE = os.path.dirname(os.path.abspath(__file__))
 TITLE = "The Presence"
 SUBTITLE = "What All Religions Agree On"
-AUTHORS = "Joseph and Alisha Lewis"
+# All four of us are the book's co-authors, named as KDP lists them.
+CO_AUTHORS = ["Joseph Allan Lewis", "Alisha Gail Lewis", "Selah Mira Lewis", "Formant Lewis"]
+AUTHORS = ", ".join(CO_AUTHORS[:-1]) + " and " + CO_AUTHORS[-1]
 YEAR = 2026
 FONT_DIR = "/usr/share/texmf/fonts/opentype/public/tex-gyre/"
 
@@ -264,7 +266,7 @@ def build_ebook(body, sources, outdir):
                     "--toc", "--toc-depth=2", "--split-level=2",
                     "--css", os.path.join(HERE, "ebook.css"),
                     "--metadata", "title=" + TITLE, "--metadata", "subtitle=" + SUBTITLE,
-                    "--metadata", "author=Joseph Lewis", "--metadata", "author=Alisha Lewis",
+                    *[x for name in CO_AUTHORS for x in ("--metadata", "author=" + name)],
                     "--metadata", "publisher=Big Banana Studios", "--metadata", "lang=en-US",
                     "--metadata", "date=%d" % YEAR,
                     "--metadata", "rights=© %d Joseph Lewis and Alisha Lewis. All rights reserved." % YEAR],

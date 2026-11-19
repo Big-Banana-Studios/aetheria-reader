@@ -357,6 +357,8 @@ def main():
                 print("MISSING (no PDF matching %s)" % item["pdf"])
                 continue
         row["c"] = coll_id
+        if os.path.exists(os.path.join(args.dest, "covers", item["id"] + ".jpg")):
+            row["cv"] = 1  # cover art at library/covers/<id>.jpg
         rows.append(row)
         print("%3d sec %7d words %5d KB" % (row["s"], row["w"], row["kb"]))
 

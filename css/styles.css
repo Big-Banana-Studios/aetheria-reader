@@ -113,6 +113,16 @@ select:focus-visible, input:focus-visible, textarea:focus-visible { outline: 2px
   transition: border-color 0.15s, transform 0.15s;
 }
 .book-card:hover { border-color: var(--gold-mid); transform: translateY(-1px); }
+.book-card.with-cover {
+  display: grid; grid-template-columns: 58px 1fr; column-gap: 12px; row-gap: 6px;
+  align-content: start;
+}
+.book-card.with-cover > :not(.book-cover):not(.book-progress) { grid-column: 2; }
+.book-cover {
+  grid-column: 1; grid-row: 1 / span 3; width: 58px; aspect-ratio: 5 / 8; height: auto;
+  object-fit: cover; border-radius: 4px; background: #0b0d1d;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.45);
+}
 .book-title { color: var(--text); font-size: 15px; line-height: 1.35; }
 .book-author { color: var(--muted); font-size: 12.5px; }
 .book-foot {

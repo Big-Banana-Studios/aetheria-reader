@@ -19,6 +19,10 @@ export const bookUrl = (id) => new URL(`${id}.json`, BASE).href;
 // as just another text.
 export const englishUrl = (id) => new URL(`${id}.en.json`, BASE).href;
 
+// A book may have cover art, published as library/covers/<id>.jpg; its
+// catalogue row then carries cv: 1.
+export const coverUrl = (id) => new URL(`covers/${id}.jpg`, BASE).href;
+
 /** Fetch the catalogue. Returns null when no library is published. */
 export async function loadCatalog() {
   try {
@@ -55,6 +59,7 @@ export function toEntries(catalog, progress) {
     prose: typeof b.p === 'number' ? b.p : null,
     language: b.l || null,
     english: !!b.e,               // an English translation is published
+    cover: b.cv ? coverUrl(b.id) : null,
     englishBytes: (b.e || 0) * 1024,
     words: b.w,
     sectionCount: b.s,

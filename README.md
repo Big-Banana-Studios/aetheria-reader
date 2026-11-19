@@ -117,6 +117,9 @@ the methods and the thinking behind the apps.
   `python tools/aetheria/presence/build.py`, which writes its Markdown here.
   With `--print out` the same script also builds the KDP paperback interior
   (6 x 9 in PDF, with pandoc and xelatex) and the Kindle eBook (EPUB).
+- **Cover art.** A book with a picture at `library/covers/<id>.jpg` (600 x 960)
+  shows it on its card and on the lock screen while it is read aloud;
+  `tools/build_aetheria.py` marks its catalogue row (`cv`) when the file is there.
 - **Notes.** Where a book or note says something the apps no longer say —
   claims about DNA, or that a sound heals — it is published as written, and
   a short note from the authors opens it to say so. The notes live in
