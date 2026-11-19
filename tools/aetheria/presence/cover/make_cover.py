@@ -256,17 +256,27 @@ def prepared_art(art, full_w, full_h, front_x, scale, out_png):
     im = Image.open(art).convert("RGB")
     W, H = int(full_w * scale), int(full_h * scale)
     if im.width / im.height > 1.0:
-        canvas = im.resize((W, H), Image.LANCZOS)
+        canvas = fill(im, W, H)
     else:
         fx = int(front_x * scale)
-        fw = W - fx
-        front = im.resize((fw, H), Image.LANCZOS)
-        back = front.transpose(Image.FLIP_LEFT_RIGHT).resize((fx, H), Image.LANCZOS)
-        back = ImageEnhance.Brightness(back.filter(ImageFilter.GaussianBlur(18))).enhance(0.45)
+        front = fill(im, W - fx, H)
+        # The back: the picture's sky alone, stretched, softened and darkened,
+        # so the words over it stay easy to read.
+        sky = front.crop((0, 0, front.width, int(front.height * 0.42)))
+        back = sky.resize((fx, H), Image.LANCZOS).filter(ImageFilter.GaussianBlur(24))
+        back = ImageEnhance.Brightness(back).enhance(0.6)
         canvas = Image.new("RGB", (W, H))
         canvas.paste(back, (0, 0))
         canvas.paste(front, (fx, 0))
     canvas.save(out_png)
+
+
+def fill(im, w, h):
+    """Scale a picture to cover w x h, cropping the overflow from the middle."""
+    k = max(w / im.width, h / im.height)
+    im = im.resize((round(im.width * k), round(im.height * k)), Image.LANCZOS)
+    x, y = (im.width - w) // 2, (im.height - h) // 2
+    return im.crop((x, y, x + w, y + h))
 
 
 def main():
