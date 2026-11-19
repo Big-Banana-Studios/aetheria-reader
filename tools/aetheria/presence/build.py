@@ -242,7 +242,7 @@ COPYRIGHT = """## Copyright
 
 Copyright © %(year)d Joseph Lewis and Alisha Lewis. All rights reserved.
 
-Published by Big Banana Studios.
+Independently published. A Big Banana Studios book.
 
 The quotations from scriptures and other older writings come from translations in the public domain in the United States. Translations and Sources, at the back of the book, lists every one.
 

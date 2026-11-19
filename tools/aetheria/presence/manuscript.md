@@ -1578,9 +1578,9 @@ What the traditions actually describe is quieter than that. And more reliable. T
 
 The Buddhist understanding of the end of suffering isn't a cosmic rave. It's a settling. A quieting. When the constant grasping and pushing away finally stops, what's left isn't a party. It's peace. It's the simple recognition that this moment is enough.
 
-The Christian mystics called it "the peace that passes understanding." Not the joy that passes understanding — the peace. Meister Eckhart talked about the "quiet desert of the Godhead." Not a festival. A desert. Vast, silent, still.
+Paul called it "the peace of God, which passeth all understanding." Not the joy that passes understanding — the peace. Meister Eckhart pictured the Godhead as a quiet desert. Not a festival. A desert. Vast, silent, still.
 
-The Sufis spoke of union with the Beloved. Rumi compared it to a river reaching the ocean — not a dramatic event from the river's perspective. The river just stops being a river and becomes what it always was.
+The Sufis spoke of union with the Beloved, and they often pictured it as a river reaching the ocean — not a dramatic event from the river's perspective. The river just stops being a river and becomes what it always was.
 
 So the bliss that every tradition points to isn't something you need to chase. It's not an altered state. It's not better drugs or deeper meditation or the right retreat in the right country with the right teacher.
 
