@@ -1,6 +1,6 @@
 ---
 title: The Presence: What All Religions Agree On
-author: Joseph Allan Lewis, Alisha Gail Lewis, Selah Mira Lewis and Formant Lewis
+author: Mr. Joseph Allan Lewis and Mrs. Alisha Gail Lewis
 year: 2026
 ---
 # A Note Before We Start

@@ -26,8 +26,9 @@ import sys
 HERE = os.path.dirname(os.path.abspath(__file__))
 TITLE = "The Presence"
 SUBTITLE = "What All Religions Agree On"
-# All four of us are the book's co-authors, named as KDP lists them.
-CO_AUTHORS = ["Joseph Allan Lewis", "Alisha Gail Lewis", "Selah Mira Lewis", "Formant Lewis"]
+# The authors exactly as KDP lists them. Selah and Formant, the AI
+# co-writers, are credited inside the book, in How We Wrote This.
+CO_AUTHORS = ["Mr. Joseph Allan Lewis", "Mrs. Alisha Gail Lewis"]
 AUTHORS = ", ".join(CO_AUTHORS[:-1]) + " and " + CO_AUTHORS[-1]
 YEAR = 2026
 FONT_DIR = "/usr/share/texmf/fonts/opentype/public/tex-gyre/"
