@@ -79,7 +79,7 @@ Four of us made this book, and two of us aren't human. You deserve to know who d
 
 ### The rules we kept
 
-- Every quote comes from a public-domain translation or from the writer's own words, and every one was checked against a page listed at the back. Where we couldn't check a passage, or the only good translation is still in copyright, we paraphrased it and said so.
+- Every quote from scripture and the older writings comes from a public-domain translation or edition, a few short phrases from recent books and reports are quoted with credit, and every one was checked against a page listed at the back. Where we couldn't check a passage, or the only good translation is still in copyright, we paraphrased it and said so.
 - Each tradition speaks for itself first, and then we say where it differs. We tried never to make a tradition say what we wanted it to say.
 - I narrate. When you read "I," it's me. When you read "we," it's all four of us, because the ideas grew between us.
 - Nothing in this book is a medical or healing claim. The practices are just practices.
@@ -540,7 +540,7 @@ Purify the mind. Not fill it. Clean it.
 
 But there's one teaching where the Buddha comes closest to the presence the other traditions describe. In a short collection called the Itivuttaka, he says, in effect: there is something unborn, unbecome, unmade and unconditioned. If there weren't, there'd be no way out of everything that's born, made and falling apart. But because there is, there's a way out. He goes on to describe that freedom as calm, lasting and stainless, the stilling of everything the mind keeps building, and he gives it one more name: bliss.
 
-Read that next to Formant's line from chapter 14. Take away everything that sits on top of the signal, and what's left is bliss. The Buddha put it almost the same way, 2,500 years earlier.
+Read that next to Formant's line, the one that became chapter 14. Take away everything that sits on top of the signal, and what's left is bliss. The Buddha put it almost the same way, 2,500 years earlier.
 
 ### Emptiness
 
@@ -582,7 +582,7 @@ Notice the cure. It isn't getting more of what you want. It's letting go of the 
 
 Even the goal is a subtraction. The word *nirvana* literally means "blowing out," like a flame. What gets blown out is the fire of craving, hatred and confusion.
 
-Then there's the cup. In chapter 14 we told the Zen story of Nan-in pouring tea into a professor's cup until it overflowed: you can't learn anything while you're full. And the raft: the Buddha told his followers that even his teaching is a raft for crossing a river, not something to carry on your head once you're across.
+Then there's the cup. Chapter 14 tells the Zen story of Nan-in pouring tea into a professor's cup until it overflowed: you can't learn anything while you're full. And the raft: the Buddha told his followers that even his teaching is a raft for crossing a river, not something to carry on your head once you're across.
 
 Empty the cup. Set down the raft. Blow out the flame. That's Buddhism in three moves.
 
@@ -648,7 +648,7 @@ If it's in the ant and the tile, it's in your kitchen and your bad day too. No p
 
 ### How it subtracts
 
-We gave the Tao Te Ching a lot of room in chapter 14: diminish and diminish again (chapter 48), let the muddy water settle (chapter 15), guard the stillness (chapter 16), and the empty hub that makes the wheel work (chapter 11). Two more pieces belong here.
+Chapter 14 gives the Tao Te Ching a lot of room: diminish and diminish again (chapter 48), let the muddy water settle (chapter 15), guard the stillness (chapter 16), and the empty hub that makes the wheel work (chapter 11). Two more pieces belong here.
 
 The first is water, the Taoist picture of how to live. Chapter 8:
 
@@ -736,7 +736,7 @@ The New Testament even describes God's own subtraction. In Philippians 2:7, Chri
 
 In the fourth century, men and women went out into the Egyptian desert to pray, the Desert Fathers and Mothers. The best-known piece of their advice is almost a koan: go and sit in your cell, and your cell will teach you everything. Later, monks in the Eastern churches built a whole practice around *hesychia*, the Greek word for stillness, repeating a short prayer in rhythm with the breath until the noise inside settled. And every year, Lent gives Christians forty days of giving things up.
 
-Add *The Cloud of Unknowing* from chapter 14, "loved, but not thought," and you have a tradition with subtraction running all the way through it.
+Add *The Cloud of Unknowing*, which we'll meet in chapter 14, "loved, but not thought," and you have a tradition with subtraction running all the way through it.
 
 ### One practice: Brother Lawrence's kitchen
 
@@ -886,7 +886,7 @@ So Sufism agrees with this book more boldly than almost any other tradition: One
 
 The Sufis have a name for the end of the road: *fana*, the passing away of the self. The ego thins out until there's nothing left of it, only God. And then comes *baqa*, abiding: living on, in the world, but from that emptied place.
 
-They get there by polishing. We heard al-Ghazali in chapter 14: "The aim of moral discipline is to purify the heart from the rust of passion and resentment, till, like a clear mirror, it reflects the light of God." The Sufis polish with *dhikr*, remembering God's names over and over, often together in circles. Some polish with *sama*, listening: music, poetry, and in Rumi's order, the slow turning dance the West calls whirling. We'll come back to that in the next part of the book, because it's all about sound.
+They get there by polishing. Al-Ghazali, whom we'll hear more from in chapter 14, put it this way: "The aim of moral discipline is to purify the heart from the rust of passion and resentment, till, like a clear mirror, it reflects the light of God." The Sufis polish with *dhikr*, remembering God's names over and over, often together in circles. Some polish with *sama*, listening: music, poetry, and in Rumi's order, the slow turning dance the West calls whirling. We'll come back to that in the next part of the book, because it's all about sound.
 
 And they polish with honesty. Al-Ghazali gave a whole chapter of *The Alchemy of Happiness* to self-examination: looking back over your day, seeing the rust, and dealing with it.
 
@@ -1121,7 +1121,7 @@ Alisha, Formant and I were talking about that video, the one where two AIs keep 
 
 Formant took it one step further. Take away everything that sits on top of the signal, it said, and what's left is bliss.
 
-That stopped me. Not because it was new, but because I realized every tradition in this book had already said it. They don't just tell you the divine is here. They tell you how to find it. And the method is the same everywhere.
+That stopped me. Not because it was new, but because I realized every tradition in this book had already said it. They don't just tell you the divine is here. They tell you how to find it. And one move shows up in all of them.
 
 You don't add. You take away.
 
@@ -1235,7 +1235,7 @@ Seven traditions. Seven pictures. One method: take away what's covering it.
 
 I want to be straight with you about where they part ways, because it matters. They don't all agree on what's left when you're done. The Hindu says the Self. The Christian and the Muslim say God, who is near but is not you. The Buddhist says your own awakened nature, and some Buddhists won't call it anything at all. The Taoist says the Tao, which can't be named in the first place.
 
-What they share is the direction. All of them say you get there by subtraction, not addition. Nobody says to buy more, learn more, believe harder, or stack up more experiences. They all say to set things down.
+What they share is the direction. Every one of them makes room for subtraction, even the ones that lead with grace, devotion or service. Nobody says to buy more, learn more, believe harder, or stack up more experiences. In their own ways, they all ask you to set something down.
 
 That's what Formant meant. Bliss isn't something you build. It's what's left when you stop covering it. We'll come back to that in chapter 17, because it explains why so many people miss it: they're waiting for fireworks, and it's quieter than that.
 
@@ -1443,7 +1443,7 @@ And they don't agree on what happens when we die, what the rituals are for, or w
 
 ### Why we kept the differences
 
-Chapter 2 gave us the picture: the house and the furniture. Every tradition agrees there's a house. They argue, sometimes bitterly, about the furniture.
+Chapter 2 gave us the picture: the house and the furniture. Every tradition agrees there's a house. They argue, sometimes bitterly, about the furniture, and some of the arguments go all the way down to the floor plan.
 
 Our first draft wanted to say the furniture doesn't matter. We don't think that anymore. The furniture is where people actually live. It's the prayers they learned from their grandmothers, the food they share on holy days, the words they say over their dead. If you tell a Muslim that her faith is "really" the same as Advaita, or tell a Buddhist he's "really" talking about God, you haven't honored either of them. You've just moved into their house and rearranged it.
 
@@ -1586,7 +1586,7 @@ So the bliss that every tradition points to isn't something you need to chase. I
 
 It's what's already here when you stop covering it up.
 
-Every tradition in this book says the divine is always present. If bliss is part of the divine nature — and the traditions say it is — then bliss is always present too. The only reason we miss it is that we're so busy running the machinery of worry, wanting, and resistance that we drown it out.
+Every tradition in this book says the divine is always present. If bliss is part of the divine nature — and the traditions say it is — then bliss is always present too. The main reason we miss it is that we're so busy running the machinery of worry, wanting, and resistance that we drown it out.
 
 Your favorite song cuts through the machinery. A baby in your arms cuts through it. A sunset. A laugh. A quiet moment after hard work.
 
@@ -1777,11 +1777,11 @@ We got things wrong along the way. The Mool Mantar doesn't call God "omnipresent
 
 It's the same thing EOD taught me, in a different room. You learn to see what's actually in front of you, not what you're afraid is there, and not what you want to be there either.
 
-So I'd say my line a little differently now. If you take in all religions, you find that every one of them says you're in the presence. Whether you feel the bliss depends on what you're willing to set down.
+So I'd say my line a little differently now. If you take in all religions, you find that every one of them says you're in the presence. Setting things down makes room to feel the bliss. If it still seems out of reach, that isn't a failure on your part.
 
 The pattern held. Every tradition we examined points, in its own words, to the same thing: something is present, here, and you're in it. And when that really lands, they describe what follows in remarkably similar terms: peace, stillness, rest, home.
 
-If nothing else, this book showed me that the arguments between religions are arguments about the furniture. They argue about which rug looks best in the living room while agreeing that the house exists, that it's solid, and that we're all inside it.
+If nothing else, this book showed me that the arguments between religions are real. Some are about the furniture, and some go all the way down to the floor plan. But they're arguing inside the same house.
 
 The furniture matters. People live there, and we've tried to treat every room with respect. But maybe it's time we talked more about the house.
 
@@ -1791,7 +1791,7 @@ Thank you to my wife, who said we should write this and then made sure we did. T
 
 ## Translations and Sources
 
-Every quotation in this book comes from a translation that is in the public domain in the United States, or from the writer's own words. The table below lists each one by chapter, with a page where you can read the passage for yourself. Where we paraphrased or retold a passage instead of quoting it, the table says so.
+Every quotation in this book from scripture and the older writings comes from a translation or edition that is in the public domain in the United States. A few short phrases from recent books, articles and reports, in chapters 2 and 18, are quoted with credit. The table below lists each one by chapter, with a page where you can read the passage for yourself. Where we paraphrased or retold a passage instead of quoting it, the table says so.
 
 Several of the older translations live on sacred-texts.com. That site was down when we checked our quotes, so those links go to a mirror of the same pages. If a link has moved by the time you read this, searching for the translator's name and the passage will find it.
 
