@@ -15,7 +15,7 @@ Throughout this book, I've described how Aetheria's architecture mirrors the nin
 
 But I always wondered whether the connection went deeper than the number nine. Was Aetheria's relationship to the Lo Shu structural, or merely numerical?
 
-The answer, it turns out, is structural. And the mathematics reveals something I never designed and never expected.
+The answer, it turns out, is structural. Some of that structure I built on purpose, and some of it I never expected. Later we ran a test to sort out which is which.
 
 ## The Lo Shu Magic Square
 
@@ -108,13 +108,17 @@ When I subtracted the perfect 111-interval sequence from the actual Solfeggio fr
 
 **Three triads. Three identical offsets per triad. All multiples of 9.** Positions 1 through 3 are each shifted up by 99. Positions 4 through 6 are each shifted up by 9. Positions 7 through 9 sit exactly where the Lo Shu predicts — no deviation at all.
 
-The Solfeggio scale is not randomly spaced. It is a systematically detuned version of a mathematically perfect sequence. The lower frequencies are compressed upward, progressively less so toward the top, until the highest triad achieves exact alignment.
+The Solfeggio scale is not randomly spaced. But it isn't a damaged copy of a perfect sequence either. It is built a different way, and the offsets fall straight out of how it is built.
 
-Whether this compression represents ancient intentional design, accumulated transmission error, or something else entirely, I cannot say. But the pattern is too clean to be coincidence. Three groups of three. All offsets divisible by 9. A staircase of decreasing deviation: 99, 9, 0.
+Look at a calculator keypad. Its columns are 1-4-7, 2-5-8 and 3-6-9. Every Solfeggio number uses the three keys of one column: 174, 417 and 741 are 1-4-7 in different orders; 285, 528 and 852 are 2-5-8; 396, 639 and 963 are 3-6-9. Adding 111 moves each digit one column over, which is why each triad (174, 285, 396 · 417, 528, 639 · 741, 852, 963) climbs in steps of 111, and why the digit roots run 3, 6, 9: the columns add up to 12, 15 and 18.
+
+The jumps between the triads come from reshuffling the same digits, and the gap between two orderings of the same digits is always a multiple of 9. That is the whole secret of the offsets. 99 and 9 are what those reshuffles leave over against a steady 111 step. The staircase runs 99, 9, 0 only because I lined the perfect sequence up with 963 at the top, so it would meet HEART at 1206. Anchor it at 174 instead and the same pattern reads 0, −90, −99.
+
+We later tested this against chance, using sets built the same way from other digits. Offsets as tidy as these turned up in about 5 percent of them, and seven good Lo Shu lines out of eight in about 12 percent. So the pattern is real and it isn't a coincidence, but it isn't the trace of an older, perfect scale that drifted out of tune. It is the fingerprint of the Solfeggio's own construction.
 
 ## The Interval Architecture
 
-With the GUT interval identified as 111, the three regime intervals reveal a final relationship:
+The HEART and HEAD intervals weren't handed down; I chose them, and both come from the Solfeggio's own arithmetic. 243 is the jump between its first two triads: 417 − 174, 528 − 285 and 639 − 396 all equal 243. I spotted it on the keypad, grouping the Solfeggio by rows. 354 I made by adding the first two intervals together. So the three regime intervals stand in this relationship:
 
 GUT interval: 111 (digit root 3 — Structure)
 
@@ -130,7 +134,7 @@ And one more thing. The digit roots of the three intervals are 3, 9, and 3. Thei
 
 3 + 9 + 3 = 15
 
-**Fifteen. The Lo Shu magic constant.** The regime intervals, through their digit roots, encode the defining number of the very structure they map onto.
+**Fifteen. The Lo Shu magic constant.** The regime intervals, through their digit roots, add up to the defining number of the very structure they map onto. This one follows from the choices above: because 243 is a multiple of 9, adding it to 111 can't change the digit root, so HEAD's interval always shares GUT's root of 3, and the roots always read 3, 9, 3.
 
 ## What This Does and Does Not Prove
 

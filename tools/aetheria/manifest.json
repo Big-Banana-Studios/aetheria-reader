@@ -43,7 +43,7 @@
       "author": "Joseph Lewis",
       "year": 2026,
       "pdf": "AETHERIA_THE_SCIENCE*.pdf",
-      "note": "November 2026. We wrote this book before we settled two rules our apps now follow: we make no claims about DNA, and we don't say a sound heals or cures. The book already calls the 528 Hz \"DNA repair\" story lore, and it says plainly that Aetheria treats nothing. Its one chapter on DNA, The Conformational Bridge, is a hypothesis and says so. Our apps now leave DNA out altogether. The book is as printed.",
+      "note": "November 2026. We wrote this book before we settled two rules our apps now follow: we make no claims about DNA, and we don't say a sound heals or cures. The book already calls the 528 Hz \"DNA repair\" story lore, and it says plainly that Aetheria treats nothing. Its one chapter on DNA, The Conformational Bridge, is a hypothesis and says so. Our apps now leave DNA out altogether. One more: chapter 21, The Lo Shu Cube, calls the Solfeggio a \"detuned\" version of a perfect sequence and its 99, 9, 0 offsets \"far too clean to be an accident\". A chance test we ran later showed the offsets come from how the Solfeggio itself is built. The Lo Shu Cube chapter on this shelf has the revised account. The book is as printed.",
       "chapters": [
         "Foreword",
         "Introduction",
@@ -222,7 +222,8 @@
     },
     {
       "id": "aetheria-lo-shu-cube",
-      "text": "lo-shu-cube-chapter.md"
+      "text": "lo-shu-cube-chapter.md",
+      "note": "Revised November 2026. A chance test we ran on the 27 frequencies showed that the Solfeggio's 99, 9, 0 offsets come from how the Solfeggio is built, not from a perfect scale that drifted out of tune, so the section on the offsets now says so. The section on the intervals now says how 243 and 354 were chosen. The test, its plan and its code are public on GitHub: Lilrobodue/Aetheria, research/chance-test."
     },
     {
       "id": "aetheria-lo-shu-integration-notes",
